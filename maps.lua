@@ -38,6 +38,7 @@ function select_map(n)
 	else
 		hero_x = 0
 	end
+	hero_dir = 1;
 end
 
 function map_next()
