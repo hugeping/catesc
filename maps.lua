@@ -2,24 +2,6 @@ global {
 	map_nr = 1;
 	map_data = {};
 }
-function hero_collision(x, y, w, h)
-	if hero.state == HERO_DEAD or hero.state == HERO_FLY or hero.state == HERO_DROWN then
-		return
-	end
-	if hero.x + hero.w <= x then
-		return
-	end
-	if hero.y + hero.h <= y then
-		return
-	end
-	if hero.x > x + w then
-		return
-	end
-	if hero.y > y + h then
-		return
-	end
-	return true
-end
 
 function select_map(n)
 	map_nr = n;
@@ -102,7 +84,7 @@ maps = {
 			sprite.fill(sprite.screen(), map_data.x, map_data.y, 16, 16, 'red');
 			map_data.x = map_data.x - 2
 			if map_data.x < -10 then map_data.x = 640; map_data.y = map_data.y + 0 end
-			if hero_collision(map_data.x, map_data.y, 16, 16) then
+			if hero:collision(map_data.x, map_data.y, 16, 16) then
 				hero.state = FLY
 				hero.move = 0
 			end
@@ -191,7 +173,7 @@ maps = {
 			end
 			if map_data.laser <= 10 then
 				sprite.fill(sprite.screen(), 0, 24 * 16 - hero.h, 340, 3, 'red');
-				if hero_collision(0, 24 * 16 - hero.h, 340, 3) then
+				if hero:collision(0, 24 * 16 - hero.h, 340, 3) then
 					hero.state = FLY
 					hero.move = 0
 				end

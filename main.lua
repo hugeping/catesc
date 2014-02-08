@@ -349,6 +349,24 @@ hero = obj {
 		else
 			sprite.draw(hero_spr, xoff, yoff, w, h, sprite.screen(), x, y);
 		end
+	end;
+	collision = function(s, x, y, w, h)
+		if s.state == HERO_DEAD or s.state == HERO_FLY or s.state == HERO_DROWN then
+			return
+		end
+		if s.x + s.w <= x then
+			return
+		end
+		if s.y + s.h <= y then
+			return
+		end
+		if s.x > x + w then
+			return
+		end
+		if s.y > y + h then
+			return
+		end
+		return true
 	end
 }
 
