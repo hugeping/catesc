@@ -12,7 +12,7 @@ function init()
 	hero_spr_left = sprite.scale(hero_spr, -1.0, 1, false)
 	hook_keys('right', 'left', 'space');
 	hero.state = DEAD
-	select_map(1)
+	
 end
 
 function map_show()
@@ -128,6 +128,7 @@ function map_move(x, y, dx, dy, w, h)
 end
 
 function start()
+	select_map(map_nr)
 	timer:set(20);
 end
 

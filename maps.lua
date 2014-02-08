@@ -35,10 +35,7 @@ function select_map(n)
 		hero.state = FALL;
 		hero.speed_x = 0
 		hero.move = 0
-	else
-		hero.x = 0
 	end
-	hero.dir = 1;
 end
 
 function map_next()
@@ -46,6 +43,10 @@ function map_next()
 	n = map_nr + 1;
 	map_data = {}
 	select_map(n)
+	if hero.state ~= DEAD then
+		hero.x = 0
+		hero.dir = 1
+	end
 end
 
 function map_life()
@@ -142,6 +143,62 @@ maps = {
 '                                        ';
 '                                        ';
 '                                        ';
+		};
+	},
+	{
+		x = 0,
+		y = 24 * 16 - hero.h,
+		title = "3",
+		map = {
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                     #                  ';
+'                     #                  ';
+'                     #                  ';
+'                     #                  ';
+'                     #                  ';
+'              *      #                  ';
+'###############      #                ##';
+'              #                     ####';
+'              #                   ####  ';
+'              #                 ####    ';
+'              #               ####      ';
+'              ##################        ';
 };
-}
+		life =  function()
+			if not map_data.laser then
+				map_data.laser = 60
+			end
+			map_data.laser = map_data.laser - 1
+			if map_data.laser <= 0 then
+				map_data.laser = 60
+			end
+			if map_data.laser <= 10 then
+				sprite.fill(sprite.screen(), 0, 24 * 16 - hero.h, 340, 3, 'red');
+				if hero_collision(0, 24 * 16 - hero.h, 340, 3) then
+					hero.state = FLY
+					hero.move = 0
+				end
+			end
+		end;
+
+},
+
+
 }
