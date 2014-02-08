@@ -60,6 +60,9 @@ end
 function map_block(x, y)
 	x = math.floor(x / BW);
 	y = math.floor(y / BH);
+	if x < 0 or y < 0 or x >= 60 or y >= 30 then
+		return
+	end
 	local l = map[y + 1];
 	local c = string.sub(l, x + 1, x + 1);
 
