@@ -19,7 +19,7 @@ function map_show()
 	local y, x
 	for y=0, 29 do
 		for x=0, 39 do
-			local l = map[y + 1];
+			local l = map.map[y + 1];
 			local c = string.sub(l, x + 1, x + 1);
 			if c == '#' then
 				sprite.fill(sprite.screen(), x * 16 + 1, y * 16 + 1, 16 - 2, 16 - 2, 'black');
@@ -42,7 +42,7 @@ function map_block(x, y)
 	if x < 0 or y < 0 or x >= 60 or y >= 30 then
 		return
 	end
-	local l = map[y + 1];
+	local l = map.map[y + 1];
 	local c = string.sub(l, x + 1, x + 1);
 
 	if c == '#' then
@@ -128,7 +128,7 @@ function map_move(x, y, dx, dy, w, h)
 end
 
 function start()
-	select_map(map_nr)
+	map:select()
 	timer:set(20);
 end
 
@@ -373,13 +373,13 @@ hero = obj {
 game.timer = function(s)
 	sprite.fill(sprite.screen(), '#bbbbbb')
 	map_show()
-	map_life()
+	map:life()
 	hero:draw();
 	hero:life();
 	if hero.state == DEAD then
-		select_map(map_nr)
+		map:select()
 	elseif hero.x >= 640 then
-		map_next()
+		map:next()
 	end
 
 	sprite.draw(title, sprite.screen(), 0, 0);
