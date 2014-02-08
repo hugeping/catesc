@@ -3,19 +3,19 @@ global {
 	map_data = {};
 }
 function hero_collision(x, y, w, h)
-	if hero_state == HERO_DEAD or hero_state == HERO_FLY or hero_state == HERO_DROWN then
+	if hero.state == HERO_DEAD or hero.state == HERO_FLY or hero.state == HERO_DROWN then
 		return
 	end
-	if hero_x + hero_w <= x then
+	if hero.x + hero.w <= x then
 		return
 	end
-	if hero_y + hero_h <= y then
+	if hero.y + hero.h <= y then
 		return
 	end
-	if hero_x > x + w then
+	if hero.x > x + w then
 		return
 	end
-	if hero_y > y + h then
+	if hero.y > y + h then
 		return
 	end
 	return true
@@ -28,17 +28,17 @@ function select_map(n)
 	end
 	title = sprite.text(fn, string.format("%d: %s", n, maps[n].title), "black");
 	map = maps[n].map;
-	if hero_state == DEAD then
-		hero_x = maps[n].x
-		hero_y = maps[n].y
+	if hero.state == DEAD then
+		hero.x = maps[n].x
+		hero.y = maps[n].y
 		map_data = {}
-		hero_state = FALL;
-		hero_speed_x = 0
-		hero_move = 0
+		hero.state = FALL;
+		hero.speed_x = 0
+		hero.move = 0
 	else
-		hero_x = 0
+		hero.x = 0
 	end
-	hero_dir = 1;
+	hero.dir = 1;
 end
 
 function map_next()
@@ -100,8 +100,8 @@ maps = {
 			map_data.x = map_data.x - 2
 			if map_data.x < -10 then map_data.x = 640; map_data.y = map_data.y + 0 end
 			if hero_collision(map_data.x, map_data.y, 16, 16) then
-				hero_state = FLY
-				hero_move = 0
+				hero.state = FLY
+				hero.move = 0
 			end
 		end;
 	},

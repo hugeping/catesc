@@ -33,7 +33,7 @@ function init()
 	hero_spr = sprite.load "pic/cat.png"
 	hero_spr_left = sprite.scale(hero_spr, -1.0, 1, false)
 	hook_keys('right', 'left', 'space');
-	hero_state = DEAD
+	hero.state = DEAD
 	select_map(1)
 end
 function map_show()
@@ -71,14 +71,14 @@ function map_block(x, y)
 	end
 
 	if c == '~' then
-		hero_state = DROWN
-		hero_move = 0
+		hero.state = DROWN
+		hero.move = 0
 		return WATER
 	end
 
 	if c == '*' then
-		hero_state = FLY
-		hero_move = 0
+		hero.state = FLY
+		hero.move = 0
 		return EMERGENCY
 	end
 
@@ -141,8 +141,8 @@ function map_move(x, y, dx, dy, w, h)
 		blockx = true
 	end
 
-	if x < -hero_w / 2 then
-		x = -hero_w / 2
+	if x < -hero.w / 2 then
+		x = -hero.w / 2
 	end
 
 	return math.floor(x), math.floor(y), blockx, blocky
@@ -210,19 +210,21 @@ GX = 0.25
 BW = 16
 BH = 16
 
-hero_h = 19 * 3 - 8
-hero_w = 23 * 3 - 16
-hero_xoff = 8
-hero_yoff = 8
 
 global {
-	hero_move = 0;
-	hero_x = 10;
-	hero_y = 0;
-	hero_speed_x = 0;
-	hero_state = FALL;
-	hero_dir = 1;
-	hero_jump_speed = 0;
+	hero = {
+		move = 0;
+		x = 10;
+		y = 0;
+		speed_x = 0;
+		state = FALL;
+		dir = 1;
+		jump_speed = 0;
+		h = 19 * 3 - 8;
+		w = 23 * 3 - 16;
+		xoff = 8;
+		yoff = 8;
+	}
 }
 
 game.timer = function(s)
@@ -230,108 +232,108 @@ game.timer = function(s)
 	sprite.fill(sprite.screen(), '#bbbbbb')
 	map_show()
 	map_life()
-	if hero_state == JUMP then
-		hero_move = hero_move + 1
-		local d = hero_jump_speed - hero_move * G;
+	if hero.state == JUMP then
+		hero.move = hero.move + 1
+		local d = hero.jump_speed - hero.move * G;
 		if d <= 0 then
 			d = 0
 		end
-		hero_x, hero_y, blockx, blocky = map_move(hero_x, hero_y, 
-			hero_speed_x, -d, hero_w, hero_h);
+		hero.x, hero.y, blockx, blocky = map_move(hero.x, hero.y, 
+			hero.speed_x, -d, hero.w, hero.h);
 		if blockx then
-			hero_speed_x = hero_speed_x * 0.75
+			hero.speed_x = hero.speed_x * 0.75
 		end
 		if d <= 0 or blocky  then
-			hero_state = FALL
-			hero_move = 0
+			hero.state = FALL
+			hero.move = 0
 		end
-	elseif hero_state == FALL then
-		hero_move = hero_move + 1
-		local d = hero_move * G;
-		hero_x, hero_y, blockx, blocky = map_move(hero_x, hero_y, 
-			hero_speed_x, d, 
-			hero_w, hero_h);
+	elseif hero.state == FALL then
+		hero.move = hero.move + 1
+		local d = hero.move * G;
+		hero.x, hero.y, blockx, blocky = map_move(hero.x, hero.y, 
+			hero.speed_x, d, 
+			hero.w, hero.h);
 		if blocky then
-			hero_state = WALK;
+			hero.state = WALK;
 		end
-	elseif hero_state == WALK then
+	elseif hero.state == WALK then
 		if key_right or key_left then
 			if key_right then
-				hero_dir = 1
-				hero_speed_x = hero_speed_x + GX
-				if hero_speed_x > MAX_SPEEDX then
-					hero_speed_x = MAX_SPEEDX
+				hero.dir = 1
+				hero.speed_x = hero.speed_x + GX
+				if hero.speed_x > MAX_SPEEDX then
+					hero.speed_x = MAX_SPEEDX
 				end
 			else
-				hero_dir = -1
-				hero_speed_x = hero_speed_x - GX
-				if hero_speed_x < -MAX_SPEEDX then
-					hero_speed_x = -MAX_SPEEDX
+				hero.dir = -1
+				hero.speed_x = hero.speed_x - GX
+				if hero.speed_x < -MAX_SPEEDX then
+					hero.speed_x = -MAX_SPEEDX
 				end
 			end
 		else
 			local gx = GX
-			if hero_speed_x ~= 0 then
-				if hero_speed_x > 0 then
+			if hero.speed_x ~= 0 then
+				if hero.speed_x > 0 then
 					gx = - gx
 				end
-				hero_speed_x = hero_speed_x + gx
-				if gx < 0 and hero_speed_x < 0 or gx > 0 and hero_speed_x > 0 then
-					hero_speed_x = 0
+				hero.speed_x = hero.speed_x + gx
+				if gx < 0 and hero.speed_x < 0 or gx > 0 and hero.speed_x > 0 then
+					hero.speed_x = 0
 				end
 			end
 		end
 		if key_space then
 			key_space = false
-			hero_state = JUMP
-			hero_move = 0
-			hero_jump_speed = math.abs(hero_speed_x)* 0.75 + JUMP_SPEED 
-		elseif hero_speed_x ~= 0 then
-			hero_move = hero_move + 1
-			hero_x, hero_y, blockx, blocky = map_move(hero_x, hero_y, 
-				hero_speed_x, 0, 
-				hero_w, hero_h);
+			hero.state = JUMP
+			hero.move = 0
+			hero.jump_speed = math.abs(hero.speed_x)* 0.75 + JUMP_SPEED 
+		elseif hero.speed_x ~= 0 then
+			hero.move = hero.move + 1
+			hero.x, hero.y, blockx, blocky = map_move(hero.x, hero.y, 
+				hero.speed_x, 0, 
+				hero.w, hero.h);
 			if blockx then
-				hero_speed_x = 0
+				hero.speed_x = 0
 			end
 			if not blocky then
-				hero_state = FALL
-				hero_move = 0
+				hero.state = FALL
+				hero.move = 0
 			end
 		end
-	elseif hero_state == DROWN then
-		hero_move = hero_move + 2
-		if hero_move >= 19 * 3 then
-			hero_state = DEAD
+	elseif hero.state == DROWN then
+		hero.move = hero.move + 2
+		if hero.move >= 19 * 3 then
+			hero.state = DEAD
 		end
-	elseif hero_state == FLY then
-		hero_move = hero_move + 3
-		if hero_move > 50 then
-			local d = JUMP_SPEED + (hero_move - 50) * G;
-			hero_y = hero_y - d
-			if hero_y < - 19 * 3 then
-				hero_state = DEAD
+	elseif hero.state == FLY then
+		hero.move = hero.move + 3
+		if hero.move > 50 then
+			local d = JUMP_SPEED + (hero.move - 50) * G;
+			hero.y = hero.y - d
+			if hero.y < - 19 * 3 then
+				hero.state = DEAD
 			end
 		else
-			hero_dir = -1 * hero_dir
+			hero.dir = -1 * hero.dir
 		end
 	end
-	if hero_state == WALK or hero_state == FLY then
-		if math.abs(hero_speed_x) >= SPEED_RUN then
-			hero_draw(hero_x - hero_xoff, hero_y - hero_yoff, (math.floor(hero_move / 10)) % 2 +  2, hero_dir)
+	if hero.state == WALK or hero.state == FLY then
+		if math.abs(hero.speed_x) >= SPEED_RUN then
+			hero_draw(hero.x - hero.xoff, hero.y - hero.yoff, (math.floor(hero.move / 10)) % 2 +  2, hero.dir)
 		else
-			hero_draw(hero_x - hero_xoff, hero_y - hero_yoff, (math.floor(hero_move / 10)) % 2, hero_dir)
+			hero_draw(hero.x - hero.xoff, hero.y - hero.yoff, (math.floor(hero.move / 10)) % 2, hero.dir)
 		end
-	elseif hero_state == JUMP then
-		hero_draw(hero_x - hero_xoff, hero_y - hero_yoff, 2, hero_dir)
-	elseif hero_state == FALL then
-		hero_draw(hero_x - hero_xoff, hero_y - hero_yoff, 3, hero_dir)
-	elseif hero_state == DROWN then
-		hero_draw(hero_x - hero_xoff, hero_y - hero_yoff + hero_move, 0, hero_dir, 0, 0, 23 * 3, 19 * 3 - hero_move)
-	elseif hero_state == DEAD then
+	elseif hero.state == JUMP then
+		hero_draw(hero.x - hero.xoff, hero.y - hero.yoff, 2, hero.dir)
+	elseif hero.state == FALL then
+		hero_draw(hero.x - hero.xoff, hero.y - hero.yoff, 3, hero.dir)
+	elseif hero.state == DROWN then
+		hero_draw(hero.x - hero.xoff, hero.y - hero.yoff + hero.move, 0, hero.dir, 0, 0, 23 * 3, 19 * 3 - hero.move)
+	elseif hero.state == DEAD then
 		select_map(map_nr)
 	end
-	if hero_x >= 640 then
+	if hero.x >= 640 then
 		map_next()
 	end
 	sprite.draw(title, sprite.screen(), 0, 0);
