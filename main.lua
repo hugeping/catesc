@@ -40,15 +40,16 @@ function map_show()
 	local y, x
 	for y=0, 29 do
 		for x=0, 39 do
-			local r, g, b = sprite.pixel(map, x, y)
-			if r == 255 and g == 255 and b == 255 then
+			local l = map[y + 1];
+			local c = string.sub(l, x + 1, x + 1);
+			if c == '#' then
 				sprite.fill(sprite.screen(), x * 16 + 1, y * 16 + 1, 16 - 2, 16 - 2, 'black');
 			end
-			if r == 0 and g == 0 and b == 255 then
+			if c == '~' then
 				sprite.fill(sprite.screen(), x * 16 - 1, y * 16, 16 + 2, 16, 'blue');
 			end
 
-			if r == 255 and g == 0 and b == 0 then
+			if c == '*' then
 				sprite.fill(sprite.screen(), x * 16, y * 16, 16, 16, 'red');
 			end
 
@@ -57,19 +58,22 @@ function map_show()
 end
 
 function map_block(x, y)
-	x = x / BW;
-	y = y / BH;
-	local r, g, b = sprite.pixel(map, x, y)
-	if r == 255 and g == 255 and b == 255 then
+	x = math.floor(x / BW);
+	y = math.floor(y / BH);
+	local l = map[y + 1];
+	local c = string.sub(l, x + 1, x + 1);
+
+	if c == '#' then
 		return BLOCK
 	end
-	if r == 0 and g == 0 and b == 255 then
+
+	if c == '~' then
 		hero_state = DROWN
 		hero_move = 0
 		return WATER
 	end
 
-	if r == 255 and g == 0 and b == 0 then
+	if c == '*' then
 		hero_state = FLY
 		hero_move = 0
 		return EMERGENCY
@@ -79,22 +83,24 @@ function map_block(x, y)
 end
 function map_is_fall(x, y, w)
 	local xx
+	local rc = true
 	for xx = 0, math.floor((w - 1) / BW) do
 		if map_block(x + xx * BW, y) then
-			return false
+			rc = false
 		end
 	end
-	return true
+	return rc
 end
 
 function map_is_move(x, y, h)
 	local yy
+	local rc = true
 	for yy = 0, math.floor((h - 1) / BH) do
 		if map_block(x, y + yy*BH) then
-			return false
+			rc = false
 		end
 	end
-	return true
+	return rc
 end
 
 function map_move(x, y, dx, dy, w, h)

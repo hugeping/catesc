@@ -23,14 +23,11 @@ end
 
 function select_map(n)
 	map_nr = n;
-	if map then
-		sprite.free(map);
-	end
 	if title then
 		sprite.free(title);
 	end
 	title = sprite.text(fn, string.format("%d: %s", n, maps[n].title), "black");
-	map = sprite.load(maps[n].map);
+	map = maps[n].map;
 	if hero_state == DEAD then
 		hero_x = maps[n].x
 		hero_y = maps[n].y
@@ -61,7 +58,38 @@ maps = {
 		x = 0,
 		y = 0,
 		title = "Be smart", 
-		map = 'pic/map1.png';
+		map = {
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'#######****#############################';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+};
 		life = function()
 			if not map_data.x then
 				map_data.x = 640
