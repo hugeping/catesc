@@ -15,13 +15,12 @@ map = obj {
 		end
 		s.title = sprite.text(fn, string.format("%d: %s", n, maps[n].title), "black");
 		s.map = maps[n].map;
-		if hero.state == DEAD then
+		if hero:state() == DEAD then
 			hero.x = maps[n].x
 			hero.y = maps[n].y
 			map.data = {}
-			hero.state = FALL;
+			hero:state(FALL);
 			hero.speed_x = 0
-			hero.move = 0
 		end
 	end;
 	next = function(s)
@@ -29,7 +28,7 @@ map = obj {
 		n = s.nr + 1;
 		s.data = {}
 		s:select(n)
-		if hero.state ~= DEAD then
+		if hero:state() ~= DEAD then
 			hero.x = 0
 			hero.dir = 1
 		end
@@ -64,13 +63,11 @@ map = obj {
 			return BLOCK
 		end
 		if c == '~' then
-			hero.state = DROWN
-			hero.move = 0
+			hero:state(DROWN)
 			return WATER
 		end
 		if c == '*' then
-			hero.state = FLY
-			hero.move = 0
+			hero:state(FLY)
 			return EMERGENCY
 		end
 		return
@@ -266,8 +263,7 @@ maps = {
 			if s.laser <= 10 then
 				sprite.fill(sprite.screen(), 0, 24 * 16 - hero.h, 340, 3, 'red');
 				if hero:collision(0, 24 * 16 - hero.h, 340, 3) then
-					hero.state = FLY
-					hero.move = 0
+					hero:state(FLY)
 				end
 			end
 		end;

@@ -11,7 +11,7 @@ function init()
 	hero_spr = sprite.load "pic/cat.png"
 	hero_spr_left = sprite.scale(hero_spr, -1.0, 1, false)
 	hook_keys('right', 'left', 'space');
-	hero.state = DEAD
+	hero:state(DEAD)
 end
 
 
@@ -88,7 +88,7 @@ hero = obj {
 		x = 10;
 		y = 0;
 		speed_x = 0;
-		state = FALL;
+		st = FALL;
 		dir = 1;
 		jump_speed = 0;
 		h = 19 * 3 - 8;
@@ -96,9 +96,17 @@ hero = obj {
 		xoff = 8;
 		yoff = 8;
 	};
+	state = function(s, n)
+		local os = s.st
+		if n then
+			s.st = n
+			s.move = 0
+		end
+		return os
+	end;
 	life = function (s)
 		local block_x, block_y
-		if s.state == JUMP then
+		if s:state() == JUMP then
 			s.move = s.move + 1
 			local d = s.jump_speed - hero.move * G;
 			if d <= 0 then
@@ -110,35 +118,35 @@ hero = obj {
 				s.speed_x = s.speed_x * 0.75
 			end
 			if d <= 0 or block_y  then
-				s.state = FALL
+				s:state(FALL)
 				s.move = 0
 			end
-		elseif s.state == FALL then
+		elseif s:state() == FALL then
 			s.move = s.move + 1
 			local d = s.move * G;
 			s.x, s.y, block_x, block_y = map:move(s.x, s.y, 
 				s.speed_x, d, 
 				s.w, s.h);
 			if block_y then
-				s.state = WALK;
+				s:state(WALK);
 			end
-		elseif s.state == DROWN then
+		elseif s:state() == DROWN then
 			s.move = s.move + 2
 			if s.move >= 19 * 3 then
-				s.state = DEAD
+				s:state(DEAD)
 			end
-		elseif s.state == FLY then
+		elseif s:state() == FLY then
 			s.move = s.move + 3
 			if s.move > 50 then
 				local d = JUMP_SPEED + (s.move - 50) * G;
 				s.y = s.y - d
 				if s.y < - 19 * 3 then
-					s.state = DEAD
+					s:state(DEAD)
 				end
 			else
 				s.dir = -1 * s.dir
 			end
-		elseif s.state == WALK then
+		elseif s:state() == WALK then
 			if s.speed_x ~= 0 then
 				s.move = s.move + 1
 				s.x, s.y, block_x, block_y = map:move(s.x, s.y, 
@@ -148,8 +156,7 @@ hero = obj {
 					s.speed_x = 0
 				end
 				if not block_y then
-					s.state = FALL
-					s.move = 0
+					s:state(FALL)
 				end
 			end
 			s:input()
@@ -159,7 +166,7 @@ hero = obj {
 		return true;
 	end;
 	input = function(s)
-		if s.state == WALK then
+		if s:state() == WALK then
 			if key_right or key_left then
 				if key_right then
 					s.dir = 1
@@ -188,8 +195,7 @@ hero = obj {
 			end
 			if key_space then
 				key_space = false
-				s.state = JUMP
-				s.move = 0
+				s:state(JUMP)
 				s.jump_speed = math.abs(s.speed_x)* 0.75 + JUMP_SPEED 
 			end
 		end
@@ -198,17 +204,17 @@ hero = obj {
 		local x, y, state, fx, fy, fw, fh
 		x = s.x - s.xoff
 		y = s.y - s.yoff
-		if s.state == WALK or s.state == FLY then
+		if s:state() == WALK or s:state() == FLY then
 			if math.abs(s.speed_x) >= SPEED_RUN then
 				state = (math.floor(s.move / 10)) % 2 +  2
 			else
 				state = (math.floor(s.move / 10)) % 2 
 			end
-		elseif s.state == JUMP then
+		elseif s:state() == JUMP then
 			state = 2
-		elseif hero.state == FALL then
+		elseif s:state() == FALL then
 			state = 3
-		elseif hero.state == DROWN then
+		elseif s:state() == DROWN then
 			y = s.y - s.yoff + s.move
 			state = 0
 			fx = 0
@@ -216,7 +222,7 @@ hero = obj {
 			fw = 23 * 3
 			fh = 19 * 3 - s.move
 		else
-			state = s.state
+			state = s:state()
 		end
 
 		local xoff = state * (23 * 3)
@@ -239,7 +245,7 @@ hero = obj {
 		end
 	end;
 	collision = function(s, x, y, w, h)
-		if s.state == HERO_DEAD or s.state == HERO_FLY or s.state == HERO_DROWN then
+		if s:state() == HERO_DEAD or s:state() == HERO_FLY or s:state() == HERO_DROWN then
 			return
 		end
 		if s.x + s.w <= x then
@@ -264,7 +270,7 @@ game.timer = function(s)
 	map:life()
 	hero:draw();
 	hero:life();
-	if hero.state == DEAD then
+	if hero:state() == DEAD then
 		map:select()
 	elseif hero.x >= 640 then
 		map:next()
