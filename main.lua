@@ -12,120 +12,8 @@ function init()
 	hero_spr_left = sprite.scale(hero_spr, -1.0, 1, false)
 	hook_keys('right', 'left', 'space');
 	hero.state = DEAD
-	
 end
 
-function map_show()
-	local y, x
-	for y=0, 29 do
-		for x=0, 39 do
-			local l = map.map[y + 1];
-			local c = string.sub(l, x + 1, x + 1);
-			if c == '#' then
-				sprite.fill(sprite.screen(), x * 16 + 1, y * 16 + 1, 16 - 2, 16 - 2, 'black');
-			end
-			if c == '~' then
-				sprite.fill(sprite.screen(), x * 16 - 1, y * 16, 16 + 2, 16, 'blue');
-			end
-
-			if c == '*' then
-				sprite.fill(sprite.screen(), x * 16, y * 16, 16, 16, 'red');
-			end
-
-		end
-	end
-end
-
-function map_block(x, y)
-	x = math.floor(x / BW);
-	y = math.floor(y / BH);
-	if x < 0 or y < 0 or x >= 60 or y >= 30 then
-		return
-	end
-	local l = map.map[y + 1];
-	local c = string.sub(l, x + 1, x + 1);
-
-	if c == '#' then
-		return BLOCK
-	end
-
-	if c == '~' then
-		hero.state = DROWN
-		hero.move = 0
-		return WATER
-	end
-
-	if c == '*' then
-		hero.state = FLY
-		hero.move = 0
-		return EMERGENCY
-	end
-
-	return
-end
-function map_is_fall(x, y, w)
-	local xx
-	local rc = true
-	for xx = 0, math.floor((w - 1) / BW) do
-		if map_block(x + xx * BW, y) then
-			rc = false
-		end
-	end
-	return rc
-end
-
-function map_is_move(x, y, h)
-	local yy
-	local rc = true
-	for yy = 0, math.floor((h - 1) / BH) do
-		if map_block(x, y + yy*BH) then
-			rc = false
-		end
-	end
-	return rc
-end
-
-function map_move(x, y, dx, dy, w, h)
-	local blockx = false
-	local blocky = false
-	local xx = x
-	local yy = y
-	if dx >= 0 then
-		xx = xx + w
-	end
-	if dy >= 0 then
-		yy = yy + h
-	end
-	if map_is_fall(x, yy + dy, w) then
-		y = y + dy
-	else
-		y = math.floor((yy + dy) / BH) * BH
-		if dy >= 0 then
-			y = y - h
-		else
-			y = y + BH
-		end
-		blocky = true
-	end
-
-	if map_is_move(xx + dx, y, h) then
-		x = x + dx
-	else
-		x = math.floor((xx + dx) / BW) * BW 
-		if dx >= 0 then
-			x = x - w
-		else
-			x = x + BW
-		end
-		blockx = true
-	end
-
-	if x < -hero.w / 2 then
-		x = -hero.w / 2
-	end
-
-	return math.floor(x), math.floor(y), blockx, blocky
-end
 
 function start()
 	map:select()
@@ -216,7 +104,7 @@ hero = obj {
 			if d <= 0 then
 				d = 0
 			end
-			s.x, s.y, block_x, block_y = map_move(s.x, s.y, 
+			s.x, s.y, block_x, block_y = map:move(s.x, s.y, 
 				s.speed_x, -d, s.w, s.h);
 			if block_x then
 				s.speed_x = s.speed_x * 0.75
@@ -228,7 +116,7 @@ hero = obj {
 		elseif s.state == FALL then
 			s.move = s.move + 1
 			local d = s.move * G;
-			s.x, s.y, block_x, block_y = map_move(s.x, s.y, 
+			s.x, s.y, block_x, block_y = map:move(s.x, s.y, 
 				s.speed_x, d, 
 				s.w, s.h);
 			if block_y then
@@ -253,7 +141,7 @@ hero = obj {
 		elseif s.state == WALK then
 			if s.speed_x ~= 0 then
 				s.move = s.move + 1
-				s.x, s.y, block_x, block_y = map_move(s.x, s.y, 
+				s.x, s.y, block_x, block_y = map:move(s.x, s.y, 
 					s.speed_x, 0, 
 					s.w, s.h);
 				if block_x then
@@ -372,7 +260,7 @@ hero = obj {
 
 game.timer = function(s)
 	sprite.fill(sprite.screen(), '#bbbbbb')
-	map_show()
+	map:show()
 	map:life()
 	hero:draw();
 	hero:life();

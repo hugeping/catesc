@@ -1,8 +1,3 @@
-global {
-	map_nr = 1;
-	map_data = {};
-}
-
 map = obj {
 	nam = 'map';
 	var {
@@ -38,6 +33,106 @@ map = obj {
 			hero.x = 0
 			hero.dir = 1
 		end
+	end;
+	show = function(s)
+		local y, x
+		for y=0, 29 do
+			for x=0, 39 do
+				local l = s.map[y + 1];
+				local c = string.sub(l, x + 1, x + 1);
+				if c == '#' then
+					sprite.fill(sprite.screen(), x * 16 + 1, y * 16 + 1, 16 - 2, 16 - 2, 'black');
+				end
+				if c == '~' then
+					sprite.fill(sprite.screen(), x * 16 - 1, y * 16, 16 + 2, 16, 'blue');
+				end
+				if c == '*' then
+					sprite.fill(sprite.screen(), x * 16, y * 16, 16, 16, 'red');
+				end
+			end
+		end
+	end;
+	block = function(s, x, y)
+		x = math.floor(x / BW);
+		y = math.floor(y / BH);
+		if x < 0 or y < 0 or x >= 60 or y >= 30 then
+			return
+		end
+		local l = s.map[y + 1];
+		local c = string.sub(l, x + 1, x + 1);	
+		if c == '#' then
+			return BLOCK
+		end
+		if c == '~' then
+			hero.state = DROWN
+			hero.move = 0
+			return WATER
+		end
+		if c == '*' then
+			hero.state = FLY
+			hero.move = 0
+			return EMERGENCY
+		end
+		return
+	end;
+	is_fall = function(s, x, y, w)
+		local xx
+		local rc = true
+		for xx = 0, math.floor((w - 1) / BW) do
+			if s:block(x + xx * BW, y) then
+				rc = false
+			end
+		end
+		return rc
+	end;
+	is_move = function(s, x, y, h)
+		local yy
+		local rc = true
+		for yy = 0, math.floor((h - 1) / BH) do
+			if s:block(x, y + yy*BH) then
+				rc = false
+			end
+		end
+		return rc
+	end;
+	move = function(s, x, y, dx, dy, w, h)
+		local block_x = false
+		local block_y = false
+		local xx = x
+		local yy = y
+		if dx >= 0 then
+			xx = xx + w
+		end
+		if dy >= 0 then
+			yy = yy + h
+		end
+		if s:is_fall(x, yy + dy, w) then
+			y = y + dy
+		else
+			y = math.floor((yy + dy) / BH) * BH
+			if dy >= 0 then
+				y = y - h
+			else
+				y = y + BH
+			end
+			block_y = true
+		end
+	
+		if s:is_move(xx + dx, y, h) then
+			x = x + dx
+		else
+			x = math.floor((xx + dx) / BW) * BW 
+			if dx >= 0 then
+				x = x - w
+			else
+				x = x + BW
+			end
+			block_x = true
+		end
+		if x < -hero.w / 2 then
+			x = -hero.w / 2
+		end
+		return math.floor(x), math.floor(y), block_x, block_y
 	end;
 	life = function(s)
 		if maps[s.nr].life then
