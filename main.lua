@@ -5,7 +5,6 @@ require "timer"
 require "kbd"
 require "sound"
 require "prefs"
-dofile "maps.lua"
 
 function init()
 	fn = sprite.font("font.ttf", 16);
@@ -366,3 +365,5 @@ game.timer = function(s)
 
 	sprite.draw(title, sprite.screen(), 0, 0);
 end
+
+dofile "maps.lua"
