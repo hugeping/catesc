@@ -7,27 +7,6 @@ require "sound"
 require "prefs"
 dofile "maps.lua"
 
-function hero_draw(x, y, state, dir, xd, yd, ww, hh)
-	local xoff = state * (23 * 3)
-	if dir < 0 then
-		xoff = (3 - state) * (23 * 3)
-	else
-		xoff = state * (23 * 3)
-	end
-	local yoff = 0;
-	local w = 23 * 3;
-	local h = 19 * 3;
-	if xd then xoff = xoff + xd end
-	if yd then yoff = yoff + yd end
-	if ww then w = ww end
-	if hh then h = hh end
-	if dir < 0 then
-		sprite.draw(hero_spr_left, xoff, yoff, w, h, sprite.screen(), x, y);
-	else
-		sprite.draw(hero_spr, xoff, yoff, w, h, sprite.screen(), x, y);
-	end
-end
-
 function init()
 	fn = sprite.font("font.ttf", 16);
 	hero_spr = sprite.load "pic/cat.png"
@@ -212,7 +191,10 @@ BH = 16
 
 
 global {
-	hero = {
+}
+hero = obj {
+	nam = 'hero';
+	var {
 		move = 0;
 		x = 10;
 		y = 0;
@@ -224,7 +206,51 @@ global {
 		w = 23 * 3 - 16;
 		xoff = 8;
 		yoff = 8;
-	}
+	};
+	draw = function (s)
+		local x, y, state, fx, fy, fw, fh
+		x = s.x - s.xoff
+		y = s.y - s.yoff
+		if s.state == WALK or s.state == FLY then
+			if math.abs(s.speed_x) >= SPEED_RUN then
+				state = (math.floor(s.move / 10)) % 2 +  2
+			else
+				state = (math.floor(s.move / 10)) % 2 
+			end
+		elseif s.state == JUMP then
+			state = 2
+		elseif hero.state == FALL then
+			state = 3
+		elseif hero.state == DROWN then
+			y = s.y - s.yoff + s.move
+			state = 0
+			fx = 0
+			fy = 0
+			fw = 23 * 3
+			fh = 19 * 3 - s.move
+		else
+			state = s.state
+		end
+
+		local xoff = state * (23 * 3)
+		if s.dir < 0 then
+			xoff = (3 - state) * (23 * 3)
+		else
+			xoff = state * (23 * 3)
+		end
+		local yoff = 0;
+		local w = 23 * 3;
+		local h = 19 * 3;
+		if fx then xoff = xoff + fx end
+		if fy then yoff = yoff + fy end
+		if fw then w = fw end
+		if fh then h = fh end
+		if s.dir < 0 then
+			sprite.draw(hero_spr_left, xoff, yoff, w, h, sprite.screen(), x, y);
+		else
+			sprite.draw(hero_spr, xoff, yoff, w, h, sprite.screen(), x, y);
+		end
+	end
 }
 
 game.timer = function(s)
@@ -318,23 +344,13 @@ game.timer = function(s)
 			hero.dir = -1 * hero.dir
 		end
 	end
-	if hero.state == WALK or hero.state == FLY then
-		if math.abs(hero.speed_x) >= SPEED_RUN then
-			hero_draw(hero.x - hero.xoff, hero.y - hero.yoff, (math.floor(hero.move / 10)) % 2 +  2, hero.dir)
-		else
-			hero_draw(hero.x - hero.xoff, hero.y - hero.yoff, (math.floor(hero.move / 10)) % 2, hero.dir)
-		end
-	elseif hero.state == JUMP then
-		hero_draw(hero.x - hero.xoff, hero.y - hero.yoff, 2, hero.dir)
-	elseif hero.state == FALL then
-		hero_draw(hero.x - hero.xoff, hero.y - hero.yoff, 3, hero.dir)
-	elseif hero.state == DROWN then
-		hero_draw(hero.x - hero.xoff, hero.y - hero.yoff + hero.move, 0, hero.dir, 0, 0, 23 * 3, 19 * 3 - hero.move)
-	elseif hero.state == DEAD then
+	hero:draw();
+
+	if hero.state == DEAD then
 		select_map(map_nr)
-	end
-	if hero.x >= 640 then
+	elseif hero.x >= 640 then
 		map_next()
 	end
+
 	sprite.draw(title, sprite.screen(), 0, 0);
 end
