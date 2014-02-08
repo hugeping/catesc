@@ -15,6 +15,7 @@ function init()
 	hero.state = DEAD
 	select_map(1)
 end
+
 function map_show()
 	local y, x
 	for y=0, 29 do
@@ -207,6 +208,104 @@ hero = obj {
 		xoff = 8;
 		yoff = 8;
 	};
+	life = function (s)
+		local block_x, block_y
+		if s.state == JUMP then
+			s.move = s.move + 1
+			local d = s.jump_speed - hero.move * G;
+			if d <= 0 then
+				d = 0
+			end
+			s.x, s.y, block_x, block_y = map_move(s.x, s.y, 
+				s.speed_x, -d, s.w, s.h);
+			if block_x then
+				s.speed_x = s.speed_x * 0.75
+			end
+			if d <= 0 or block_y  then
+				s.state = FALL
+				s.move = 0
+			end
+		elseif s.state == FALL then
+			s.move = s.move + 1
+			local d = s.move * G;
+			s.x, s.y, block_x, block_y = map_move(s.x, s.y, 
+				s.speed_x, d, 
+				s.w, s.h);
+			if block_y then
+				s.state = WALK;
+			end
+		elseif s.state == DROWN then
+			s.move = s.move + 2
+			if s.move >= 19 * 3 then
+				s.state = DEAD
+			end
+		elseif s.state == FLY then
+			s.move = s.move + 3
+			if s.move > 50 then
+				local d = JUMP_SPEED + (s.move - 50) * G;
+				s.y = s.y - d
+				if s.y < - 19 * 3 then
+					s.state = DEAD
+				end
+			else
+				s.dir = -1 * s.dir
+			end
+		elseif s.state == WALK then
+			if s.speed_x ~= 0 then
+				s.move = s.move + 1
+				s.x, s.y, block_x, block_y = map_move(s.x, s.y, 
+					s.speed_x, 0, 
+					s.w, s.h);
+				if block_x then
+					s.speed_x = 0
+				end
+				if not block_y then
+					s.state = FALL
+					s.move = 0
+				end
+			end
+			s:input()
+		else
+			return false
+		end
+		return true;
+	end;
+	input = function(s)
+		if s.state == WALK then
+			if key_right or key_left then
+				if key_right then
+					s.dir = 1
+					s.speed_x = s.speed_x + GX
+					if s.speed_x > MAX_SPEEDX then
+						s.speed_x = MAX_SPEEDX
+					end
+				else
+					s.dir = -1
+					s.speed_x = s.speed_x - GX
+					if s.speed_x < -MAX_SPEEDX then
+						s.speed_x = -MAX_SPEEDX
+					end
+				end
+			else
+				local gx = GX
+				if s.speed_x ~= 0 then
+					if s.speed_x > 0 then
+						gx = - gx
+					end
+					s.speed_x = s.speed_x + gx
+					if gx < 0 and s.speed_x < 0 or gx > 0 and s.speed_x > 0 then
+						s.speed_x = 0
+					end
+				end
+			end
+			if key_space then
+				key_space = false
+				s.state = JUMP
+				s.move = 0
+				s.jump_speed = math.abs(s.speed_x)* 0.75 + JUMP_SPEED 
+			end
+		end
+	end;
 	draw = function (s)
 		local x, y, state, fx, fy, fw, fh
 		x = s.x - s.xoff
@@ -254,98 +353,11 @@ hero = obj {
 }
 
 game.timer = function(s)
-	local blockx, blocky
 	sprite.fill(sprite.screen(), '#bbbbbb')
 	map_show()
 	map_life()
-	if hero.state == JUMP then
-		hero.move = hero.move + 1
-		local d = hero.jump_speed - hero.move * G;
-		if d <= 0 then
-			d = 0
-		end
-		hero.x, hero.y, blockx, blocky = map_move(hero.x, hero.y, 
-			hero.speed_x, -d, hero.w, hero.h);
-		if blockx then
-			hero.speed_x = hero.speed_x * 0.75
-		end
-		if d <= 0 or blocky  then
-			hero.state = FALL
-			hero.move = 0
-		end
-	elseif hero.state == FALL then
-		hero.move = hero.move + 1
-		local d = hero.move * G;
-		hero.x, hero.y, blockx, blocky = map_move(hero.x, hero.y, 
-			hero.speed_x, d, 
-			hero.w, hero.h);
-		if blocky then
-			hero.state = WALK;
-		end
-	elseif hero.state == WALK then
-		if key_right or key_left then
-			if key_right then
-				hero.dir = 1
-				hero.speed_x = hero.speed_x + GX
-				if hero.speed_x > MAX_SPEEDX then
-					hero.speed_x = MAX_SPEEDX
-				end
-			else
-				hero.dir = -1
-				hero.speed_x = hero.speed_x - GX
-				if hero.speed_x < -MAX_SPEEDX then
-					hero.speed_x = -MAX_SPEEDX
-				end
-			end
-		else
-			local gx = GX
-			if hero.speed_x ~= 0 then
-				if hero.speed_x > 0 then
-					gx = - gx
-				end
-				hero.speed_x = hero.speed_x + gx
-				if gx < 0 and hero.speed_x < 0 or gx > 0 and hero.speed_x > 0 then
-					hero.speed_x = 0
-				end
-			end
-		end
-		if key_space then
-			key_space = false
-			hero.state = JUMP
-			hero.move = 0
-			hero.jump_speed = math.abs(hero.speed_x)* 0.75 + JUMP_SPEED 
-		elseif hero.speed_x ~= 0 then
-			hero.move = hero.move + 1
-			hero.x, hero.y, blockx, blocky = map_move(hero.x, hero.y, 
-				hero.speed_x, 0, 
-				hero.w, hero.h);
-			if blockx then
-				hero.speed_x = 0
-			end
-			if not blocky then
-				hero.state = FALL
-				hero.move = 0
-			end
-		end
-	elseif hero.state == DROWN then
-		hero.move = hero.move + 2
-		if hero.move >= 19 * 3 then
-			hero.state = DEAD
-		end
-	elseif hero.state == FLY then
-		hero.move = hero.move + 3
-		if hero.move > 50 then
-			local d = JUMP_SPEED + (hero.move - 50) * G;
-			hero.y = hero.y - d
-			if hero.y < - 19 * 3 then
-				hero.state = DEAD
-			end
-		else
-			hero.dir = -1 * hero.dir
-		end
-	end
 	hero:draw();
-
+	hero:life();
 	if hero.state == DEAD then
 		select_map(map_nr)
 	elseif hero.x >= 640 then
