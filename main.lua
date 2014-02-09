@@ -6,6 +6,8 @@ require "kbd"
 require "sound"
 require "prefs"
 
+SEMICOL="#103030"
+
 function init()
 	set_music 'snd/music.ogg'
 	fn = sprite.font("font.ttf", 16);

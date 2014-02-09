@@ -87,7 +87,7 @@ map = obj {
 					sprite.fill(sprite.screen(), x * 16, y * 16, 16 - 1, 16 - 1, 'black');
 				elseif c[1] == SEMIBLOCK then
 					if (not c.move) or (c.move < SEMI_TO) then
-						sprite.fill(sprite.screen(), x * 16, y * 16, 16 - 1, 16 - 1, 'gray');
+						sprite.fill(sprite.screen(), x * 16, y * 16, 16 - 1, 16 - 1, SEMICOL);
 					end
 				elseif c[1] == WATER then
 					sprite.fill(sprite.screen(), x * 16, y * 16, 16, 16, 'blue');
@@ -223,7 +223,7 @@ map = obj {
 						sprite.fill(sprite.screen(), (x - 1) * BW, 
 							c.y, 
 							16 - 1, 
-							16 - 1, 'gray');
+							16 - 1, SEMICOL);
 					end
 					if c.move and c.y and c.y > 480 then
 						c[1] = 0
