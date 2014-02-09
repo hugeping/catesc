@@ -162,7 +162,7 @@ maps = {
 '                                        ';
 '                                        ';
 '                                        ';
-'>                                       ';
+'>                  *                    ';
 '########################################';
 '                                        ';
 '                                        ';
@@ -174,7 +174,14 @@ maps = {
 '                                        ';
 '                                        ';
 };
-
+life = function(s)
+	if hero.x > 12 * BW then
+		sprite.fill(sprite.screen(), 19 * BW + BW / 2, 0, 3, 18 * BH, 'red');
+		if hero:collision(19 * BW + BW / 2, 0, 3, 18 * BH) then
+			hero:state(FLY)
+		end
+	end
+end
 },
 
 	{
