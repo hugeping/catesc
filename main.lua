@@ -8,10 +8,14 @@ require "prefs"
 
 function init()
 	fn = sprite.font("font.ttf", 16);
+	fn8 = sprite.font("8bit.ttf", 32);
+	fn8s = sprite.font("8bit.ttf", 16);
 	hero.spr = sprite.load "pic/cat.png"
 	hero.spr_left = sprite.scale(hero.spr, -1.0, 1, false)
 	heart_spr = sprite.load "pic/heart.png"
 	score_spr = sprite.text (fn, _"Score:Distance: ", 'black');
+	title_spr = sprite.text (fn8, "ESCAPE OF THE CAT", 'black');
+	press_spr = sprite.text (fn8s, "PRESS SPACE", 'black');
 	hook_keys('right', 'left', 'space', 'up', 'return');
 	hero:state(DEAD)
 	game:state(INTRO);
@@ -351,6 +355,10 @@ game.timer = function(s)
 		sprite.fill(sprite.screen(), "")
 		hero:draw();
 		hero:life();
+		local w, h = sprite.size(title_spr)
+		sprite.draw(title_spr, sprite.screen(), (640 - w) / 2 + 1 - rnd(2), 100 + 1 - rnd(2));
+		w, h = sprite.size(press_spr);
+		sprite.draw(press_spr, sprite.screen(), (640 - w) / 2 + 1 - rnd(2), 300 + 1 - rnd(2));
 		if hero.move % rnd(200) == 0 then
 			if rnd(50) > 25 then
 				key_left, key_right = true, false
