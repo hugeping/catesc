@@ -75,16 +75,18 @@ map = obj {
 		local y, x
 		for y=0, 29 do
 			for x=0, 39 do
-				local c = s:block(x, y);
-				if c == BLOCK  then
+				local c = s:cell(x, y);
+				if c[1] == BLOCK then
 					sprite.fill(sprite.screen(), x * 16, y * 16, 16 - 1, 16 - 1, 'black');
-				elseif c == SEMIBLOCK then
-					sprite.fill(sprite.screen(), x * 16, y * 16, 16 - 1, 16 - 1, 'gray');
-				elseif c == WATER then
+				elseif c[1] == SEMIBLOCK then
+					if (not c.move) or (c.move < SEMI_TO) then
+						sprite.fill(sprite.screen(), x * 16, y * 16, 16 - 1, 16 - 1, 'gray');
+					end
+				elseif c[1] == WATER then
 					sprite.fill(sprite.screen(), x * 16, y * 16, 16, 16, 'blue');
-				elseif c == EMERGENCY then
+				elseif c[1] == EMERGENCY then
 					sprite.fill(sprite.screen(), x * 16 + 1, y * 16 + 1, 16 - 2, 16 - 2, 'red');
-				elseif c == BRIDGE then
+				elseif c[1] == BRIDGE then
 					sprite.fill(sprite.screen(), x * 16, y * 16, 16 - 1, 8, 'brown');
 				end
 			end
@@ -118,7 +120,9 @@ map = obj {
 			elseif c == SEMIBLOCK then
 				c = s:cell(bx, by)
 				if not c.move then c.move = 0 end
-				rc = false
+				if c.move >= SEMI_TO then
+					rc = false
+				end
 			elseif c == WATER then
 				water = true
 			elseif c == EMERGENCY then
@@ -139,7 +143,7 @@ map = obj {
 		local rc = true
 		for yy = 0, math.floor((h - 1) / BH) do
 			local c = s:block(s:pos2block(x, y + yy*BH))
-			if c == BLOCK or c == SEMIBLOCK then
+			if c == BLOCK or c == SEMIBLOCK and (not c.move or c.move < SEMI_TO) then
 				return false
 			end
 			if c == EMERGENCY then
@@ -192,10 +196,21 @@ map = obj {
 		local y, x
 		for y = 1, 30 do
 			for x = 1, 40 do
+				local yy
 				local c = s.map[y][x]
 				if c.move then c.move = c.move + 1 end
 				if c[1] == SEMIBLOCK and c.move then
-					if c.move > 10 then
+					if c.move >= SEMI_TO then
+						if not c.y then
+							c.y = (y - 1)* BH
+						end
+						c.y = c.y + (c.move - SEMI_TO) * G;
+						sprite.fill(sprite.screen(), (x - 1) * BW, 
+							c.y, 
+							16 - 1, 
+							16 - 1, 'gray');
+					end
+					if c.move and c.y and c.y > 480 then
 						c[1] = 0
 					end
 				end
