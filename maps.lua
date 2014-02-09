@@ -30,6 +30,8 @@ map = obj {
 						c = EMERGENCY
 					elseif c == '%' then
 						c = SEMIBLOCK
+					elseif c == '=' then
+						c = BRIDGE
 					end
 					table.insert(s.map[y], { c })
 				end
@@ -67,15 +69,14 @@ map = obj {
 				local c = s:block(x, y);
 				if c == BLOCK  then
 					sprite.fill(sprite.screen(), x * 16 + 1, y * 16 + 1, 16 - 2, 16 - 2, 'black');
-				end
-				if c == SEMIBLOCK then
+				elseif c == SEMIBLOCK then
 					sprite.fill(sprite.screen(), x * 16 + 1, y * 16 + 1, 16 - 2, 16 - 2, 'gray');
-				end
-				if c == WATER then
+				elseif c == WATER then
 					sprite.fill(sprite.screen(), x * 16 - 1, y * 16, 16 + 2, 16, 'blue');
-				end
-				if c == EMERGENCY then
+				elseif c == EMERGENCY then
 					sprite.fill(sprite.screen(), x * 16, y * 16, 16, 16, 'red');
+				elseif c == BRIDGE then
+					sprite.fill(sprite.screen(), x * 16, y * 16, 16, 8, 'brown');
 				end
 			end
 		end
@@ -94,17 +95,19 @@ map = obj {
 		local c = l[x + 1][1];
 		return c
 	end;
-	is_fall = function(s, x, y, w)
+	is_fall = function(s, x, y, w, dy)
 		local xx
+		if not dy then dy = 0 end
 		local rc = true
 		local water = false
 		local emerg = false
 		for xx = 0, math.floor((w - 1) / BW) do
-			local c = s:block(s:pos2block(x + xx * BW, y))
+			local bx, by = s:pos2block(x + xx * BW, y)
+			local c = s:block(bx, by)
 			if c == BLOCK then
 				rc = false
 			elseif c == SEMIBLOCK then
-				c = s:cell(s:pos2block(x + xx * BW, y))
+				c = s:cell(bx, by)
 				if not c.move then c.move = 0 end
 				rc = false
 			elseif c == WATER then
@@ -112,6 +115,8 @@ map = obj {
 			elseif c == EMERGENCY then
 				hero:state(FLY)
 				return false
+			elseif c == BRIDGE and dy >= 0 and y - dy <= by * BH then
+				rc = false
 			end
 		end
 		if rc and water then
@@ -145,7 +150,7 @@ map = obj {
 		if dy >= 0 then
 			yy = yy + h
 		end
-		if s:is_fall(x, yy + dy, w) then
+		if s:is_fall(x, yy + dy, w, dy) then
 			y = y + dy
 		else
 			y = math.floor((yy + dy) / BH) * BH
@@ -221,11 +226,11 @@ maps = {
 '                                        ';
 '                                        ';
 '                                        ';
+'        ========                        ';
 '                                        ';
 '                                        ';
 '                                        ';
-'                                        ';
-'###%%%%######            ###############';
+'#############            ###############';
 '            #            #              ';
 '            #            #              ';
 '            #            #              ';
