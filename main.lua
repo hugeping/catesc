@@ -101,6 +101,9 @@ hero = obj {
 		if n then
 			s.st = n
 			s.move = 0
+			if n == JUMP or n == FLY then
+				s.jump_speed = math.abs(s.speed_x)* 0.75 + JUMP_SPEED 
+			end
 		end
 		return os
 	end;
@@ -119,7 +122,6 @@ hero = obj {
 			end
 			if d <= 0 or block_y  then
 				s:state(FALL)
-				s.move = 0
 			end
 		elseif s:state() == FALL then
 			s.move = s.move + 1
@@ -136,15 +138,11 @@ hero = obj {
 				s:state(DEAD)
 			end
 		elseif s:state() == FLY then
-			s.move = s.move + 3
-			if s.move > 50 then
-				local d = JUMP_SPEED + (s.move - 50) * G;
-				s.y = s.y - d
-				if s.y < - 19 * 3 then
-					s:state(DEAD)
-				end
-			else
-				s.dir = -1 * s.dir
+			s.move = s.move + 2
+			local d = s.jump_speed - s.move * G;
+			s.y = s.y - d
+			if s.y > 480 then
+				s:state(DEAD)
 			end
 		elseif s:state() == WALK then
 			if s.speed_x ~= 0 then
@@ -196,7 +194,6 @@ hero = obj {
 			if key_space then
 				key_space = false
 				s:state(JUMP)
-				s.jump_speed = math.abs(s.speed_x)* 0.75 + JUMP_SPEED 
 			end
 		end
 	end;
