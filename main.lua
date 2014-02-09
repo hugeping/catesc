@@ -19,6 +19,7 @@ CNANGE_LEVEL = 1
 global {
 	game_state = 0;
 	game_move = 0;
+	bg_color = 'white';
 }
 
 function start()
@@ -286,7 +287,7 @@ game.timer = function(s)
 		game_move = game_move + 1
 		return
 	end
-	sprite.fill(sprite.screen(), '#9cccfc')
+	sprite.fill(sprite.screen(), bg_color)
 	map:show()
 	map:life()
 	hero:draw();

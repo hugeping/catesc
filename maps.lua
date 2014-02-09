@@ -16,6 +16,11 @@ map = obj {
 		end
 		s.title = sprite.text(fn, string.format("%d: %s", n, _(maps[n].title)), "black");
 		if hero:state() == DEAD or #s.map == 0 then
+			if maps[n].color then
+				bg_color = maps[n].color;
+			else
+				bg_color = '#9cccfc';
+			end
 			local y, x
 			s.map = {}
 			for y = 1, 30 do 
@@ -243,6 +248,7 @@ maps = {
 },
 	{
 		title = "2:Be careful...",
+		color = '#008080',
 		map = {
 '                                        ';
 '                                        ';
