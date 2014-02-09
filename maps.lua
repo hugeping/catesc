@@ -63,11 +63,9 @@ map = obj {
 			return BLOCK
 		end
 		if c == '~' then
-			hero:state(DROWN)
 			return WATER
 		end
 		if c == '*' then
-			hero:state(FLY)
 			return EMERGENCY
 		end
 		return
@@ -75,10 +73,21 @@ map = obj {
 	is_fall = function(s, x, y, w)
 		local xx
 		local rc = true
+		local water = false
+		local emerg = false
 		for xx = 0, math.floor((w - 1) / BW) do
-			if s:block(x + xx * BW, y) then
+			local c = s:block(x + xx * BW, y)
+			if c == BLOCK then
 				rc = false
+			elseif c == WATER then
+				water = true
+			elseif c == EMERGENCY then
+				hero:state(FLY)
+				return false
 			end
+		end
+		if rc and water then
+			hero:state(DROWN)
 		end
 		return rc
 	end;
@@ -86,11 +95,16 @@ map = obj {
 		local yy
 		local rc = true
 		for yy = 0, math.floor((h - 1) / BH) do
-			if s:block(x, y + yy*BH) then
-				rc = false
+			local c = s:block(x, y + yy*BH)
+			if c == BLOCK then
+				return false
+			end
+			if c == EMERGENCY then
+				hero:state(FLY)
+				return false
 			end
 		end
-		return rc
+		return true
 	end;
 	move = function(s, x, y, dx, dy, w, h)
 		local block_x = false
