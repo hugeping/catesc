@@ -120,6 +120,9 @@ map = obj {
 		local rc = true
 		local water = false
 		local emerg = false
+		if game_state == INTRO then
+			return false
+		end
 		for xx = 0, math.floor((w - 1) / BW) do
 			local bx, by = s:pos2block(x + xx * BW, y)
 			local c = s:block(bx, by)
@@ -149,6 +152,9 @@ map = obj {
 	is_move = function(s, x, y, h)
 		local yy
 		local rc = true
+		if game_state == INTRO then
+			return true
+		end
 		for yy = 0, math.floor((h - 1) / BH) do
 			local c = s:block(s:pos2block(x, y + yy*BH))
 			if c == BLOCK or c == SEMIBLOCK and (not c.move or c.move < SEMI_TO) then

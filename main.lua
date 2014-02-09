@@ -47,6 +47,14 @@ game.state = function(s, n, st)
 		else
 			game_move = 0
 		end
+		if n == INTRO then
+			hero:state(WALK)
+			hero.x = 0
+			hero.y = 400
+			hero.dir = 1
+			key_right = true
+			key_left = false
+		end
 	end
 	return os, om
 end
@@ -58,6 +66,9 @@ end
 function start()
 	timer:set(20);
 	if game_state == GAME then 
+		key_left = false
+		key_right = false
+		key_space = false
 		game:state(CHANGE_LEVEL, 16);
 		map:select()
 	end
@@ -67,14 +78,17 @@ key_input = {}
 key_space_pass = true
 game.kbd = function(s, down, key)
 	if key == 'up' then key = 'space' end
-	if down then
-		local st = game:state()
-		if st == INTRO then
+	local st = game:state()
+	if st == INTRO then
+		if down then
 			game:state(CHANGE_LEVEL, 16);
+			hero:state(DEAD)
 			map:select(1)
 			game_lifes = 3
-			return
 		end
+		return
+	end
+	if down then
 		if st == GAMEOVER then
 			game:state(INTRO)
 			return
@@ -180,7 +194,7 @@ hero = obj {
 			if block_x then
 				s.speed_x = s.speed_x * 0.75
 			end
-			if d <= 0 or block_y  then
+			if d <= 0 or block_y then
 				s:state(FALL)
 			end
 		elseif s:state() == FALL then
@@ -333,7 +347,23 @@ game.timer = function(s)
 	st, m = game:state()
 
 	if st == INTRO then
-		sprite.fill(sprite.screen(), 'black')
+		sprite.fill(sprite.screen(), "")
+		hero:draw();
+		hero:life();
+		if hero.move % rnd(200) == 0 then
+			if rnd(50) > 25 then
+				key_left, key_right = true, false
+			else
+				key_left, key_right = false, true
+			end
+		end
+		if hero.x > 640 - hero.w * 2  then
+			key_left = true
+			key_right = false
+		elseif hero.x < hero.w then
+			key_right = true
+			key_left = false
+		end
 		return
 	end
 
