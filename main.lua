@@ -12,13 +12,15 @@ function init()
 	hero.spr_left = sprite.scale(hero.spr, -1.0, 1, false)
 	heart_spr = sprite.load "pic/heart.png"
 	score_spr = sprite.text (fn, _"Score:Distance: ", 'black');
-	hook_keys('right', 'left', 'space');
+	hook_keys('right', 'left', 'space', 'up', 'return');
 	hero:state(DEAD)
+	game:state(INTRO);
 end
 
 GAME = 0
 CHANGE_LEVEL = 1
 GAMEOVER = 2
+INTRO = 3
 
 global {
 	game_state = 0;
@@ -54,15 +56,29 @@ game.step = function(s, n)
 end
 
 function start()
-	game:state(CHANGE_LEVEL, 16);
-	map:select()
 	timer:set(20);
+	if game_state == GAME then 
+		game:state(CHANGE_LEVEL, 16);
+		map:select()
+	end
 end
 
 key_input = {}
 key_space_pass = true
 game.kbd = function(s, down, key)
+	if key == 'up' then key = 'space' end
 	if down then
+		local st = game:state()
+		if st == INTRO then
+			game:state(CHANGE_LEVEL, 16);
+			map:select(1)
+			game_lifes = 3
+			return
+		end
+		if st == GAMEOVER then
+			game:state(INTRO)
+			return
+		end
 		if key == 'left' or key == 'right' and key_input[1] ~= key then
 			table.insert(key_input, 1, key)
 			if #key_input >=3 then
@@ -316,12 +332,18 @@ game.timer = function(s)
 
 	st, m = game:state()
 
+	if st == INTRO then
+		sprite.fill(sprite.screen(), 'black')
+		return
+	end
+
 	sprite.fill(sprite.screen(), bg_color)
 
 	map:show()
 	map:life()
 	hero:draw();
-	if st == 0 or (st == CHANGE_LEVEL and m >= 16) then
+
+	if st == GAME or (st == CHANGE_LEVEL and m >= 16) then
 		hero:life();
 	end
 
@@ -331,12 +353,14 @@ game.timer = function(s)
 
 	sprite.draw(map.title, sprite.screen(), 0, 0);
 	sprite.draw(score_spr, sprite.screen(), 0, 16);
+
 	if old_score ~= game:dist() + map:dist() then
 		old_score = game_dist + map:dist()
 		game_score = old_score
 		if dist_spr then sprite.free(dist_spr) end
 		dist_spr = sprite.text(fn, string.format("%d", game_score), "black");
 	end
+
 	x,y = sprite.size(score_spr);
 	sprite.draw(dist_spr, sprite.screen(), x + 4, 16);
 	
@@ -380,7 +404,7 @@ game.timer = function(s)
 		end
 		game:step();
 		if m >= 31 then
-			game:state(0)
+			game:state(GAME)
 		end
 		return
 	end
