@@ -8,21 +8,44 @@ require "prefs"
 
 function init()
 	fn = sprite.font("font.ttf", 16);
-	hero_spr = sprite.load "pic/cat.png"
-	hero_spr_left = sprite.scale(hero_spr, -1.0, 1, false)
+	hero.spr = sprite.load "pic/cat.png"
+	hero.spr_left = sprite.scale(hero.spr, -1.0, 1, false)
+	heart_spr = sprite.load "pic/heart.png"
+	score_spr = sprite.text (fn, _"Score:Meters: ", 'black');
 	hook_keys('right', 'left', 'space');
 	hero:state(DEAD)
 end
 
-CNANGE_LEVEL = 1
+CHANGE_LEVEL = 1
+GAMEOVER = 2
 
 global {
 	game_state = 0;
 	game_move = 0;
+	game_lifes = 3;
 	bg_color = 'white';
 }
 
+game.state = function(s, n, st)
+	local os = game_state
+	local om = game_move
+	if n then
+		game_state = n
+		if st then
+			game_move = st
+		else
+			game_move = 0
+		end
+	end
+	return os, om
+end
+
+game.step = function(s, n)
+	game_move = game_move + 1
+end
+
 function start()
+	game:state(CHANGE_LEVEL, 16);
 	map:select()
 	timer:set(20);
 end
@@ -97,7 +120,7 @@ hero = obj {
 		x = 10;
 		y = 0;
 		speed_x = 0;
-		st = FALL;
+		st = WALK;
 		dir = 1;
 		jump_speed = 0;
 		h = 19 * 3 - 8;
@@ -253,9 +276,9 @@ hero = obj {
 		if fw then w = fw end
 		if fh then h = fh end
 		if s.dir < 0 then
-			sprite.draw(hero_spr_left, xoff, yoff, w, h, sprite.screen(), x, y);
+			sprite.draw(hero.spr_left, xoff, yoff, w, h, sprite.screen(), x, y);
 		else
-			sprite.draw(hero_spr, xoff, yoff, w, h, sprite.screen(), x, y);
+			sprite.draw(hero.spr, xoff, yoff, w, h, sprite.screen(), x, y);
 		end
 	end;
 	collision = function(s, x, y, w, h)
@@ -279,42 +302,58 @@ hero = obj {
 }
 
 game.timer = function(s)
-	if game_state == CHANGE_LEVEL and game_move < 16 then
-		local y
-		for y = 0, 29 do
-			sprite.fill(sprite.screen(), 0, y * 16 + game_move , 640, 1, 'black')
-		end
-		game_move = game_move + 1
-		return
-	end
+	local st, m;
+	st, m = game:state()
 	sprite.fill(sprite.screen(), bg_color)
 	map:show()
 	map:life()
+
 	hero:draw();
-	hero:life();
-
-
-	sprite.draw(map.title, sprite.screen(), 0, 0);
-
-	if hero:state() == DEAD then
-		game_state = CHANGE_LEVEL
-		game_move = 0
-		map:select()
-	elseif hero.x >= 640 then
-		game_state = CHANGE_LEVEL
-		game_move = 0
-		map:next()
+	if st == 0 or st == CHANGE_LEVEL and m >= 16 then
+		hero:life();
 	end
 
+	for i=1, game_lifes do
+		sprite.draw(heart_spr, sprite.screen(), (i - 1) * 16, 32 + 4);
+	end
 
-	if game_state == CHANGE_LEVEL and game_move >= 16 then
+	sprite.draw(map.title, sprite.screen(), 0, 0);
+	sprite.draw(score_spr, sprite.screen(), 0, 16);
+
+	if st == CHANGE_LEVEL and m < 16 then
 		local y
 		for y = 0, 29 do
-			sprite.fill(sprite.screen(), 0, y * 16 + game_move - 16 , 640, 16 - (game_move - 16), 'black')
+			sprite.fill(sprite.screen(), 0, y * 16 , 640, m, 'black')
 		end
-		game_move = game_move + 1
-		if game_move >= 32 then
-			game_state = 0
+		game:step();
+		return
+	elseif st == CHANGE_LEVEL then
+		if hero:state() == DEAD then
+			map:select()
+		elseif hero.x >= 640 then
+			map:next()
+		end
+	end
+
+	if hero:state() == DEAD then
+		game_lifes = game_lifes - 1
+		if game_lifes == 0 then
+			game:state(GAMEOVER)
+		else
+			game:state(CHANGE_LEVEL)
+		end
+	elseif hero.x >= 640 then
+		game:state(CHANGE_LEVEL)
+	end
+
+	if st == CHANGE_LEVEL and m >= 16 then
+		local y
+		for y = 0, 29 do
+			sprite.fill(sprite.screen(), 0, y * 16 + m - 16 , 640, 16 - (m - 16), 'black')
+		end
+		game:step();
+		if m >= 31 then
+			game:state(0)
 		end
 		return
 	end

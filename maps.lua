@@ -50,7 +50,7 @@ map = obj {
 			hero.x = s.map.x
 			hero.y = s.map.y
 			map.data = {}
-			hero:state(FALL);
+			hero:state(WALK);
 			hero.speed_x = 0
 			hero.dir = 1
 		end
