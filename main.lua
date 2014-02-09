@@ -11,7 +11,7 @@ function init()
 	hero.spr = sprite.load "pic/cat.png"
 	hero.spr_left = sprite.scale(hero.spr, -1.0, 1, false)
 	heart_spr = sprite.load "pic/heart.png"
-	score_spr = sprite.text (fn, _"Score:Meters: ", 'black');
+	score_spr = sprite.text (fn, _"Score:Distance: ", 'black');
 	hook_keys('right', 'left', 'space');
 	hero:state(DEAD)
 end
@@ -26,6 +26,13 @@ global {
 	game_dist = 0;
 	bg_color = 'white';
 }
+game.dist = function(s, n)
+	local od = game_dist
+	if n then
+		game_dist = math.floor(n)
+	end
+	return od
+end
 
 game.state = function(s, n, st)
 	local os = game_state
@@ -309,9 +316,8 @@ game.timer = function(s)
 	sprite.fill(sprite.screen(), bg_color)
 	map:show()
 	map:life()
-
 	hero:draw();
-	if st == 0 or st == CHANGE_LEVEL and m >= 16 then
+	if st == 0 or (st == CHANGE_LEVEL and m >= 16) then
 		hero:life();
 	end
 
@@ -321,7 +327,7 @@ game.timer = function(s)
 
 	sprite.draw(map.title, sprite.screen(), 0, 0);
 	sprite.draw(score_spr, sprite.screen(), 0, 16);
-	if old_score ~= game_dist + map:dist() then
+	if old_score ~= game:dist() + map:dist() then
 		old_score = game_dist + map:dist()
 		game_score = old_score
 		if dist_spr then sprite.free(dist_spr) end
@@ -341,7 +347,7 @@ game.timer = function(s)
 		if hero:state() == DEAD then
 			map:select()
 		elseif hero.x >= 640 then
-			game_dist = game_dist + map:dist()
+			game:dist(game:dist() + map:dist())
 			map:next()
 		end
 	end
