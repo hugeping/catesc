@@ -131,7 +131,7 @@ map = obj {
 			elseif c == SEMIBLOCK then
 				c = s:cell(bx, by)
 				if not c.move then c.move = 0 end
-				if c.move >= SEMI_TO then
+				if c.move < SEMI_TO then
 					rc = false
 				end
 			elseif c == WATER then
@@ -156,13 +156,15 @@ map = obj {
 			return true
 		end
 		for yy = 0, math.floor((h - 1) / BH) do
-			local c = s:block(s:pos2block(x, y + yy*BH))
-			if c == BLOCK or c == SEMIBLOCK and (not c.move or c.move < SEMI_TO) then
-				return false
-			end
-			if c == EMERGENCY then
-				hero:state(FLY)
-				return false
+			local c = s:cell(s:pos2block(x, y + yy*BH))
+			if c then
+				if c[1] == BLOCK or (c[1] == SEMIBLOCK and (not c.move or c.move < SEMI_TO)) then
+					return false
+				end
+				if c[1] == EMERGENCY then
+					hero:state(FLY)
+					return false
+				end
 			end
 		end
 		return true
@@ -235,133 +237,4 @@ map = obj {
 		end
 	end
 }
-
-
-maps = {
-	{
---		x = 0,
---		y = -19 * 3,
-		title = "1:Beginning...", 
-		map = {
-'                                        ';
-'                                        ';
-'                                        ';
-'                                        ';
-'                                        ';
-'                                        ';
-'                                        ';
-'                                        ';
-'                                        ';
-'                                        ';
-'                                        ';
-'                                        ';
-'                                        ';
-'                                        ';
-'                                        ';
-'                                        ';
-'                                        ';
-'                                        ';
-'                                        ';
-'                                        ';
-'        ========                        ';
-'                                        ';
-'                                        ';
-'>                                       ';
-'#############            ###############';
-'            #            #              ';
-'            #            #              ';
-'            #            #              ';
-'            #            #              ';
-'            #~~~~~~~~~~~~#              ';
-};
-},
-	{
-		title = "2:Be careful...",
-		color = '#008080',
-		map = {
-'                                        ';
-'                                        ';
-'                                        ';
-'                                        ';
-'                                        ';
-'                                        ';
-'                                        ';
-'                                        ';
-'                                        ';
-'                                        ';
-'                                        ';
-'                                        ';
-'                                        ';
-'                                        ';
-'                                        ';
-'                                        ';
-'                                        ';
-'                                        ';
-'                                        ';
-'                                        ';
-'                                        ';
-'                                        ';
-'                                        ';
-'>             *         *               ';
-'########################################';
-'                                        ';
-'                                        ';
-'                                        ';
-'                                        ';
-'                                        ';
-		};
-	},
-	{
-		title = "3",
-		map = {
-'                                        ';
-'                                        ';
-'                                        ';
-'                                        ';
-'                                        ';
-'                                        ';
-'                                        ';
-'                                        ';
-'                                        ';
-'                                        ';
-'                                        ';
-'                                        ';
-'                                        ';
-'                                        ';
-'                                        ';
-'                                        ';
-'                                        ';
-'                                        ';
-'                     #                  ';
-'                     #                  ';
-'                     #                  ';
-'                     #                  ';
-'                     #                  ';
-'>             *      #                  ';
-'###############      #                ##';
-'              #                     ####';
-'              #                   ####  ';
-'              #                 ####    ';
-'              #               ####      ';
-'              ##################        ';
-};
-		life =  function(s)
-			if not s.laser then
-				s.laser = 60
-			end
-			s.laser = s.laser - 1
-			if s.laser <= 0 then
-				s.laser = 60
-			end
-			if s.laser <= 10 then
-				sprite.fill(sprite.screen(), 0, 24 * 16 - hero.h, 340, 3, 'red');
-				if hero:collision(0, 24 * 16 - hero.h, 340, 3) then
-					hero:state(FLY)
-				end
-			end
-		end;
-
-},
-
-
-}
+dofile "levels.lua"
