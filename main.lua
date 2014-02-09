@@ -23,6 +23,7 @@ global {
 	game_state = 0;
 	game_move = 0;
 	game_lifes = 3;
+	game_dist = 0;
 	bg_color = 'white';
 }
 
@@ -303,7 +304,7 @@ hero = obj {
 }
 
 game.timer = function(s)
-	local st, m;
+	local st, m, i, x, y;
 	st, m = game:state()
 	sprite.fill(sprite.screen(), bg_color)
 	map:show()
@@ -320,7 +321,15 @@ game.timer = function(s)
 
 	sprite.draw(map.title, sprite.screen(), 0, 0);
 	sprite.draw(score_spr, sprite.screen(), 0, 16);
-
+	if old_score ~= game_dist + map:dist() then
+		old_score = game_dist + map:dist()
+		game_score = old_score
+		if dist_spr then sprite.free(dist_spr) end
+		dist_spr = sprite.text(fn, string.format("%d", game_score), "black");
+	end
+	x,y = sprite.size(score_spr);
+	sprite.draw(dist_spr, sprite.screen(), x + 4, 16);
+	
 	if st == CHANGE_LEVEL and m < 16 then
 		local y
 		for y = 0, 29 do
@@ -332,8 +341,13 @@ game.timer = function(s)
 		if hero:state() == DEAD then
 			map:select()
 		elseif hero.x >= 640 then
+			game_dist = game_dist + map:dist()
 			map:next()
 		end
+	end
+
+	if hero.x / BW > map:dist() then
+		map:dist(math.floor(hero.x / BW))
 	end
 
 	if hero:state() == DEAD then
@@ -358,7 +372,6 @@ game.timer = function(s)
 		end
 		return
 	end
-
 end
 
 dofile "maps.lua"

@@ -4,7 +4,13 @@ map = obj {
 		data = {};
 		nr = 1;
 		map = {};
+		d = 0;
 	};
+	dist = function(s, n)
+		local nn = s.d
+		if n then s.d = n end
+		return nn
+	end;
 	select = function(s, n)
 		if n then
 			s.nr = n;
@@ -53,6 +59,8 @@ map = obj {
 			hero:state(WALK);
 			hero.speed_x = 0
 			hero.dir = 1
+		else
+			s:dist(0)
 		end
 	end;
 	next = function(s)
