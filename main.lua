@@ -187,6 +187,9 @@ hero = obj {
 				s.move = 0
 			end
 			s.st = n
+			if n == FLY or n == DROWN then
+				sound.play(mew)
+			end
 			if n == JUMP or n == FLY then
 				s.jump_speed = math.abs(s.speed_x)* 0.75 + JUMP_SPEED 
 			end
@@ -463,3 +466,4 @@ end
 
 dofile "maps.lua"
 dofile "i18n.lua"
+dofile "sounds.lua"
