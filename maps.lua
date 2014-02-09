@@ -3,6 +3,7 @@ map = obj {
 	var {
 		data = {};
 		nr = 1;
+		map = {};
 	};
 	select = function(s, n)
 		if n then
@@ -14,61 +15,84 @@ map = obj {
 			sprite.free(s.title);
 		end
 		s.title = sprite.text(fn, string.format("%d: %s", n, maps[n].title), "black");
-		s.map = maps[n].map;
+		if hero:state() == DEAD or #s.map == 0 then
+			local y, x
+			s.map = {}
+			for y = 1, 30 do 
+				s.map[y] = {}
+				for x = 1, 40 do
+					local c = string.sub(maps[n].map[y], x, x);
+					if c == '#' then
+						c = BLOCK
+					elseif c == '~' then
+						c = WATER
+					elseif c == '*' then
+						c = EMERGENCY
+					elseif c == '%' then
+						c = SEMIBLOCK
+					end
+					table.insert(s.map[y], { c })
+				end
+			end
+		end
 		if hero:state() == DEAD then
 			hero.x = maps[n].x
 			hero.y = maps[n].y
 			map.data = {}
 			hero:state(FALL);
 			hero.speed_x = 0
+			hero.dir = 1
 		end
 	end;
 	next = function(s)
 		local n
 		n = s.nr + 1;
 		s.data = {}
+		s.map = {}
 		s:select(n)
 		if hero:state() ~= DEAD then
 			hero.x = 0
 			hero.dir = 1
 		end
 	end;
+	pos2block = function(s, x, y)
+		x = math.floor(x / BW);
+		y = math.floor(y / BH);
+		return x, y
+	end;
 	show = function(s)
 		local y, x
 		for y=0, 29 do
 			for x=0, 39 do
-				local l = s.map[y + 1];
-				local c = string.sub(l, x + 1, x + 1);
-				if c == '#' then
+				local c = s:block(x, y);
+				if c == BLOCK  then
 					sprite.fill(sprite.screen(), x * 16 + 1, y * 16 + 1, 16 - 2, 16 - 2, 'black');
 				end
-				if c == '~' then
+				if c == SEMIBLOCK then
+					sprite.fill(sprite.screen(), x * 16 + 1, y * 16 + 1, 16 - 2, 16 - 2, 'gray');
+				end
+				if c == WATER then
 					sprite.fill(sprite.screen(), x * 16 - 1, y * 16, 16 + 2, 16, 'blue');
 				end
-				if c == '*' then
+				if c == EMERGENCY then
 					sprite.fill(sprite.screen(), x * 16, y * 16, 16, 16, 'red');
 				end
 			end
 		end
 	end;
+	cell = function(s, x, y)
+		if x < 0 or y < 0 or x >= 40 or y >= 30 then
+			return
+		end
+		return s.map[y + 1][x + 1];	
+	end,
 	block = function(s, x, y)
-		x = math.floor(x / BW);
-		y = math.floor(y / BH);
-		if x < 0 or y < 0 or x >= 60 or y >= 30 then
+		if x < 0 or y < 0 or x >= 40 or y >= 30 then
 			return
 		end
 		local l = s.map[y + 1];
-		local c = string.sub(l, x + 1, x + 1);	
-		if c == '#' then
-			return BLOCK
-		end
-		if c == '~' then
-			return WATER
-		end
-		if c == '*' then
-			return EMERGENCY
-		end
-		return
+		local c = l[x + 1][1];
+		return c
 	end;
 	is_fall = function(s, x, y, w)
 		local xx
@@ -76,8 +100,12 @@ map = obj {
 		local water = false
 		local emerg = false
 		for xx = 0, math.floor((w - 1) / BW) do
-			local c = s:block(x + xx * BW, y)
+			local c = s:block(s:pos2block(x + xx * BW, y))
 			if c == BLOCK then
+				rc = false
+			elseif c == SEMIBLOCK then
+				c = s:cell(s:pos2block(x + xx * BW, y))
+				if not c.move then c.move = 0 end
 				rc = false
 			elseif c == WATER then
 				water = true
@@ -95,8 +123,8 @@ map = obj {
 		local yy
 		local rc = true
 		for yy = 0, math.floor((h - 1) / BH) do
-			local c = s:block(x, y + yy*BH)
-			if c == BLOCK then
+			local c = s:block(s:pos2block(x, y + yy*BH))
+			if c == BLOCK or c == SEMIBLOCK then
 				return false
 			end
 			if c == EMERGENCY then
@@ -146,6 +174,18 @@ map = obj {
 		return math.floor(x), math.floor(y), block_x, block_y
 	end;
 	life = function(s)
+		local y, x
+		for y = 1, 30 do
+			for x = 1, 40 do
+				local c = s.map[y][x]
+				if c.move then c.move = c.move + 1 end
+				if c[1] == SEMIBLOCK and c.move then
+					if c.move > 10 then
+						c[1] = 0
+					end
+				end
+			end
+		end
 		if maps[s.nr].life then
 			maps[s.nr].life(s.data)
 		end
@@ -185,7 +225,7 @@ maps = {
 '                                        ';
 '                                        ';
 '                                        ';
-'#############            ###############';
+'###%%%%######            ###############';
 '            #            #              ';
 '            #            #              ';
 '            #            #              ';

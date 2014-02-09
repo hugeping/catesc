@@ -60,6 +60,7 @@ end
 BLOCK = 1
 WATER = 2
 EMERGENCY = 3
+SEMIBLOCK = 4
 
 WALK = 1
 JUMP = 2
@@ -99,8 +100,10 @@ hero = obj {
 	state = function(s, n)
 		local os = s.st
 		if n then
+			if n ~= os then
+				s.move = 0
+			end
 			s.st = n
-			s.move = 0
 			if n == JUMP or n == FLY then
 				s.jump_speed = math.abs(s.speed_x)* 0.75 + JUMP_SPEED 
 			end
@@ -129,7 +132,9 @@ hero = obj {
 			s.x, s.y, block_x, block_y = map:move(s.x, s.y, 
 				s.speed_x, d, 
 				s.w, s.h);
-			if block_y then
+			if s.y > 480 then
+				s:state(DEAD)
+			elseif block_y then
 				s:state(WALK);
 			end
 		elseif s:state() == DROWN then
@@ -145,6 +150,7 @@ hero = obj {
 				s:state(DEAD)
 			end
 		elseif s:state() == WALK then
+			local x, y
 			if s.speed_x ~= 0 then
 				s.move = s.move + 1
 				s.x, s.y, block_x, block_y = map:move(s.x, s.y, 
@@ -153,11 +159,14 @@ hero = obj {
 				if block_x then
 					s.speed_x = 0
 				end
-				if not block_y then
-					s:state(FALL)
-				end
+			else
+				x, y, block_x, block_y = map:move(s.x, s.y, 0, 0, s.w, s.h);
 			end
-			s:input()
+			if not block_y then
+				s:state(FALL)
+			else
+				s:input()
+			end
 		else
 			return false
 		end
