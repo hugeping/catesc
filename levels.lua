@@ -141,7 +141,7 @@ maps = {
 
 },
 	{
-		title = "5:???";
+		title = "5:Laser";
 		map = {
 '                                        ';
 '                                        ';
@@ -175,9 +175,13 @@ maps = {
 '                                        ';
 };
 life = function(s)
-	if hero.x > 12 * BW then
-		sprite.fill(sprite.screen(), 19 * BW + BW / 2, 0, 3, 18 * BH, 'red');
-		if hero:collision(19 * BW + BW / 2, 0, 3, 18 * BH) then
+	if hero.x > 12 * BW and hero:state() == WALK then
+		local c = 'red'
+		if rnd(50) > 25 then
+			c = 'yellow'
+		end
+		sprite.fill(sprite.screen(), 19 * BW + BW / 2 - 2, 0, 3, 19 * BH, c);
+		if hero:collision(19 * BW + BW / 2 - 2, 0, 3, 19 * BH) then
 			hero:state(FLY)
 		end
 	end
