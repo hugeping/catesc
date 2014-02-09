@@ -273,9 +273,9 @@ hero = obj {
 
 		local xoff = state * (23 * 3)
 		if s.dir < 0 then
-			xoff = (3 - state) * (23 * 3)
+			xoff = (3 - state) * (27 * 3)
 		else
-			xoff = state * (23 * 3)
+			xoff = state * (27 * 3)
 		end
 		local yoff = 0;
 		local w = 23 * 3;
