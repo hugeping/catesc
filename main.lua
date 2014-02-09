@@ -16,6 +16,7 @@ function init()
 	hero:state(DEAD)
 end
 
+GAME = 0
 CHANGE_LEVEL = 1
 GAMEOVER = 2
 
@@ -312,8 +313,11 @@ hero = obj {
 
 game.timer = function(s)
 	local st, m, i, x, y;
+
 	st, m = game:state()
+
 	sprite.fill(sprite.screen(), bg_color)
+
 	map:show()
 	map:life()
 	hero:draw();
