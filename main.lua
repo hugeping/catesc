@@ -293,6 +293,8 @@ game.timer = function(s)
 	hero:life();
 
 
+	sprite.draw(map.title, sprite.screen(), 0, 0);
+
 	if hero:state() == DEAD then
 		game_state = CHANGE_LEVEL
 		game_move = 0
@@ -303,7 +305,6 @@ game.timer = function(s)
 		map:next()
 	end
 
-	sprite.draw(map.title, sprite.screen(), 0, 0);
 
 	if game_state == CHANGE_LEVEL and game_move >= 16 then
 		local y
