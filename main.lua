@@ -54,6 +54,10 @@ game.state = function(s, n, st)
 			hero.dir = 1
 			key_right = true
 			key_left = false
+		else
+			key_left = false
+			key_right = false
+			key_space = false
 		end
 	end
 	return os, om
@@ -66,9 +70,6 @@ end
 function start()
 	timer:set(20);
 	if game_state == GAME then 
-		key_left = false
-		key_right = false
-		key_space = false
 		game:state(CHANGE_LEVEL, 16);
 		map:select()
 	end
