@@ -366,6 +366,59 @@ life = function(s)
 end
 },
 
+	{
+		title = "9:Jump!";
+		map = {
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'     #############################      ';
+'                                        ';
+'                                        ';
+'                                        ';
+'>                                       ';
+'#########                      #########';
+'        #*                    *#        ';
+'        ########################        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+};
+life = function(s)
+	local c
+	if not s.laser then
+		s.laser = 50
+	end
+	s.laser = s.laser + 1 
+	local c = 'red'
+	if rnd(50) > 25 then
+		c = 'yellow'
+	end
+	if math.floor(s.laser / 100) % 2 == 1 then 
+		sprite.fill(sprite.screen(), 10 * BW, 21 * BH + BH/2 - 2, 20 * BW, 3, c);
+		if hero:collision(10 * BW, 21 * BH + BH/2 - 2, 20 * BW, 3) then
+			hero:state(FLY)
+		end
+	end
+end
+},
+
 
 	{
 		title = "4:",
