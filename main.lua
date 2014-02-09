@@ -283,7 +283,8 @@ game.timer = function(s)
 		map:next()
 	end
 
-	sprite.draw(title, sprite.screen(), 0, 0);
+	sprite.draw(map.title, sprite.screen(), 0, 0);
 end
 
 dofile "maps.lua"
+dofile "i18n.lua"

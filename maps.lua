@@ -14,7 +14,7 @@ map = obj {
 		if s.title then
 			sprite.free(s.title);
 		end
-		s.title = sprite.text(fn, string.format("%d: %s", n, maps[n].title), "black");
+		s.title = sprite.text(fn, string.format("%d: %s", n, _(maps[n].title)), "black");
 		if hero:state() == DEAD or #s.map == 0 then
 			local y, x
 			s.map = {}
@@ -207,7 +207,7 @@ maps = {
 	{
 --		x = 0,
 --		y = -19 * 3,
-		title = "Be smart", 
+		title = "1:Beginning...", 
 		map = {
 '                                        ';
 '                                        ';
