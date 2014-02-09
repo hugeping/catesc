@@ -175,7 +175,13 @@ maps = {
 '                                        ';
 };
 life = function(s)
-	if hero.x > 12 * BW and hero:state() == WALK then
+	if hero.x < 10 * BW then
+		s.laser = false
+	end
+	if hero.x > 10 * BW and hero:state() == WALK then
+		s.laser = true
+	end
+	if s.laser then
 		local c = 'red'
 		if rnd(50) > 25 then
 			c = 'yellow'
