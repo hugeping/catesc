@@ -78,9 +78,11 @@ end
 function start()
 	timer:set(20);
 	if game_state == GAME then
-		key_state, key_right, key_space = false, false, false
 		game:state(CHANGE_LEVEL, 16);
 		map:select()
+	end
+	if game_state ~= INTRO then
+		key_state, key_right, key_space = false, false, false
 	end
 end
 

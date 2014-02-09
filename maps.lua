@@ -229,6 +229,11 @@ map = obj {
 					if c.move and c.y and c.y > 480 then
 						c[1] = 0
 					end
+				elseif c[1] == EMERGENCY then
+					if not c.step then
+						sprite.fill(sprite.screen(), (x - 1) * BW, (y - 1) * BH, BW - 1, BH/2, 'yellow');
+					end
+					c.step = not c.step
 				end
 			end
 		end
