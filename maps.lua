@@ -77,15 +77,15 @@ map = obj {
 			for x=0, 39 do
 				local c = s:block(x, y);
 				if c == BLOCK  then
-					sprite.fill(sprite.screen(), x * 16 + 1, y * 16 + 1, 16 - 2, 16 - 2, 'black');
+					sprite.fill(sprite.screen(), x * 16, y * 16, 16 - 1, 16 - 1, 'black');
 				elseif c == SEMIBLOCK then
-					sprite.fill(sprite.screen(), x * 16 + 1, y * 16 + 1, 16 - 2, 16 - 2, 'gray');
+					sprite.fill(sprite.screen(), x * 16, y * 16, 16 - 1, 16 - 1, 'gray');
 				elseif c == WATER then
-					sprite.fill(sprite.screen(), x * 16 - 1, y * 16, 16 + 2, 16, 'blue');
+					sprite.fill(sprite.screen(), x * 16, y * 16, 16, 16, 'blue');
 				elseif c == EMERGENCY then
-					sprite.fill(sprite.screen(), x * 16, y * 16, 16, 16, 'red');
+					sprite.fill(sprite.screen(), x * 16 + 1, y * 16 + 1, 16 - 2, 16 - 2, 'red');
 				elseif c == BRIDGE then
-					sprite.fill(sprite.screen(), x * 16, y * 16, 16, 8, 'brown');
+					sprite.fill(sprite.screen(), x * 16, y * 16, 16 - 1, 8, 'brown');
 				end
 			end
 		end
