@@ -124,8 +124,8 @@ hero = obj {
 		dir = 1;
 		jump_speed = 0;
 		h = 19 * 3 - 8;
-		w = 23 * 3 - 32;
-		xoff = 16;
+		w = 23 * 3 - 20;
+		xoff = 10;
 		yoff = 8;
 	};
 	state = function(s, n)
