@@ -32,14 +32,18 @@ map = obj {
 						c = SEMIBLOCK
 					elseif c == '=' then
 						c = BRIDGE
+					elseif c == '>' then
+						c = nil
+						s.map.x = (x - 1) * BW
+						s.map.y = (y) * BH - hero.h
 					end
 					table.insert(s.map[y], { c })
 				end
 			end
 		end
 		if hero:state() == DEAD then
-			hero.x = maps[n].x
-			hero.y = maps[n].y
+			hero.x = s.map.x
+			hero.y = s.map.y
 			map.data = {}
 			hero:state(FALL);
 			hero.speed_x = 0
@@ -85,7 +89,7 @@ map = obj {
 		if x < 0 or y < 0 or x >= 40 or y >= 30 then
 			return
 		end
-		return s.map[y + 1][x + 1];	
+		return s.map[y + 1][x + 1];
 	end,
 	block = function(s, x, y)
 		if x < 0 or y < 0 or x >= 40 or y >= 30 then
@@ -202,8 +206,6 @@ maps = {
 	{
 --		x = 0,
 --		y = -19 * 3,
-		x = 0,
-		y = 24 * 16 - hero.h,
 		title = "Be smart", 
 		map = {
 '                                        ';
@@ -229,7 +231,7 @@ maps = {
 '        ========                        ';
 '                                        ';
 '                                        ';
-'                                        ';
+'>                                       ';
 '#############            ###############';
 '            #            #              ';
 '            #            #              ';
@@ -239,8 +241,6 @@ maps = {
 };
 },
 	{
-		x = 0,
-		y = 24 * 16 - hero.h,
 		title = "2",
 		map = {
 '                                        ';
@@ -266,7 +266,7 @@ maps = {
 '                                        ';
 '                                        ';
 '                                        ';
-'              *         *               ';
+'>             *         *               ';
 '########################################';
 '                                        ';
 '                                        ';
@@ -276,8 +276,6 @@ maps = {
 		};
 	},
 	{
-		x = 0,
-		y = 24 * 16 - hero.h,
 		title = "3",
 		map = {
 '                                        ';
@@ -303,7 +301,7 @@ maps = {
 '                     #                  ';
 '                     #                  ';
 '                     #                  ';
-'              *      #                  ';
+'>             *      #                  ';
 '###############      #                ##';
 '              #                     ####';
 '              #                   ####  ';
