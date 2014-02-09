@@ -14,6 +14,12 @@ function init()
 	hero:state(DEAD)
 end
 
+CNANGE_LEVEL = 1
+
+global {
+	game_state = 0;
+	game_move = 0;
+}
 
 function start()
 	map:select()
@@ -272,18 +278,45 @@ hero = obj {
 }
 
 game.timer = function(s)
-	sprite.fill(sprite.screen(), '#bbbbbb')
+	if game_state == CHANGE_LEVEL and game_move < 16 then
+		local y
+		for y = 0, 29 do
+			sprite.fill(sprite.screen(), 0, y * 16 + game_move , 640, 1, 'black')
+		end
+		game_move = game_move + 1
+		return
+	end
+	sprite.fill(sprite.screen(), '#cccccc')
 	map:show()
 	map:life()
 	hero:draw();
 	hero:life();
+
+
 	if hero:state() == DEAD then
+		game_state = CHANGE_LEVEL
+		game_move = 0
 		map:select()
 	elseif hero.x >= 640 then
+		game_state = CHANGE_LEVEL
+		game_move = 0
 		map:next()
 	end
 
 	sprite.draw(map.title, sprite.screen(), 0, 0);
+
+	if game_state == CHANGE_LEVEL and game_move >= 16 then
+		local y
+		for y = 0, 29 do
+			sprite.fill(sprite.screen(), 0, y * 16 + game_move - 16 , 640, 16 - (game_move - 16), 'black')
+		end
+		game_move = game_move + 1
+		if game_move >= 32 then
+			game_state = 0
+		end
+		return
+	end
+
 end
 
 dofile "maps.lua"
