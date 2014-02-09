@@ -286,7 +286,7 @@ game.timer = function(s)
 		game_move = game_move + 1
 		return
 	end
-	sprite.fill(sprite.screen(), '#cccccc')
+	sprite.fill(sprite.screen(), '#9cccfc')
 	map:show()
 	map:life()
 	hero:draw();
