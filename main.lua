@@ -1,4 +1,4 @@
---$Name:Cats adventure$
+--$Name:ESCAPE OF THE CAT$
 instead_version "1.9.0"
 require "sprites"
 require "timer"
