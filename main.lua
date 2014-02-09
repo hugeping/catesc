@@ -16,6 +16,10 @@ function init()
 	score_spr = sprite.text (fn, _"Score:Distance: ", 'black');
 	title_spr = sprite.text (fn8, "ESCAPE OF THE CAT", 'black');
 	press_spr = sprite.text (fn8s, "PRESS SPACE", 'black');
+	titles_spr = {
+		sprite.text (fn8s, "KEYS ARE LEFT RIGHT SPACE or UP");
+		sprite.text (fn8s, "ESCAPE FOR MENU");
+	}
 	hook_keys('right', 'left', 'space', 'up', 'return');
 	hero:state(DEAD)
 	game:state(INTRO);
@@ -359,6 +363,11 @@ game.timer = function(s)
 		sprite.draw(title_spr, sprite.screen(), (640 - w) / 2 + 1 - rnd(2), 100 + 1 - rnd(2));
 		w, h = sprite.size(press_spr);
 		sprite.draw(press_spr, sprite.screen(), (640 - w) / 2 + 1 - rnd(2), 300 + 1 - rnd(2));
+		if not title_pos then title_pos = 1 end
+		if hero.move % 150 == 0 then title_pos = title_pos + 1 end
+		if title_pos > #titles_spr then title_pos = 1 end
+		w, h = sprite.size(titles_spr[title_pos])
+		sprite.draw(titles_spr[title_pos], sprite.screen(), (640 - w) / 2, 480 - h);
 		if hero.move % rnd(200) == 0 then
 			if rnd(50) > 25 then
 				key_left, key_right = true, false
