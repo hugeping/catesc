@@ -49,6 +49,8 @@ map = obj {
 						c = nil
 						s.map.x = (x - 1) * BW
 						s.map.y = (y) * BH - hero.h
+					elseif c == '+' then
+						c = HEART
 					end
 					table.insert(s.map[y], { c })
 				end
@@ -97,6 +99,8 @@ map = obj {
 					sprite.fill(sprite.screen(), x * 16 + 1, y * 16 + 1, 16 - 2, 16 - 2, 'red');
 				elseif c[1] == BRIDGE then
 					sprite.fill(sprite.screen(), x * 16, y * 16, 16 - 1, 8, 'brown');
+				elseif c[1] == HEART then
+					sprite.draw(heart_spr, sprite.screen(), x * 16, y * 16);
 				end
 			end
 		end
@@ -142,6 +146,10 @@ map = obj {
 				return false
 			elseif c == BRIDGE and dy >= 0 and y - dy <= by * BH then
 				rc = false
+			elseif c == HEART then
+				game_lifes = game_lifes + 1
+				c = s:cell(bx, by)
+				c[1] = 0
 			end
 		end
 		if rc and dy >= 0 and water then
@@ -165,6 +173,9 @@ map = obj {
 				if c[1] == EMERGENCY then
 					hero:state(FLY)
 					return false
+				elseif c[1] == HEART then
+					game_lifes = game_lifes + 1
+					c[1] = 0
 				end
 			end
 		end
