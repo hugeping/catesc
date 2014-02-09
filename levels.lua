@@ -193,6 +193,57 @@ life = function(s)
 	end
 end
 },
+	{
+		title = "6:Dont be so fast";
+		map = {
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'>                                       ';
+'#########        ######        #########';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~';
+};
+life = function(s)
+	if not s.step then
+		s.step = 0
+	end
+	s.step = s.step + 1
+	local y, x
+	y = 20
+	for x = 16, 23 do
+		local c = map:cell(x, y)
+		if math.floor(s.step / 50) % 2 == 0 then
+			c[1] = BLOCK
+		else
+			c[1] = 0
+		end
+	end
+end
+},
 
 	{
 		title = "4:",
