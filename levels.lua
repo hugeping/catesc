@@ -410,7 +410,7 @@ life = function(s)
 	if rnd(50) > 25 then
 		c = 'yellow'
 	end
-	if math.floor(s.laser / 100) % 2 == 1 then 
+	if math.floor(s.laser / 80) % 2 == 1 then 
 		sprite.fill(sprite.screen(), 10 * BW, 21 * BH + BH/2 - 2, 20 * BW, 3, c);
 		if hero:collision(10 * BW, 21 * BH + BH/2 - 2, 20 * BW, 3) then
 			hero:state(FLY)
