@@ -59,8 +59,6 @@ map = obj {
 			hero:state(WALK);
 			hero.speed_x = 0
 			hero.dir = 1
-		else
-			s:dist(0)
 		end
 	end;
 	next = function(s)
@@ -69,6 +67,7 @@ map = obj {
 		s.data = {}
 		s.map = {}
 		s:select(n)
+		s:dist(0)
 		if hero:state() ~= DEAD then
 			hero.x = 0
 			hero.dir = 1

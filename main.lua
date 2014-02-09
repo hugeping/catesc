@@ -67,6 +67,7 @@ game.state = function(s, n, st)
 			key_left = false
 			key_right = false
 			key_space = false
+			map:dist(0)
 		end
 	end
 	return os, om
@@ -97,7 +98,8 @@ game.kbd = function(s, down, key)
 			game:state(CHANGE_LEVEL, 16);
 			hero:state(DEAD)
 			map:select(1)
-			game_lifes = 3
+			game_lifes = 5
+			game:dist(0)
 		end
 		return
 	end
