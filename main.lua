@@ -7,6 +7,7 @@ require "sound"
 require "prefs"
 
 function init()
+	set_music 'snd/music.ogg'
 	fn = sprite.font("font.ttf", 16);
 	fn8 = sprite.font("8bit.ttf", 32);
 	fn8s = sprite.font("8bit.ttf", 16);
