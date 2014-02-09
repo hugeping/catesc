@@ -123,8 +123,9 @@ map = obj {
 				rc = false
 			end
 		end
-		if rc and water then
+		if rc and dy >= 0 and water then
 			hero:state(DROWN)
+			rc = false
 		end
 		return rc
 	end;
