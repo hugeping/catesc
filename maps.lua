@@ -35,6 +35,8 @@ map = obj {
 					local c = string.sub(maps[n].map[y], x, x);
 					if c == '#' then
 						c = BLOCK
+					elseif c == '^' then
+						c = FAKE
 					elseif c == '~' then
 						c = WATER
 					elseif c == '*' then
@@ -83,7 +85,7 @@ map = obj {
 		for y=0, 29 do
 			for x=0, 39 do
 				local c = s:cell(x, y);
-				if c[1] == BLOCK then
+				if c[1] == BLOCK or c[1] == FAKE then
 					sprite.fill(sprite.screen(), x * 16, y * 16, 16 - 1, 16 - 1, 'black');
 				elseif c[1] == SEMIBLOCK then
 					if (not c.move) or (c.move < SEMI_TO) then
