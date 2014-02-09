@@ -321,7 +321,7 @@ game.timer = function(s)
 		hero:life();
 	end
 
-	for i=1, game_lifes do
+	for i=1, game_lifes - 1 do
 		sprite.draw(heart_spr, sprite.screen(), (i - 1) * 16, 32 + 4);
 	end
 
@@ -357,11 +357,13 @@ game.timer = function(s)
 	end
 
 	if hero:state() == DEAD then
-		game_lifes = game_lifes - 1
-		if game_lifes == 0 then
-			game:state(GAMEOVER)
-		else
-			game:state(CHANGE_LEVEL)
+		if game_lifes > 0 then
+			game_lifes = game_lifes - 1
+			if game_lifes == 0 then
+				game:state(GAMEOVER)
+			else
+				game:state(CHANGE_LEVEL)
+			end
 		end
 	elseif hero.x >= 640 then
 		game:state(CHANGE_LEVEL)
