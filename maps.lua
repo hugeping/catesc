@@ -45,6 +45,8 @@ map = obj {
 						c = SEMIBLOCK
 					elseif c == '=' then
 						c = BRIDGE
+					elseif c == '-' then
+						c = ROPE
 					elseif c == '>' then
 						c = nil
 						s.map.x = (x - 1) * BW
@@ -98,7 +100,9 @@ map = obj {
 				elseif c[1] == EMERGENCY then
 					sprite.fill(sprite.screen(), x * 16 + 1, y * 16 + 1, 16 - 2, 16 - 2, 'red');
 				elseif c[1] == BRIDGE then
-					sprite.fill(sprite.screen(), x * 16, y * 16, 16 - 1, 8, 'brown');
+					sprite.fill(sprite.screen(), x * 16, y * 16, 16 - 1, 8, 'black');
+				elseif c[1] == ROPE then
+					sprite.fill(sprite.screen(), x * 16, y * 16, 16 - 1, 4, 'black');
 				elseif c[1] == HEART then
 					sprite.draw(heart_spr, sprite.screen(), x * 16, y * 16);
 				end
@@ -145,6 +149,8 @@ map = obj {
 				hero:state(FLY)
 				return false
 			elseif c == BRIDGE and dy >= 0 and y - dy <= by * BH then
+				rc = false
+			elseif c == ROPE and dy == 0 and y - dy <= by * BH and hero.speed_x ~= 0 then
 				rc = false
 			elseif c == HEART then
 				game_lifes = game_lifes + 1

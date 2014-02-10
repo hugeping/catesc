@@ -147,10 +147,11 @@ BLOCK = 1
 WATER = 2
 EMERGENCY = 3
 SEMIBLOCK = 4
-SEMI_TO = 12
+SEMI_TO = 22
 BRIDGE = 5
 FAKE=6
 HEART=7
+ROPE = 8
 
 WALK = 1
 JUMP = 2
@@ -194,7 +195,7 @@ hero = obj {
 				s.move = 0
 			end
 			s.st = n
-			if n == FLY or n == DROWN then
+			if (n == FLY or n == DROWN) and s.move == 0 then
 				sound.play(mew)
 			end
 			if n == JUMP or n == FLY then
@@ -222,6 +223,7 @@ hero = obj {
 		elseif s:state() == FALL then
 			s.move = s.move + 1
 			local d = s.move * G;
+			if d >= BH then d = BH - 1 elseif d <= -BH then d = -BH + 1 end
 			s.x, s.y, block_x, block_y = map:move(s.x, s.y, 
 				s.speed_x, d, 
 				s.w, s.h);
