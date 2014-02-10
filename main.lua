@@ -9,6 +9,9 @@ require "prefs"
 SEMICOL="#103030"
 
 function init()
+	if not prefs.game_record then
+		prefs.game_record = 0
+	end
 	set_music 'snd/music.ogg'
 	fn = sprite.font("font.ttf", 16);
 	fn8 = sprite.font("8bit.ttf", 32);
@@ -17,6 +20,7 @@ function init()
 	hero.spr_left = sprite.scale(hero.spr, -1.0, 1, false)
 	heart_spr = sprite.load "pic/heart.png"
 	score_spr = sprite.text (fn, _"Score:Distance: ", 'black');
+	hiscore_spr = sprite.text (fn, _"Hiscore:Record: ", 'black');
 	title_spr = sprite.text (fn8, "ESCAPE OF THE CAT", 'black');
 	press_spr = sprite.text (fn8s, "PRESS SPACE", 'black');
 	gameover_spr = sprite.text (fn8s, "GAME OVER", 'black');
@@ -34,10 +38,11 @@ CHANGE_LEVEL = 1
 GAMEOVER = 2
 INTRO = 3
 
+
 global {
 	game_state = 0;
 	game_move = 0;
-	game_lifes = 4;
+	game_lifes = 3;
 	game_dist = 0;
 	bg_color = 'white';
 }
@@ -101,7 +106,7 @@ game.kbd = function(s, down, key)
 			game:state(CHANGE_LEVEL, 16);
 			hero:state(DEAD)
 			map:select(1)
-			game_lifes = 4
+			game_lifes = 3
 			game:dist(0)
 		end
 		return
@@ -412,21 +417,34 @@ game.timer = function(s)
 	end
 
 	for i=1, game_lifes - 1 do
-		sprite.draw(heart_spr, sprite.screen(), (i - 1) * 16, 32 + 4);
+		sprite.draw(heart_spr, sprite.screen(), (i - 1) * 16, 48 + 4);
 	end
 
 	sprite.draw(map.title, sprite.screen(), 0, 0);
 	sprite.draw(score_spr, sprite.screen(), 0, 16);
+	sprite.draw(hiscore_spr, sprite.screen(), 0, 32);
 
 	if old_score ~= game:dist() + map:dist() then
 		old_score = game_dist + map:dist()
 		game_score = old_score
 		if dist_spr then sprite.free(dist_spr) end
 		dist_spr = sprite.text(fn, string.format("%d", game_score), "black");
+		if prefs.game_record < game_score then
+			prefs.game_record = game_score
+		end
+		if record_spr and prefs.game_record == game_score then 
+			sprite.free(record_spr); 
+			record_spr = false
+		end
+		if not record_spr then
+			record_spr = sprite.text(fn, string.format("%d", prefs.game_record), "black");
+		end
 	end
 
 	x,y = sprite.size(score_spr);
 	sprite.draw(dist_spr, sprite.screen(), x + 4, 16);
+	x,y = sprite.size(hiscore_spr);
+	sprite.draw(record_spr, sprite.screen(), x + 4, 32);
 
 	if st == GAMEOVER then
 		local w, h = sprite.size(gameover_spr);
