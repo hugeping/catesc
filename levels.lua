@@ -187,9 +187,12 @@ life = function(s)
 			c = 'yellow'
 		end
 		sprite.fill(sprite.screen(), 19 * BW + BW / 2 - 2, 0, 3, 19 * BH, c);
+		laser_play()
 		if hero:collision(19 * BW + BW / 2 - 2, 0, 3, 19 * BH) then
 			hero:state(FLY)
 		end
+	else
+		laser_mute();
 	end
 end
 },
@@ -411,10 +414,13 @@ life = function(s)
 		c = 'yellow'
 	end
 	if math.floor(s.laser / 80) % 2 == 1 then 
+		laser_play()
 		sprite.fill(sprite.screen(), 10 * BW, 21 * BH + BH/2 - 2, 20 * BW, 3, c);
 		if hero:collision(10 * BW, 21 * BH + BH/2 - 2, 20 * BW, 3) then
 			hero:state(FLY)
 		end
+	else
+		laser_mute()
 	end
 end
 },
@@ -540,10 +546,13 @@ life = function(s)
 		if rnd(50) > 25 then
 			c = 'yellow'
 		end
+		laser_play();
 		sprite.fill(sprite.screen(), 32 * BW + BW / 2 - 2, 17 * BH, 4, 11 * BH, c);
 		if hero:collision(32 * BW + BW / 2 - 2, 17 * BH, 4, 11 * BH) then
 			hero:state(FLY)
 		end
+	else
+		laser_mute()
 	end
 
 	if not s.y then s.y = y end
@@ -612,10 +621,13 @@ end
 				s.laser = 60
 			end
 			if s.laser <= 10 then
+				laser_play()
 				sprite.fill(sprite.screen(), 0, 24 * 16 - hero.h, 340, 3, 'red');
 				if hero:collision(0, 24 * 16 - hero.h, 340, 3) then
 					hero:state(FLY)
 				end
+			else
+				laser_mute()
 			end
 		end;
 

@@ -204,7 +204,7 @@ hero = obj {
 			end
 			s.st = n
 			if (n == FLY or n == DROWN) and s.move == 0 then
-				sound.play(mew)
+				sound.play(mew_snd)
 			end
 			if n == JUMP or n == FLY then
 				s.jump_speed = math.abs(s.speed_x)* 0.75 + JUMP_SPEED 

@@ -22,6 +22,7 @@ map = obj {
 		end
 		s.title = sprite.text(fn, string.format("%d: %s", n, _(maps[n].title)), "black");
 		if hero:state() == DEAD or #s.map == 0 then
+			sound_init()
 			if maps[n].color then
 				bg_color = maps[n].color;
 			else
