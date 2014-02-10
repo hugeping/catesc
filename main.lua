@@ -102,7 +102,7 @@ game.kbd = function(s, down, key)
 	if key == 'up' then key = 'space' end
 	local st = game:state()
 	if st == INTRO then
-		if down then
+		if down and key == "space" then
 			game:state(CHANGE_LEVEL, 16);
 			hero:state(DEAD)
 			map:select(1)
@@ -113,7 +113,9 @@ game.kbd = function(s, down, key)
 	end
 	if down then
 		if st == GAMEOVER then
-			game:state(INTRO)
+			if key == "space" then
+				game:state(INTRO)
+			end
 			return
 		end
 		if key == 'left' or key == 'right' and key_input[1] ~= key then
@@ -210,6 +212,9 @@ hero = obj {
 		end
 		return os
 	end;
+	alive = function(s)
+		return not (s.st == DROWN or s.st == FLY or s.st == DEAD)
+	end;
 	life = function (s)
 		local block_x, block_y
 		if s:state() == JUMP then
@@ -224,7 +229,9 @@ hero = obj {
 				s.speed_x = s.speed_x * 0.90
 			end
 			if d <= 0 or block_y then
-				s:state(FALL)
+				if s:alive() then
+					s:state(FALL)
+				end
 			end
 		elseif s:state() == FALL then
 			s.move = s.move + 1
@@ -236,7 +243,9 @@ hero = obj {
 			if s.y > 480 then
 				s:state(DEAD)
 			elseif block_y then
-				s:state(WALK);
+				if s:alive() then
+					s:state(WALK);
+				end
 			end
 		elseif s:state() == DROWN then
 			s.move = s.move + 2
@@ -352,7 +361,7 @@ hero = obj {
 		end
 	end;
 	collision = function(s, x, y, w, h)
-		if s:state() == HERO_DEAD or s:state() == HERO_FLY or s:state() == HERO_DROWN then
+		if not s:alive() then
 			return
 		end
 		if s.x + s.w <= x then
