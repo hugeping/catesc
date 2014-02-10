@@ -19,6 +19,7 @@ function init()
 	score_spr = sprite.text (fn, _"Score:Distance: ", 'black');
 	title_spr = sprite.text (fn8, "ESCAPE OF THE CAT", 'black');
 	press_spr = sprite.text (fn8s, "PRESS SPACE", 'black');
+	gameover_spr = sprite.text (fn8s, "GAME OVER", 'black');
 	titles_spr = {
 		sprite.text (fn8s, "KEYS ARE LEFT RIGHT SPACE or UP");
 		sprite.text (fn8s, "ESCAPE FOR MENU");
@@ -426,7 +427,16 @@ game.timer = function(s)
 
 	x,y = sprite.size(score_spr);
 	sprite.draw(dist_spr, sprite.screen(), x + 4, 16);
-	
+
+	if st == GAMEOVER then
+		local w, h = sprite.size(gameover_spr);
+		if blanker then
+			sprite.fill(sprite.screen(), (640 - w)/2 - 2, (80 - h)/2 - 2, w + 2, h + 2, 'white')
+		end
+		blanker = not blanker
+		sprite.draw(gameover_spr, sprite.screen(), (640 - w)/2, (80 - h)/2)
+	end
+
 	if st == CHANGE_LEVEL and m < 16 then
 		local y
 		for y = 0, 29 do
@@ -451,6 +461,7 @@ game.timer = function(s)
 		if game_lifes > 0 then
 			game_lifes = game_lifes - 1
 			if game_lifes == 0 then
+				print ("gameover")
 				game:state(GAMEOVER)
 			else
 				game:state(CHANGE_LEVEL)
