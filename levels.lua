@@ -1,3 +1,39 @@
+snake = {
+	step = function(s)
+		local k, v
+		local dx = 0
+		local dy = 0
+		if not s.pos then s.pos = 1 end
+		local to = s.path[s.pos]
+		local x, y = s.snake[1][1], s.snake[1][2]
+		if to[1] == x and to[2] == y then
+			s.pos = s.pos + 1
+			to = s.path[s.pos]
+			if s.pos > #s.path then
+				s.pos = 1
+				to = s.path[s.pos]
+			end
+		end
+		if to[1] < x then dx = -1 elseif to[1] > x then dx = 1 end
+		if to[2] < y then dy = -1 elseif to[2] > y then dy = 1 end
+		print(x, y, "to", to[1], to[2])
+		x = x + dx
+		x = y + dy
+
+		for k, v in ipairs(s.snake) do
+			local ox, oy = v[1], v[2]
+			v[1], v[2] = x, y
+			x, y = ox, oy
+		end
+	end;
+	draw = function(s)
+		local k, v
+		for k, v in ipairs(s.snake) do
+			sprite.fill(sprite.screen(), v[1] * BW, v[2] * BH, BW, BH, 'red');
+		end
+	end;
+}
+
 maps = {
 	{
 		title = "1:Cats cant swim";
@@ -577,6 +613,54 @@ end
 
 },
 
+	{
+		title = "13:Snake";
+		map = {
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'########                                ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'>                                       ';
+'########################################';
+};
+life = function(s)
+	local v = { {10,2}, {11, 2}, {12, 2}, {13, 2}, {14, 2} };
+	local path = { { 3, 2 }, { 3, 20}, {10, 20}, {10, 2} };
+	if not s.snake then
+		s.snake = v
+	end
+	if not s.path then
+		s.path = path
+	end
+	snake.step(s)
+	snake.draw(s)
+end
+
+},
 
 	{
 		title = "4:",
