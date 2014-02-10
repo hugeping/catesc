@@ -105,7 +105,7 @@ game.kbd = function(s, down, key)
 		if down then
 			game:state(CHANGE_LEVEL, 16);
 			hero:state(DEAD)
-			map:select(1)
+			map:select(11)
 			game_lifes = 3
 			game:dist(0)
 		end

@@ -493,6 +493,81 @@ end
 };
 },
 
+	{
+		title = "12:Lift";
+		color = 'white';
+		map = {
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                            ====########';
+'                                *       ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'>                               *       ';
+'########################################';
+};
+life = function(s)
+	local y = 29 * BH
+	local x = 28 * BW
+	local draw_lift = function(s)
+		sprite.fill(sprite.screen(), x, s.y, 64, 4, 'black')
+	end
+
+	if hero.x >= 29 * BW then
+		local c = 'red'
+		if rnd(50) > 25 then
+			c = 'yellow'
+		end
+		sprite.fill(sprite.screen(), 32 * BW + BW / 2 - 2, 17 * BH, 4, 11 * BH, c);
+		if hero:collision(32 * BW + BW / 2 - 2, 17 * BH, 4, 11 * BH) then
+			hero:state(FLY)
+		end
+	end
+
+	if not s.y then s.y = y end
+	if s.y == 15 * BH then return end
+	if (hero.y + hero.h) - BH <= s.y and hero.x >= x and (hero.x + hero.w) <= x + 64 then
+		if not s.lift and hero:state() ~= WALK or math.abs(hero.speed_x) > 0 then
+			return
+		end
+		s.lift = true
+		if s.y ~= 15 * BH then
+			hero.y = s.y - hero.h - 1
+			hero:state(WALK)
+			hero.speed_x = 0
+		end
+	end
+	if s.lift then
+		s.y = s.y - 1
+		if s.y <= 15 * BH then s.y = 15 * BH end
+		draw_lift(s)
+	end
+end
+
+},
+
 
 	{
 		title = "4:",
