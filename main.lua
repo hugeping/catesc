@@ -478,8 +478,7 @@ game.timer = function(s)
 	if hero:state() == DEAD then
 		if game_lifes > 0 then
 			game_lifes = game_lifes - 1
-			if game_lifes == 0 then
-				print ("gameover")
+			if game_lifes <= 0 then
 				game:state(GAMEOVER)
 			else
 				game:state(CHANGE_LEVEL)
