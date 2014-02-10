@@ -16,10 +16,11 @@ snake = {
 		end
 		if to[1] < x then dx = -1 elseif to[1] > x then dx = 1 end
 		if to[2] < y then dy = -1 elseif to[2] > y then dy = 1 end
-		print(x, y, "to", to[1], to[2])
-		x = x + dx
-		x = y + dy
 
+
+		x = x + dx
+		y = y + dy
+		
 		for k, v in ipairs(s.snake) do
 			local ox, oy = v[1], v[2]
 			v[1], v[2] = x, y
