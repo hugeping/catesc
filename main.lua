@@ -105,7 +105,7 @@ game.kbd = function(s, down, key)
 		if down and key == "space" then
 			game:state(CHANGE_LEVEL, 16);
 			hero:state(DEAD)
-			map:select(11)
+			map:select(1)
 			game_lifes = 3
 			game:dist(0)
 		end
@@ -423,8 +423,8 @@ game.timer = function(s)
 
 	map:show()
 	map:life()
-	hero:draw();
-
+	hero:draw()
+	map:after()
 	if st == GAME or (st == CHANGE_LEVEL and m >= 16) then
 		hero:life();
 	end

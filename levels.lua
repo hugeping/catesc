@@ -692,6 +692,69 @@ end
 },
 
 	{
+		title = "14:Rain";
+		map = {
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'>                                       ';
+'########################################';
+--[[
+ 0123456789012345678901234567890123456789
+           1         2         3
+]]--
+};
+life = function(s)
+end;
+after = function(s)
+	local x, y, i
+	if not s.rain then
+		s.rain = {}
+		for i = 1, 80 do
+			table.insert(s.rain, {rnd(640), rnd(480), rnd(8) + 8 })
+		end
+	end
+	for i=1, 80 do
+		x = s.rain[i][1]
+		y = s.rain[i][2]
+		sprite.fill(sprite.screen(), x, y, 2, 12, 'blue');
+		s.rain[i][2] = s.rain[i][2] + s.rain[i][3]
+		s.rain[i][1] = s.rain[i][1] - 2
+		if s.rain[i][2] > 480 or s.rain[i][1] < 0 or hero:collision(x, y + 12, 2, 2) then
+			s.rain[i][1] = rnd(740)
+			s.rain[i][2] = 0
+			s.rain[i][3] = rnd(8) + 8
+		end
+	end
+end
+},
+
+	{
 		title = "4:",
 		map = {
 '                                        ';

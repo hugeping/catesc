@@ -259,6 +259,11 @@ map = obj {
 		if maps[s.nr].life then
 			maps[s.nr].life(s.data)
 		end
+	end;
+	after = function(s)
+		if maps[s.nr].after then
+			maps[s.nr].after(s.data)
+		end
 	end
 }
 dofile "levels.lua"
