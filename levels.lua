@@ -30,7 +30,14 @@ snake = {
 	draw = function(s)
 		local k, v
 		for k, v in ipairs(s.snake) do
-			sprite.fill(sprite.screen(), v[1] * BW, v[2] * BH, BW, BH, 'red');
+			if k == 1 then
+				sprite.fill(sprite.screen(), v[1] * BW, v[2] * BH, BW, BH, 'yellow');
+			else
+				sprite.fill(sprite.screen(), v[1] * BW, v[2] * BH, BW, BH, 'red');
+			end
+			if hero:collision(v[1] * BW, v[2] * BH, BW, BH) then
+				hero:state(FLY)
+			end
 		end
 	end;
 }
@@ -631,31 +638,47 @@ end
 '                                        ';
 '                                        ';
 '                                        ';
-'                                        ';
-'########                                ';
-'                                        ';
-'                                        ';
-'                                        ';
-'                                        ';
-'                                        ';
-'                                        ';
-'                                        ';
-'                                        ';
-'                                        ';
-'                                        ';
-'                                        ';
-'                                        ';
 '>                                       ';
 '########################################';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'########################################';
+--[[
+ 0123456789012345678901234567890123456789
+           1         2         3
+]]--
 };
 life = function(s)
-	local v = { {10,2}, {11, 2}, {12, 2}, {13, 2}, {14, 2} };
-	local path = { { 3, 2 }, { 3, 20}, {10, 20}, {10, 2} };
-	if not s.snake then
-		s.snake = v
-	end
+	local path = { { 32, 1 }, { 32, 28}, 
+			{24, 28}, {24, 1},
+			{16, 1}, {16, 28},
+			{8, 28}, {8, 1}, 
+			{0, 1}, {0, 28},
+			{8, 28}, {8, 1},
+			{16, 1}, {16, 28}, 
+			{24, 28}, {24, 1},
+			{32, 1}, {32, 28},
+			{40, 28}, {40, 1} };
 	if not s.path then
 		s.path = path
+	end
+	if not s.snake then
+		s.snake = {} 
+		local k
+		for k=1, 30 do
+			table.insert(s.snake, {k + 40, 1})
+		end
 	end
 	snake.step(s)
 	snake.draw(s)
