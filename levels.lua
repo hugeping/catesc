@@ -730,6 +730,36 @@ end
 ]]--
 };
 life = function(s)
+	if hero:state() == JUMP or hero:state() == FALL then
+		hero.speed_x = hero.speed_x - GX*0.60
+		if hero.speed_x < -MAX_SPEEDX then
+			hero.speed_x = -MAX_SPEEDX
+		end
+	end
+	local k, v
+	if not s.move then
+		s.move = 0
+		s.r = 2
+	end
+	s.move = s.move + 0.1
+	if s.move > 20 then
+		s.move = 0
+		s.r = 1
+	end
+	for k=s.r, 2 do
+		v = math.ceil(s.move)
+		local c = map:cell(k * 20 - v, 28)
+		if c then
+			c[1] = EMERGENCY
+		end
+		c = map:cell(k * 20 - v + 1, 28)
+		if c then
+			c[1] = 0
+		end
+		if hero:collision((k * 20 - v) * BW, 28 * BH, BW, BH) then
+			hero:state(FLY)
+		end
+	end
 end;
 after = function(s)
 	local x, y, i
@@ -744,7 +774,7 @@ after = function(s)
 		y = s.rain[i][2]
 		sprite.fill(sprite.screen(), x, y, 2, 12, 'blue');
 		s.rain[i][2] = s.rain[i][2] + s.rain[i][3]
-		s.rain[i][1] = s.rain[i][1] - 2
+		s.rain[i][1] = s.rain[i][1] - 3
 		if s.rain[i][2] > 480 or s.rain[i][1] < 0 or hero:collision(x, y + 12, 2, 2) then
 			s.rain[i][1] = rnd(740)
 			s.rain[i][2] = 0
