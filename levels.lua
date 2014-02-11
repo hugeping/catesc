@@ -1,3 +1,32 @@
+laser = {
+	on = function(x, y, len)
+		local w, h
+		local c = 'red'
+		if rnd(50) > 25 then
+			c = 'yellow'
+		end
+		if len > 0 then
+			x = x * BW + BW / 2 - 2
+			y = y * BH
+			w = 3
+			h = len * BH
+		else
+			x = x * BW
+			y = y * BH + BH/2 - 2
+			w = -len * BW
+			h = 3
+		end
+		sprite.fill(sprite.screen(), x, y, w, h, c)
+		laser_play()
+		if hero:collision(x, y, w, h) then
+			hero:state(FLY)
+		end
+	end;
+	off = function()
+		laser_mute();
+	end
+}
+
 snake = {
 	step = function(s)
 		local k, v
@@ -226,17 +255,9 @@ life = function(s)
 		s.laser = true
 	end
 	if s.laser then
-		local c = 'red'
-		if rnd(50) > 25 then
-			c = 'yellow'
-		end
-		sprite.fill(sprite.screen(), 19 * BW + BW / 2 - 2, 0, 3, 19 * BH, c);
-		laser_play()
-		if hero:collision(19 * BW + BW / 2 - 2, 0, 3, 19 * BH) then
-			hero:state(FLY)
-		end
+		laser.on(19, 0, 19);
 	else
-		laser_mute();
+		laser.off()
 	end
 end
 },
@@ -453,18 +474,10 @@ life = function(s)
 		s.laser = 50
 	end
 	s.laser = s.laser + 1 
-	local c = 'red'
-	if rnd(50) > 25 then
-		c = 'yellow'
-	end
 	if math.floor(s.laser / 80) % 2 == 1 then 
-		laser_play()
-		sprite.fill(sprite.screen(), 10 * BW, 21 * BH + BH/2 - 2, 20 * BW, 3, c);
-		if hero:collision(10 * BW, 21 * BH + BH/2 - 2, 20 * BW, 3) then
-			hero:state(FLY)
-		end
+		laser.on(10, 21, -20);
 	else
-		laser_mute()
+		laser.off()
 	end
 end
 },
@@ -586,17 +599,9 @@ life = function(s)
 	end
 
 	if hero.x >= 29 * BW then
-		local c = 'red'
-		if rnd(50) > 25 then
-			c = 'yellow'
-		end
-		laser_play();
-		sprite.fill(sprite.screen(), 32 * BW + BW / 2 - 2, 17 * BH, 4, 11 * BH, c);
-		if hero:collision(32 * BW + BW / 2 - 2, 17 * BH, 4, 11 * BH) then
-			hero:state(FLY)
-		end
+		laser.on(32, 17, 11);
 	else
-		laser_mute()
+		laser.off()
 	end
 
 	if not s.y then s.y = y end
@@ -729,7 +734,6 @@ end
 				s.laser = 60
 			end
 			if s.laser <= 10 then
-				laser_play()
 				sprite.fill(sprite.screen(), 0, 24 * 16 - hero.h, 340, 3, 'red');
 				if hero:collision(0, 24 * 16 - hero.h, 340, 3) then
 					hero:state(FLY)

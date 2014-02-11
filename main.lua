@@ -172,6 +172,7 @@ JUMP_SPEED = 5
 SPEED_RUN = 5
 MAX_SPEEDX = 5
 
+R = 0.75
 G = 0.5
 GX = 0.25
 
@@ -226,7 +227,7 @@ hero = obj {
 			s.x, s.y, block_x, block_y = map:move(s.x, s.y, 
 				s.speed_x, -d, s.w, s.h);
 			if block_x then
-				s.speed_x = s.speed_x * 0.90
+				s.speed_x = s.speed_x * R
 			end
 			if d <= 0 or block_y then
 				if s:alive() then
@@ -240,6 +241,9 @@ hero = obj {
 			s.x, s.y, block_x, block_y = map:move(s.x, s.y, 
 				s.speed_x, d, 
 				s.w, s.h);
+			if block_x then
+				s.speed_x = s.speed_x * R
+			end
 			if s.y > 480 then
 				s:state(DEAD)
 			elseif block_y then
