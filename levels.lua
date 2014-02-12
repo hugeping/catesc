@@ -1020,7 +1020,7 @@ end
 },
 
 [CONTMAP] = 	{
-		title = "Continue?",
+		title = "cont:Continue?",
 		map = {
 '                                        ';
 '                                        ';
@@ -1055,11 +1055,15 @@ end
 };
 life =  function(s)
 	if not s.secs then s.secs = 9.9 end
+
+	local w, h = sprite.size(gameover_spr);
+	sprite.draw(gameover_spr, sprite.screen(), (640 - w)/2 + 1 - rnd(2), (100 - h)/2 + 1 - rnd(2))
+
 	if hero.x <= -hero.w / 2 or s.secs <= 0 then
 		game:state(INTRO)
+		return
 	end;
-	local w, h = sprite.size(continue_spr)
---	sprite.fill(sprite.screen(), (640 - w)/2, 100, w, h, 'white');
+	w, h = sprite.size(continue_spr)
 	local sec = sprite.text(fn_big, string.format("%d", s.secs))
 	sprite.draw(continue_spr, sprite.screen(), (640 - w)/2, 100);
 	w, h = sprite.size(sec)

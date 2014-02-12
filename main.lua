@@ -15,20 +15,19 @@ function init()
 	set_music 'snd/music.ogg'
 	fn = sprite.font("font.ttf", 16);
 	fn8 = sprite.font("8bit.ttf", 32);
-	fn8s = sprite.font("8bit.ttf", 16);
-	fn_big = sprite.font("font.ttf", 32);
+	fn_big = sprite.font("font.ttf", 28);
 	hero.spr = sprite.load "pic/cat.png"
 	hero.spr_left = sprite.scale(hero.spr, -1.0, 1, false)
 	heart_spr = sprite.load "pic/heart.png"
 	score_spr = sprite.text (fn, _"Score:Distance: ", 'black');
 	hiscore_spr = sprite.text (fn, _"Hiscore:Record: ", 'black');
 	title_spr = sprite.text (fn8, "ESCAPE OF THE CAT", 'black');
-	press_spr = sprite.text (fn8s, "PRESS SPACE", 'black');
-	gameover_spr = sprite.text (fn8s, "GAME OVER", 'black');
+	press_spr = sprite.text (fn, _"space:PRESS SPACE", 'black');
+	gameover_spr = sprite.text (fn, _"gameover:GAME OVER", 'black');
 	continue_spr = sprite.text (fn_big, _"continue:CONTINUE?", 'black');
 	titles_spr = {
-		sprite.text (fn8s, "KEYS ARE LEFT RIGHT SPACE or UP");
-		sprite.text (fn8s, "ESCAPE FOR MENU");
+		sprite.text (fn, _"help1:KEYS ARE: LEFT RIGHT SPACE or UP");
+		sprite.text (fn, _"help2:ESCAPE FOR MENU");
 	}
 	hook_keys('right', 'left', 'space', 'up', 'return');
 	hero:state(DEAD)
@@ -435,7 +434,9 @@ game.timer = function(s)
 		sprite.draw(heart_spr, sprite.screen(), (i - 1) * 16, 48 + 4);
 	end
 
-	sprite.draw(map.title, sprite.screen(), 0, 0);
+	if map.nr ~= CONTMAP then
+		sprite.draw(map.title, sprite.screen(), 0, 0);
+	end
 	sprite.draw(score_spr, sprite.screen(), 0, 16);
 	sprite.draw(hiscore_spr, sprite.screen(), 0, 32);
 
@@ -464,10 +465,10 @@ game.timer = function(s)
 	if st == GAMEOVER then
 		local w, h = sprite.size(gameover_spr);
 		if blanker then
-			sprite.fill(sprite.screen(), (640 - w)/2 - 2, (80 - h)/2 - 2, w + 2, h + 2, 'white')
+			sprite.fill(sprite.screen(), (640 - w)/2 - 2, (480 - h)/2 - 2, w + 2, h + 2, 'white')
 		end
 		blanker = not blanker
-		sprite.draw(gameover_spr, sprite.screen(), (640 - w)/2, (80 - h)/2)
+		sprite.draw(gameover_spr, sprite.screen(), (640 - w)/2, (480 - h)/2)
 	end
 
 	if st == CHANGE_LEVEL and m < 16 then
