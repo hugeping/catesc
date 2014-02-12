@@ -47,6 +47,8 @@ map = obj {
 					local c = string.sub(maps[n].map[y], x, x);
 					if c == '#' then
 						c = BLOCK
+					elseif c == '.' then
+						c = INVI
 					elseif c == '@' then
 						c = SNOW
 					elseif c == '^' then
@@ -163,7 +165,7 @@ map = obj {
 		for xx = 0, math.floor((w - 1) / BW) do
 			local bx, by = s:pos2block(x + xx * BW, y)
 			local c = s:block(bx, by)
-			if c == BLOCK or c == SNOW then
+			if c == BLOCK or c == SNOW or c == INVI then
 				rc = false
 			elseif c == SEMIBLOCK then
 				c = s:cell(bx, by)
@@ -204,7 +206,7 @@ map = obj {
 				if c[1] == BLOCK or (c[1] == SEMIBLOCK and (not c.move or c.move < SEMI_TO)) then
 					return false
 				end
-				if c[1] == SNOW then
+				if c[1] == SNOW or c[1] == INVI then
 					return false
 				end
 				if c[1] == EMERGENCY then

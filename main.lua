@@ -165,6 +165,7 @@ FAKE=6
 HEART=7
 ROPE = 8
 SNOW = 9
+INVI = 10 
 
 WALK = 1
 JUMP = 2
