@@ -23,7 +23,7 @@ laser = {
 		end
 	end;
 	off = function()
-		laser_mute();
+		sound.stop();
 	end
 }
 
@@ -665,23 +665,23 @@ end
 ]]--
 };
 life = function(s)
-	local path = { { 32, 8 }, { 32, 29}, 
-			{24, 29}, {24, 8},
-			{16, 8}, {16, 29},
-			{8, 29}, {8, 8}, 
-			{0, 8}, {0, 29},
-			{8, 29}, {8, 8},
-			{16, 8}, {16, 29}, 
-			{24, 29}, {24, 8},
-			{32, 8}, {32, 29},
-			{40, 29}, {40, 8} };
+	local path = { { 32, 8 }, { 32, 22}, 
+			{24, 22}, {24, 8},
+			{16, 8}, {16, 22},
+			{8, 22}, {8, 8}, 
+			{0, 8}, {0, 22},
+			{8, 22}, {8, 8},
+			{16, 8}, {16, 22}, 
+			{24, 22}, {24, 8},
+			{32, 8}, {32, 22},
+			{40, 22}, {40, 8} };
 	if not s.path then
 		s.path = path
 	end
 	if not s.snake then
 		s.snake = {} 
 		local k
-		for k=1, 50 do
+		for k=1, 40 do
 			table.insert(s.snake, {k + 50, 8})
 		end
 	end
@@ -728,7 +728,7 @@ end
  0123456789012345678901234567890123456789
            1         2         3
 ]]--
-};
+	},
 life = function(s)
 	if hero:state() == JUMP or hero:state() == FALL then
 		hero.speed_x = hero.speed_x - GX*0.60
@@ -785,6 +785,177 @@ end
 },
 
 	{
+		title = "15:Lasers";
+		map = {
+'          #########################     ';
+'           *          *          *      ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                     ###';
+'                                     #  ';
+'                                     #  ';
+'                                     #  ';
+'>          *          *          *   #  ';
+'######################################  ';
+--[[
+ 0123456789012345678901234567890123456789
+           1         2         3
+]]--
+},
+life = function(s)
+	if not s.state then
+		s.state = 1
+	end
+	local k = math.ceil(s.state / 25) % 3
+	if k == 1 then k = 2 elseif k == 2 then k = 0 else k = 1 end
+	s.state = s.state + 1
+	laser.on(11 + 11 * k, 2, 26);
+end
+},
+{
+	title = "16:Press",
+	map = {
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'########################################';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'>                                       ';
+'########################################';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+};
+		life =  function(s)
+		   if not s.sq then
+		      s.sq = true
+		      s.squeezer = {}
+		      s.squeezer_speed = {}
+		      for a = 1, 3 do
+			 s.squeezer[a] = 64
+			 s.squeezer_speed[a] = a + 1
+		      end
+		   end
+		   for a = 1, 3 do
+		      s.squeezer[a] = s.squeezer[a] + s.squeezer_speed[a]
+		      if s.squeezer[a] >= 13 * 16 or s.squeezer[a] < 64 then
+			 s.squeezer_speed[a] = s.squeezer_speed[a] *-1
+		      end
+		      sprite.fill(sprite.screen(), a * 9 * 16 , 160, 21, s.squeezer[a], '#888888')
+		      sprite.fill(sprite.screen(), a * 9 * 16 + 21 , 160, 22, s.squeezer[a], '#AAAAAA')
+		      sprite.fill(sprite.screen(), a * 9 * 16 + 43 , 160, 21, s.squeezer[a], '#DDDDDD')
+		      if hero:collision(a * 9 * 16 , 160, 64, s.squeezer[a]) then
+			 hero:state(FLY)
+		      end
+		   end
+		end;
+
+},
+{
+	title = "17:Figure out",
+	map = {
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'>                                       ';
+'########                        ########';
+'########                        ########';
+'########                        ########';
+'########                        ########';
+'########                        ########';
+'########                        ########';
+};
+--[[
+ 0123456789012345678901234567890123456789
+           1         2         3
+]]--
+
+		life =  function(s)
+			if hero:state() == JUMP or hero:state() == FALL and hero.x > 4 * BW then
+				if not s.pos then
+					s.pos = 0
+				end 
+				local x, y, c
+				for x = 4 + math.ceil(s.pos), 8 + math.ceil(s.pos) do
+					for y = 24, 29 do
+						c = map:cell(x, y)
+						c[1] = 0
+					end
+				end
+
+				s.pos = s.pos + 0.1
+				if s.pos >= 23 then s.pos = 23 end
+				for x = 4 + math.ceil(s.pos),8 + math.ceil(s.pos) do
+					for y = 24, 29 do
+						c = map:cell(x, y)
+						c[1] = BLOCK
+					end
+				end
+			end
+		end;
+},
+
+	{
 		title = "4:",
 		map = {
 '                                        ';
@@ -837,6 +1008,5 @@ end
 		end;
 
 },
-
 
 }
