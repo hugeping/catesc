@@ -25,7 +25,7 @@ laser = {
 		end
 	end;
 	off = function()
-		sound.stop();
+		laser_mute();
 	end
 }
 
