@@ -16,6 +16,9 @@ map = obj {
 		if n then
 			s.prev = s.nr
 			s.nr = n;
+			if n == CONTMAP then
+				set_music 'snd/nothing.ogg'
+			end
 		else
 			n = s.nr
 		end

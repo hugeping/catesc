@@ -77,7 +77,9 @@ game.state = function(s, n, st)
 			key_left = false
 			key_right = false
 			key_space = false
+			key_input = {}
 			map:dist(0)
+			set_music 'snd/music.ogg'
 		end
 	end
 	return os, om

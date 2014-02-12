@@ -1054,7 +1054,7 @@ end
 '                                        ';
 };
 life =  function(s)
-	if not s.secs then s.secs = 9.9 end
+	if not s.secs then s.secs = 10.9 end
 
 	local w, h = sprite.size(gameover_spr);
 	sprite.draw(gameover_spr, sprite.screen(), (640 - w)/2 + 1 - rnd(2), (100 - h)/2 + 1 - rnd(2))
