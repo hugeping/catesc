@@ -37,7 +37,7 @@ GAME = 0
 CHANGE_LEVEL = 1
 GAMEOVER = 2
 INTRO = 3
-
+CONTMAP = 99
 
 global {
 	game_state = 0;
@@ -492,7 +492,9 @@ game.timer = function(s)
 		if game_lifes > 0 then
 			game_lifes = game_lifes - 1
 			if game_lifes <= 0 then
-				game:state(GAMEOVER)
+				map.prev = map.nr
+				map.nr = CONTMAP
+				game:state(CHANGE_LEVEL)
 			else
 				game:state(CHANGE_LEVEL)
 			end

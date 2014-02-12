@@ -3,6 +3,7 @@ map = obj {
 	var {
 		data = {};
 		nr = 1;
+		prev = 0;
 		map = {};
 		d = 0;
 	};
@@ -13,6 +14,7 @@ map = obj {
 	end;
 	select = function(s, n)
 		if n then
+			s.prev = s.nr
 			s.nr = n;
 		else
 			n = s.nr
@@ -71,6 +73,12 @@ map = obj {
 	next = function(s)
 		local n
 		n = s.nr + 1;
+		if s.nr == CONTMAP then 
+			n = s.prev 
+			game_lifes = 3
+			game:dist(0)
+			hero:state(DEAD)
+		end
 		s.data = {}
 		s.map = {}
 		s:select(n)
