@@ -16,7 +16,7 @@ function init()
 	fn = sprite.font("font.ttf", 16);
 	fn8 = sprite.font("8bit.ttf", 32);
 	fn8s = sprite.font("8bit.ttf", 16);
-	fn_big = sprite.font("font.ttf", 64);
+	fn_big = sprite.font("font.ttf", 32);
 	hero.spr = sprite.load "pic/cat.png"
 	hero.spr_left = sprite.scale(hero.spr, -1.0, 1, false)
 	heart_spr = sprite.load "pic/heart.png"

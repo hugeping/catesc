@@ -1059,11 +1059,11 @@ life =  function(s)
 		game:state(INTRO)
 	end;
 	local w, h = sprite.size(continue_spr)
-	sprite.fill(sprite.screen(), (640 - w)/2, 100, w, h, 'white');
+--	sprite.fill(sprite.screen(), (640 - w)/2, 100, w, h, 'white');
 	local sec = sprite.text(fn_big, string.format("%d", s.secs))
 	sprite.draw(continue_spr, sprite.screen(), (640 - w)/2, 100);
 	w, h = sprite.size(sec)
-	sprite.draw(sec, sprite.screen(), (640 - w)/2, 200);
+	sprite.draw(sec, sprite.screen(), (640 - w)/2, 190);
 	sprite.free(sec)
 	s.secs = s.secs - 0.025
 end
