@@ -867,6 +867,16 @@ end
 '                                        ';
 };
 		life =  function(s)
+			if not s.water then
+				s.water = 0
+			end
+			if s.water then
+				sprite.fill(sprite.screen(), 0, 30 * BH - math.ceil(s.water), 640, math.ceil(s.water), 'blue');
+				s.water = s.water + 0.2
+				if 30 * BH - s.water < hero.y + hero.h and hero:alive()then
+					hero:state(DROWN)
+				end
+			end
 		   if not s.sq then
 		      s.sq = true
 		      s.squeezer = {}
