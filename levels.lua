@@ -1073,3 +1073,5 @@ life =  function(s)
 end
 }
 }
+
+game.enable_save = false
