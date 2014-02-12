@@ -1,3 +1,6 @@
+origG = G
+origRGX = RGX
+
 map = obj {
 	nam = 'map';
 	var {
@@ -23,6 +26,8 @@ map = obj {
 		else
 			n = s.nr
 		end
+		G = origG
+		RGX = origRGX
 		if s.title then
 			sprite.free(s.title);
 		end
@@ -42,6 +47,8 @@ map = obj {
 					local c = string.sub(maps[n].map[y], x, x);
 					if c == '#' then
 						c = BLOCK
+					elseif c == '@' then
+						c = SNOW
 					elseif c == '^' then
 						c = FAKE
 					elseif c == '~' then
@@ -105,6 +112,8 @@ map = obj {
 				local c = s:cell(x, y);
 				if c[1] == BLOCK or c[1] == FAKE then
 					sprite.fill(sprite.screen(), x * 16, y * 16, 16 - 1, 16 - 1, 'black');
+				elseif c[1] == SNOW then
+					sprite.fill(sprite.screen(), x * 16, y * 16, 16, 16, 'white');
 				elseif c[1] == SEMIBLOCK then
 					if (not c.move) or (c.move < SEMI_TO) then
 						sprite.fill(sprite.screen(), x * 16, y * 16, 16 - 1, 16 - 1, SEMICOL);
@@ -154,7 +163,7 @@ map = obj {
 		for xx = 0, math.floor((w - 1) / BW) do
 			local bx, by = s:pos2block(x + xx * BW, y)
 			local c = s:block(bx, by)
-			if c == BLOCK then
+			if c == BLOCK or c == SNOW then
 				rc = false
 			elseif c == SEMIBLOCK then
 				c = s:cell(bx, by)
@@ -193,6 +202,9 @@ map = obj {
 			local c = s:cell(s:pos2block(x, y + yy*BH))
 			if c then
 				if c[1] == BLOCK or (c[1] == SEMIBLOCK and (not c.move or c.move < SEMI_TO)) then
+					return false
+				end
+				if c[1] == SNOW then
 					return false
 				end
 				if c[1] == EMERGENCY then

@@ -1,5 +1,3 @@
-origG = G
-
 laser = {
 	on = function(x, y, len)
 		local w, h
@@ -1199,7 +1197,71 @@ end;
 		end;
 
 },
+      	{
+		title = "23:Winter",
+		map = {
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                          @@@@@@@@      ';
+'                           @@@@@@       ';
+'                           @@@@@@       ';
+'           @@@@@@@@        @@@@@@       ';
+'            @@@@@@         @@@@@@       ';
+'            @@@@@@         @@@@@@       ';
+'            @@@@@@         @@@@@@       ';
+'>           @@@@@@         @@@@@@       ';
+'@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+};
+		life =  function(s)
+			if hero:state() == WALK then
+				RGX = 0.1
+			else
+				RGX = origRGX
+			end
+		end;
 
+after = function(s)
+	local x, y, i
+	if not s.snow then
+		s.snow = {}
+		for i = 1, 80 do
+			table.insert(s.snow, {rnd(640), rnd(480), (rnd(2) + 1)/2 })
+		end
+	end
+	for i=1, 80 do
+		x = s.snow[i][1]
+		y = s.snow[i][2]
+		sprite.fill(sprite.screen(), x, y, 2, 2, 'white');
+		s.snow[i][2] = s.snow[i][2] + s.snow[i][3]
+		s.snow[i][1] = s.snow[i][1] + 2 -  rnd(3)
+		if s.snow[i][1] < 0 or s.snow[i][2] > 480 or hero:collision(x, y, 2, 2) then
+			s.snow[i][1] = rnd(640)
+			s.snow[i][2] = 0
+			s.snow[i][3] = (rnd(2) + 1)/2
+		end
+	end
+end
+
+},
 
 	{
 		title = "4:",
