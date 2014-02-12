@@ -17,6 +17,7 @@ map = obj {
 			s.prev = s.nr
 			s.nr = n;
 			if n == CONTMAP then
+				save_music(game)
 				set_music 'snd/nothing.ogg'
 			end
 		else
@@ -81,6 +82,7 @@ map = obj {
 			game_lifes = 3
 			game:dist(0)
 			hero:state(DEAD)
+			restore_music(game)
 		end
 		s.data = {}
 		s.map = {}

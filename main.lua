@@ -179,6 +179,7 @@ MAX_SPEEDX = 5
 R = 0.75
 G = 0.5
 GX = 0.25
+RGX = 0.4
 
 BW = 16
 BH = 16
@@ -295,19 +296,27 @@ hero = obj {
 			if key_right or key_left then
 				if key_right then
 					s.dir = 1
-					s.speed_x = s.speed_x + GX
+					if s.speed_x < 0 then
+						s.speed_x = s.speed_x + RGX
+					else
+						s.speed_x = s.speed_x + GX
+					end
 					if s.speed_x > MAX_SPEEDX then
 						s.speed_x = MAX_SPEEDX
 					end
 				else
 					s.dir = -1
-					s.speed_x = s.speed_x - GX
+					if s.speed_x > 0 then
+						s.speed_x = s.speed_x - RGX
+					else
+						s.speed_x = s.speed_x - GX
+					end
 					if s.speed_x < -MAX_SPEEDX then
 						s.speed_x = -MAX_SPEEDX
 					end
 				end
 			else
-				local gx = GX
+				local gx = RGX
 				if s.speed_x ~= 0 then
 					if s.speed_x > 0 then
 						gx = - gx
