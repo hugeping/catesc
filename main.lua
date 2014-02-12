@@ -16,6 +16,7 @@ function init()
 	fn = sprite.font("font.ttf", 16);
 	fn8 = sprite.font("8bit.ttf", 32);
 	fn8s = sprite.font("8bit.ttf", 16);
+	fn_big = sprite.font("font.ttf", 64);
 	hero.spr = sprite.load "pic/cat.png"
 	hero.spr_left = sprite.scale(hero.spr, -1.0, 1, false)
 	heart_spr = sprite.load "pic/heart.png"
@@ -24,6 +25,7 @@ function init()
 	title_spr = sprite.text (fn8, "ESCAPE OF THE CAT", 'black');
 	press_spr = sprite.text (fn8s, "PRESS SPACE", 'black');
 	gameover_spr = sprite.text (fn8s, "GAME OVER", 'black');
+	continue_spr = sprite.text (fn_big, _"continue:CONTINUE?", 'black');
 	titles_spr = {
 		sprite.text (fn8s, "KEYS ARE LEFT RIGHT SPACE or UP");
 		sprite.text (fn8s, "ESCAPE FOR MENU");
@@ -477,14 +479,18 @@ game.timer = function(s)
 		return
 	elseif st == CHANGE_LEVEL then
 		if hero:state() == DEAD then
-			map:select()
+			if game_lifes <= 0 then
+				map:select(CONTMAP)
+			else
+				map:select()
+			end
 		elseif hero.x >= 640 then
 			game:dist(game:dist() + map:dist())
 			map:next()
 		end
 	end
 
-	if hero.x / BW > map:dist() then
+	if hero.x / BW > map:dist() and map.nr ~= CONTMAP then
 		map:dist(math.floor(hero.x / BW))
 	end
 
@@ -492,8 +498,6 @@ game.timer = function(s)
 		if game_lifes > 0 then
 			game_lifes = game_lifes - 1
 			if game_lifes <= 0 then
-				map.prev = map.nr
-				map.nr = CONTMAP
 				game:state(CHANGE_LEVEL)
 			else
 				game:state(CHANGE_LEVEL)
