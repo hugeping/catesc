@@ -90,7 +90,7 @@ game.step = function(s, n)
 end
 
 function start()
-	timer:set(1);
+	timer:set(20);
 	if game_state == GAME then
 		game:state(CHANGE_LEVEL, 16);
 		map:select()
