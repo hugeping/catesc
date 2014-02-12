@@ -19,6 +19,7 @@ function init()
 	hero.spr = sprite.load "pic/cat.png"
 	hero.spr_left = sprite.scale(hero.spr, -1.0, 1, false)
 	heart_spr = sprite.load "pic/heart.png"
+	heart_bonus_spr = heart_spr;
 	score_spr = sprite.text (fn, _"Score:Distance: ", 'black');
 	hiscore_spr = sprite.text (fn, _"Hiscore:Record: ", 'black');
 	title_spr = sprite.text (fn8, "ESCAPE OF THE CAT", 'black');

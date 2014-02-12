@@ -113,7 +113,12 @@ map = obj {
 				elseif c[1] == ROPE then
 					sprite.fill(sprite.screen(), x * 16, y * 16, 16 - 1, 4, 'black');
 				elseif c[1] == HEART then
-					sprite.draw(heart_spr, sprite.screen(), x * 16, y * 16);
+					if not heart_blink then heart_blink = 0 end
+					if math.floor(heart_blink / 20) % 2 ~= 0 then
+						sprite.draw(heart_bonus_spr, sprite.screen(), x * 16, y * 16);
+					end
+					heart_blink = heart_blink + 1
+					if heart_blink >= 40 then heart_blink = 0 end
 				end
 			end
 		end
