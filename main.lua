@@ -179,9 +179,13 @@ SPEED_RUN = 5
 MAX_SPEEDX = 5
 
 R = 0.75
-G = 0.5
+
+global {
+    G = 0.5,
+    RGX = 0.4
+}
+
 GX = 0.25
-RGX = 0.4
 
 BW = 16
 BH = 16
