@@ -72,7 +72,9 @@ map = obj {
 					elseif c == '+' then
 						c = HEART
 					elseif c == ' ' then
-						c = nil
+						c = 0
+					else
+						c = c -- same character
 					end
 					table.insert(s.map[y], { c })
 				end
