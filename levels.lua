@@ -1615,7 +1615,7 @@ life = function(s)
 end
 
 },
-[MIRROR_MAP] =	{
+	{
 		title = "30:Strange place",
 		map = {
 '                                        ';-- 0
