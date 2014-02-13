@@ -1429,6 +1429,64 @@ end
 },
 
 	{
+		title = "27:Power",
+		map = {
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                            %%%%########';
+'                                ########';
+'                                ########';
+'                                ########';
+'            ####                ########';
+'            ####                ########';
+'            ####                ########';
+'            ####                ########';
+'>           ####      m         ########';
+'########################################';
+};
+life = function(s)
+	if not s.pos then s.pos = 12 end
+	local c, y, x
+	
+	for x = 0, 3 do
+		for y = 0, 4 do
+			c = map:cell(s.pos + x, 24 + y)
+			c[1] = 0
+		end
+	end
+	if hero.y >= 24 * BH and hero.speed_x <= GX and hero:state() == WALK and key_right and hero.x + hero.w >= s.pos * BW and hero.x + hero.w < (s.pos + 4) * BW then
+		s.pos = s.pos + 1
+	end
+	if s.pos >= 18 then s.pos = 18 end
+	for x = 0, 3 do
+		for y = 0, 4 do
+			c = map:cell(s.pos + x, 24 + y)
+			c[1] = BLOCK
+		end
+	end
+
+end
+},
+
+	{
 		title = "4:",
 		map = {
 '                                        ';
