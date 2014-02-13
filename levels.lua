@@ -118,8 +118,12 @@ snake = {
 		for k, v in ipairs(s.snake) do
 			if k == 1 then
 				sprite.fill(sprite.screen(), v[1] * BW, v[2] * BH, BW, BH, 'yellow');
+				if not snake_step then
+					sprite.fill(sprite.screen(), v[1] * BW + 2, v[2] * BH + 2, BW - 4, BH - 4, 'red');
+				end
+				snake_step = not snake_step
 			else
-				sprite.fill(sprite.screen(), v[1] * BW, v[2] * BH, BW, BH, 'red');
+				sprite.fill(sprite.screen(), v[1] * BW, v[2] * BH, BW - 1, BH - 1, 'crimson');
 			end
 			if hero:collision(v[1] * BW, v[2] * BH, BW, BH) then
 				hero:state(FLY)
@@ -1529,6 +1533,119 @@ after = function(s)
 end
 },
 
+
+	{
+		title = "29:Snake II",
+		map = {
+'                                        ';-- 0
+'                                        ';-- 1
+'                                        ';-- 2
+'                                        ';-- 3
+'                                        ';-- 4
+'                                        ';-- 5
+'                                        ';-- 6
+'                                        ';-- 7
+'                                        ';-- 8
+'                                        ';-- 9
+'                                        ';-- 1
+'                                        ';-- 11
+'                                        ';-- 12
+'                                        ';-- 13
+'                                        ';-- 14
+'                                        ';-- 15
+'                                        ';-- 16
+'                                        ';-- 17
+'                                        ';-- 18
+'>                  +                    ';-- 19
+'########################################';-- 20
+'                                        ';-- 21
+'                                        ';-- 22
+'                                        ';-- 23
+'                                        ';-- 24
+'                                        ';-- 25
+'                                        ';-- 26
+'                                        ';-- 27
+'                                        ';-- 28
+'                                        ';-- 29
+};
+--[[
+ 0123456789012345678901234567890123456789
+           1         2         3
+]]--
+life = function(s)
+	local path = { { 12, 6 }, { 12, 19}, 
+			{27, 19}, {27, 6} };
+	if not s.path then
+		s.path = path
+		s.step = 0
+	end
+	if not s.snake then
+		s.snake = {} 
+		local k
+		for k=1, 47 do
+			table.insert(s.snake, {k + 12, 6})
+		end
+	end
+	if s.step > 3 then
+		snake.step(s)
+		s.step = 0
+	end
+	snake.draw(s)
+	s.step = s.step + 1 
+end
+
+},
+	{
+		title = "30:Strange place",
+		map = {
+'                                        ';-- 0
+'                                        ';-- 1
+'########################################';-- 2
+'          m                   m         ';-- 3
+'                                        ';-- 4
+'                                        ';-- 5
+'                                        ';-- 6
+'                                        ';-- 7
+'                                        ';-- 8
+'                                        ';-- 9
+'                                        ';-- 1
+'                                        ';-- 11
+'                                        ';-- 12
+'                                        ';-- 13
+'                                        ';-- 14
+'                                        ';-- 15
+'                                        ';-- 16
+'                                        ';-- 17
+'                                        ';-- 18
+'>         m                   m         ';-- 19
+'########################################';-- 20
+'                                        ';-- 21
+'                                        ';-- 22
+'                                        ';-- 23
+'                                        ';-- 24
+'                                        ';-- 25
+'                                        ';-- 26
+'                                        ';-- 27
+'                                        ';-- 28
+'                                        ';-- 29
+};
+--[[
+ 0123456789012345678901234567890123456789
+           1         2         3
+]]--
+life = function(s)
+	local st, m
+	st, m = game:state()
+	if st == CHANGE_LEVEL and m >= 16 and hero.x > 600 and not s.skip then
+		map.nr = 29
+	elseif hero.x < - (hero.w * 3) and s ~= CHANGE_LEVEL then
+		hero.x = 700
+		game:state(CHANGE_LEVEL)
+		s.skip = true
+	end
+	map:dist(0)
+end
+},
 	{
 		title = "4:",
 		map = {
