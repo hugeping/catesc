@@ -1451,7 +1451,7 @@ end
 '                                        ';
 '                                        ';
 '                                        ';
-'                            %%%%########';
+'                           %%%%%########';
 '                                ########';
 '                                ########';
 '                                ########';
@@ -1468,17 +1468,18 @@ life = function(s)
 	
 	for x = 0, 3 do
 		for y = 1, 4 do
-			c = map:cell(s.pos + x, 24 + y)
+			c = map:cell(math.floor(s.pos) + x, 24 + y)
 			c[1] = 0
 		end
 	end
-	if hero.y >= 25 * BH and hero.speed_x <= GX and hero:state() == WALK and key_right and hero.x + hero.w >= s.pos * BW and hero.x + hero.w < (s.pos + 4) * BW then
-		s.pos = s.pos + 1
+	if hero.y >= 25 * BH and hero.speed_x <= GX and hero:state() == WALK and key_right 
+		    and hero.x + hero.w >= math.floor(s.pos) * BW and hero.x + hero.w < (math.floor(s.pos) + 4) * BW then
+		s.pos = s.pos + 0.1
 	end
 	if s.pos >= 18 then s.pos = 18 end
 	for x = 0, 3 do
 		for y = 1, 4 do
-			c = map:cell(s.pos + x, 24 + y)
+			c = map:cell(math.floor(s.pos) + x, 24 + y)
 			c[1] = BLOCK
 		end
 	end
