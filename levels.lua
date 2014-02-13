@@ -1,3 +1,60 @@
+explode = {
+	add = function(s, x, y, m)
+		if not s.mines then
+			s.mines = {}
+		end
+		local v = {}
+		v.x = x * BW + BW / 2 - 2
+		v.y = y * BH + BH / 2 - 2
+		v.step = 0
+		local c = map:cell(x, y)
+		c[1] = 0
+		if m then
+			table.insert(m, v)
+		else
+			table.insert(s.mines, v)
+		end
+	end;
+	draw = function(s)
+		local SP = 8
+		if not s.mines then return end
+		local k,v
+		local mines = {} 
+		for k, v in ipairs(s.mines) do
+			local x, y = v.x, v.y
+			local xx, yy
+			local p = v.step
+			local i
+			if p then
+				v.step = v.step + 1
+				p = v.step
+				for i = 1, 8 do
+					if not v[i] then
+						xx = x + p * SP * math.cos(3.14 * i / 4)
+						yy = y + p * SP * math.sin(3.14 * i / 4)
+						sprite.fill(sprite.screen(), xx, yy, 4, 4, 'black')
+						local c = map:cell(map:pos2block(xx, yy))
+						if c and c[1] ~= 0 and c[1] then
+							v[i] = true
+						elseif hero:collision(xx, yy, 4, 4) then
+							hero:state(FLY)
+						end
+						if c and (c[1] == EMERGENCY or c[1] == MINE) then
+							local x1, y1 = map:pos2block(xx, yy)
+							explode.add(s, x1, y1, mines)
+						end
+					end
+				end
+				if p * SP > 40 * BW then
+					v.step = false
+				else
+					table.insert(mines, v)
+				end
+			end
+		end;
+		s.mines = mines
+	end
+}
 laser = {
 	on = function(x, y, len)
 		local w, h
@@ -1335,6 +1392,41 @@ end
 };
 },
 
+	{
+		title = "26:Mines",
+		map = {
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'>        m          +          m        ';
+'########################################';
+};
+},
 
 	{
 		title = "4:",

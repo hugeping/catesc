@@ -63,12 +63,16 @@ map = obj {
 						c = BRIDGE
 					elseif c == '-' then
 						c = ROPE
+					elseif c == 'm' then
+						c = MINE
 					elseif c == '>' then
 						c = nil
 						s.map.x = (x - 1) * BW
 						s.map.y = (y) * BH - hero.h
 					elseif c == '+' then
 						c = HEART
+					elseif c == ' ' then
+						c = nil
 					end
 					table.insert(s.map[y], { c })
 				end
@@ -122,7 +126,7 @@ map = obj {
 					end
 				elseif c[1] == WATER then
 					sprite.fill(sprite.screen(), x * 16, y * 16, 16, 16, 'blue');
-				elseif c[1] == EMERGENCY then
+				elseif c[1] == EMERGENCY or c[1] == MINE then
 					sprite.fill(sprite.screen(), x * 16 + 1, y * 16 + 1, 16 - 2, 16 - 2, 'red');
 				elseif c[1] == BRIDGE then
 					sprite.fill(sprite.screen(), x * 16, y * 16, 16 - 1, 8, 'black');
@@ -175,7 +179,7 @@ map = obj {
 				end
 			elseif c == WATER then
 				water = true
-			elseif c == EMERGENCY then
+			elseif c == EMERGENCY or c == MINE then
 				hero:state(FLY)
 				return false
 			elseif c == BRIDGE and dy >= 0 and y - dy <= by * BH then
@@ -209,7 +213,7 @@ map = obj {
 				if c[1] == SNOW or c[1] == INVI then
 					return false
 				end
-				if c[1] == EMERGENCY then
+				if c[1] == EMERGENCY or c[1] == MINE then
 					hero:state(FLY)
 					return false
 				elseif c[1] == HEART then
@@ -266,6 +270,14 @@ map = obj {
 				local yy
 				local c = s.map[y][x]
 				if c.move then c.move = c.move + 1 end
+
+				if c[1] == MINE and not c.activated then
+					if hero:distance(x * BW + BW / 2, y * BH + BH /2) < MINE_DIST then
+						c.activated = true
+						c.move = 0
+					end
+				end
+
 				if c[1] == SEMIBLOCK and c.move then
 					if c.move >= SEMI_TO then
 						if not c.y then
@@ -280,14 +292,18 @@ map = obj {
 					if c.move and c.y and c.y > 480 then
 						c[1] = 0
 					end
-				elseif c[1] == EMERGENCY then
+				elseif c[1] == EMERGENCY or (c[1] == MINE and c.activated) then
 					if not c.step then
 						sprite.fill(sprite.screen(), (x - 1) * BW, (y - 1) * BH, BW - 1, BH/2, 'yellow');
 					end
 					c.step = not c.step
 				end
+				if c[1] == MINE and c.activated and c.move > MINE_TO then
+					explode.add(map.data, x - 1, y - 1)
+				end
 			end
 		end
+		explode.draw(s.data)
 		if maps[s.nr].life then
 			maps[s.nr].life(s.data)
 		end

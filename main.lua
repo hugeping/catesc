@@ -160,12 +160,15 @@ WATER = 2
 EMERGENCY = 3
 SEMIBLOCK = 4
 SEMI_TO = 22
+MINE_TO = 50
+MINE_DIST = 100
 BRIDGE = 5
 FAKE=6
 HEART=7
 ROPE = 8
 SNOW = 9
 INVI = 10 
+MINE = 11
 
 WALK = 1
 JUMP = 2
@@ -223,6 +226,12 @@ hero = obj {
 			end
 		end
 		return os
+	end;
+	distance = function(s, x, y)
+		local d1 = hero.x + hero.w / 2 - x
+		local d2 = hero.y + hero.h / 2 - y 
+		local r = math.sqrt(d1 * d1 + d2 * d2)
+		return r
 	end;
 	alive = function(s)
 		return not (s.st == DROWN or s.st == FLY or s.st == DEAD)
