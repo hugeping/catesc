@@ -30,17 +30,11 @@ function init()
 		sprite.text (fn, _"help1:KEYS ARE: LEFT RIGHT SPACE or UP", 'black');
 		sprite.text (fn, _"help2:ESCAPE FOR MENU", 'black');
 	}
-
-	ending_spr = {
-		sprite.text (fn, _"end1:CONGRATULATIONS!!!", 'white');
-		sprite.text (fn, _"end2:YOU HELPED THE CAT TO ESCAPE EVIL STATION",'white');
-		sprite.text (fn, _"end3:THANK YOU FOR YOUR EFFORTS!!!",'white');
-		sprite.text (fn, _"end3:--- === ---",'white');
-		sprite.text (fn, _"end3:CODE: Peter Kosyh",'white');
-		sprite.text (fn, _"end3:LEVELS: Peter Kosyh & Andrew Lobanov",'white');
-		sprite.text (fn, _"end3:MUSIC: TODO",'white');
-	}
-
+	local i
+	ending_spr = { }
+	for i = 1, #ending_txt do
+		table.insert(ending_spr, sprite.text(fn, _('end'..tostring(i)..':'..ending_txt[i]), 'white'));
+	end
 	hook_keys('right', 'left', 'space', 'up', 'return');
 	hero:state(DEAD)
 	game:state(INTRO);

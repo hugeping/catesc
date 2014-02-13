@@ -190,6 +190,7 @@ map = obj {
 				rc = false
 			elseif c == HEART then
 				game_lifes = game_lifes + 1
+				sound.play(bonus_snd)
 				c = s:cell(bx, by)
 				c[1] = 0
 			end
@@ -220,6 +221,7 @@ map = obj {
 					return false
 				elseif c[1] == HEART then
 					game_lifes = game_lifes + 1
+					sound.play(bonus_snd)
 					c[1] = 0
 				end
 			end
@@ -276,6 +278,7 @@ map = obj {
 				if c[1] == MINE and not c.activated then
 					if hero:distance(x * BW + BW / 2, y * BH + BH /2) < MINE_DIST then
 						c.activated = true
+						sound.play(beep_snd)
 						c.move = 0
 					end
 				end

@@ -1,6 +1,9 @@
 require "sound"
 mew_snd = sound.load 'snd/mew.ogg'
 laser_snd = sound.load 'snd/laser.ogg'
+bonus_snd = sound.load 'snd/bonus.wav'
+beep_snd = sound.load 'snd/beep.wav'
+boom_snd = sound.load 'snd/boom.wav'
 
 function laser_play()
 	if not laser_playing then

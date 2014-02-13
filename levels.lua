@@ -1,3 +1,14 @@
+ending_txt = {
+	"CONGRATULATIONS!!!",
+	"YOU HELPED THE CAT TO ESCAPE EVIL STATION",
+	"THANK YOU FOR YOUR EFFORTS!!!",
+	"...",
+	"CODE: Peter Kosyh",
+	"LEVELS: Peter Kosyh & Andrew Lobanov",
+	"MUSIC: TODO",
+}
+
+
 explode = {
 	add = function(s, x, y, m)
 		if not s.mines then
@@ -9,6 +20,7 @@ explode = {
 		v.step = 0
 		local c = map:cell(x, y)
 		c[1] = 0
+		sound.play(boom_snd)
 		if m then
 			table.insert(m, v)
 		else
@@ -1642,6 +1654,7 @@ life = function(s)
 		hero.x = 700
 		hero.y = 0
 		game:state(CHANGE_LEVEL)
+		hero:state(WALK)
 		s.skip = true
 	end
 	map:dist(0)
@@ -1650,30 +1663,30 @@ end
 	{
 		title = "31:Gate",
 		map = {
-'                                        ';
-'                                        ';
-'                                        ';
-'                                        ';
-'                                        ';
-'                                        ';
-'                                        ';
-'                                        ';
-'                                        ';
-'                                        ';
-'                                        ';
-'                                        ';
-'                                        ';
-'                                        ';
-'                                        ';
-'                                        ';
-'                                        ';
-'                                        ';
+'>                    ###################';
+'                     #                 #';
+'                     #                 #';
+'                     #                 #';
+'                     #                 #';
+'                     #                 #';
+'%%%                  #                 #';
+'%%%                  #                 #';
+'                     #                 #';
+'                     #                 #';
+'       %%%%          #                 #';
+'       %%%%          #                 #';
+'                     #                 #';
+'                     #                 #';
+'%%%                  #                 #';
+'%%%                  #                 #';
+'                     #                 #';
+'                     #                 #';
+'                     #                 #';
 '                     #                  ';
-'>                    #                  ';
-'#####                #                  ';
+'                    *#                  ';
 '                     #                  ';
 '                     #                  ';
-'              *      #                  ';
+'       m             #                  ';
 '###############      #                ##';
 '              #                     ####';
 '              #                   ####  ';
@@ -1682,21 +1695,53 @@ end
 '              ##################        ';
 };
 		life =  function(s)
-			if not s.laser then
-				s.laser = 60
+			if not s.timer then
+				s.timer = 0
 			end
-			s.laser = s.laser - 1
-			if s.laser <= 0 then
-				s.laser = 60
+			s.timer = s.timer + 1
+			if s.timer < 250 then
+				laser.on(0, 20, -20)
+				s.l1on = true
+			else
+				s.l1on = false
+				laser.off()
 			end
-			if s.laser <= 10 then
-				sprite.fill(sprite.screen(), 0, 24 * 16 - hero.h, 340, 3, 'red');
-				if hero:collision(0, 24 * 16 - hero.h, 340, 3) then
+			if not s.x then
+				s.x = 0
+				s.dx = 0.5
+				
+			end
+			if rnd(50) > 25 then
+				sprite.fill(sprite.screen(), 22 * BW + s.x, BH * 2, 16, 16, 'gold')
+			else
+				sprite.fill(sprite.screen(), 22 * BW + s.x, BH * 2, 16, 16, 'red')
+			end
+			s.x = s.x + s.dx
+			if s.x >= 16 * BW then s.dx = -0.5 end
+			if s.x <= 0 then s.dx = 0.5 end
+			local h = 26
+			if s.x > 7 * BW + 8 then h = h - 1 end
+			if s.x > 9 * BW + 8 then h = h - 1 end
+			if s.x > 11 * BW + 8  then h = h - 1 end
+			if s.x > 13 * BW + 8 then h = h - 1 end
+			if s.x > 15 * BW + 8 then h = h - 1 end
+			if not s.pos then s.pos = 0 end
+			if s.pos > 100 then
+				local c = 'red'
+				if not phaser_step then
+					c = 'yellow'
+				end
+				phaser_step = not phaser_step
+				sprite.fill(sprite.screen(), 22 * BW + s.x + BW / 2 - 3, BH * 2 + BH, 4, BH * h, c)
+				laser_play()
+				if hero:collision(22 * BW + s.x + BW / 2 - 3, BH * 2 + BH, 4, BH * h) then
 					hero:state(FLY)
 				end
-			else
+			elseif not s.l1on then
 				laser_mute()
 			end
+			if s.pos > 120 then s.pos = 0 end
+			s.pos = s.pos + 1
 		end;
 
 },
@@ -1766,6 +1811,7 @@ life = function(s)
 	local x, y, i, c
 	G = 0
 	GX = 0
+	set_music 'snd/music2.ogg'
 	if not s.dy then s.dy = 0 end
 	if not s.dx then s.dx = 1 end
 	hero.speed_y = 0
@@ -1829,9 +1875,7 @@ life = function(s)
 	local w, h = sprite.size(ending_spr[math.floor(s.title_pos)])
 	sprite.draw(ending_spr[math.floor(s.title_pos)], sprite.screen(), (640 - w) / 2, 480 - h);
 end
-
 },
-
 
 [CONTMAP] = 	{
 		title = "cont:Continue?",
