@@ -27,9 +27,20 @@ function init()
 	gameover_spr = sprite.text (fn, _"gameover:GAME OVER", 'black');
 	continue_spr = sprite.text (fn_big, _"continue:CONTINUE?", 'black');
 	titles_spr = {
-		sprite.text (fn, _"help1:KEYS ARE: LEFT RIGHT SPACE or UP");
-		sprite.text (fn, _"help2:ESCAPE FOR MENU");
+		sprite.text (fn, _"help1:KEYS ARE: LEFT RIGHT SPACE or UP", 'black');
+		sprite.text (fn, _"help2:ESCAPE FOR MENU", 'black');
 	}
+
+	ending_spr = {
+		sprite.text (fn, _"end1:CONGRATULATIONS!!!", 'white');
+		sprite.text (fn, _"end2:YOU HELPED THE CAT TO ESCAPE EVIL STATION",'white');
+		sprite.text (fn, _"end3:THANK YOU FOR YOUR EFFORTS!!!",'white');
+		sprite.text (fn, _"end3:--- === ---",'white');
+		sprite.text (fn, _"end3:CODE: Peter Kosyh",'white');
+		sprite.text (fn, _"end3:LEVELS: Peter Kosyh & Andrew Lobanov",'white');
+		sprite.text (fn, _"end3:MUSIC: TODO",'white');
+	}
+
 	hook_keys('right', 'left', 'space', 'up', 'return');
 	hero:state(DEAD)
 	game:state(INTRO);

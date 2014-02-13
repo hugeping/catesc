@@ -1640,6 +1640,7 @@ life = function(s)
 		map.nr = 29
 	elseif hero.x < - (hero.w * 3) and s ~= CHANGE_LEVEL then
 		hero.x = 700
+		hero.y = 0
 		game:state(CHANGE_LEVEL)
 		s.skip = true
 	end
@@ -1647,7 +1648,7 @@ life = function(s)
 end
 },
 	{
-		title = "4:",
+		title = "31:Gate",
 		map = {
 '                                        ';
 '                                        ';
@@ -1668,11 +1669,11 @@ end
 '                                        ';
 '                                        ';
 '                     #                  ';
+'>                    #                  ';
+'#####                #                  ';
 '                     #                  ';
 '                     #                  ';
-'                     #                  ';
-'                     #                  ';
-'>             *      #                  ';
+'              *      #                  ';
 '###############      #                ##';
 '              #                     ####';
 '              #                   ####  ';
@@ -1699,6 +1700,138 @@ end
 		end;
 
 },
+
+	{
+		title = "32:Freedom",
+		color = '#00001c';
+		map = {
+'                                        ';-- 0
+'                                        ';-- 1
+'                                        ';-- 2
+'                                        ';-- 3
+'                                        ';-- 4
+'                                        ';-- 5
+'                                        ';-- 6
+'                                        ';-- 7
+'                                        ';-- 8
+'                                        ';-- 9
+'                                        ';-- 1
+'                                        ';-- 11
+'                                        ';-- 12
+'                                        ';-- 13
+'                                        ';-- 14
+'                                        ';-- 15
+'                                        ';-- 16
+'                                        ';-- 17
+'                                        ';-- 18
+'>                                       ';-- 19
+'                                        ';-- 20
+'                                        ';-- 21
+'                                        ';-- 22
+'                                        ';-- 23
+'                                        ';-- 24
+'                                        ';-- 25
+'                                        ';-- 26
+'                                        ';-- 27
+'                                        ';-- 28
+'                                        ';-- 29
+};
+--[[
+ 0123456789012345678901234567890123456789
+           1         2         3
+]]--
+after = function(s)
+	if hero:state() == JUMP then
+		sprite.fill(sprite.screen(0), hero.x + hero.w - 34, hero.y + hero.h / 2 + 3, 20, 3, 'black');
+		sprite.fill(sprite.screen(0), hero.x + hero.w - 34, hero.y + hero.h / 2 + 1, 6, 7, 'black');
+	else
+		sprite.fill(sprite.screen(0), hero.x + hero.w - 34, hero.y + hero.h / 2 + 5, 20, 3, 'black');
+		sprite.fill(sprite.screen(0), hero.x + hero.w - 34, hero.y + hero.h / 2 + 3, 6, 7, 'black');
+	end
+	
+	if key_space then
+		local c = 'cyan'
+		if rnd(50) > 25 then c = 'red' end
+		local d 
+		if hero:state() == FALL then d = 3 else d = 0 end
+		sprite.fill(sprite.screen(0), hero.x + hero.w - 8, hero.y + hero.h / 2 + 3 + d, 640, 2, c);
+		laser_play()
+	else
+		laser_mute()
+	end
+
+end;
+life = function(s)
+	local SG = 0.1
+	local x, y, i, c
+	G = 0
+	GX = 0
+	if not s.dy then s.dy = 0 end
+	if not s.dx then s.dx = 1 end
+	hero.speed_y = 0
+	hero.speed_x = 0
+	hero.jump_speed = 0
+	if hero.x <= -rnd(10) then s.dx = 1 end
+	if hero.x >= rnd(hero.w*2) + 4*hero.w then s.dx = -1 end
+	if key_right then
+		s.dy = s.dy + SG
+		if s.dy > 8 then s.dy = 8 end
+	elseif key_left then
+		s.dy = s.dy - SG
+		if s.dy < -8 then s.dy = -8 end
+	else
+		s.dy = s.dy * 0.99
+	end
+	if s.dy >= 1 then
+		hero.st = FALL
+	elseif s.dy <= -1 then
+		hero.st = JUMP
+	else
+		hero.st = JUMP
+	end
+	hero.y = hero.y + s.dy
+	hero.x = hero.x + s.dx
+	if hero.y < 0 and s.dy < 0 then hero.y = 0 end
+	if hero.y > 480 - hero.h then hero.y = 480 - hero.h end
+	hero.dir = 1
+	sprite.fill(sprite.screen(0), 0, 0, 640, 16 * 4, 'blue');
+	if not s.stars then
+		s.stars = {}
+		for i = 1, 80 do
+			table.insert(s.stars, {rnd(640), rnd(680) - 100, (rnd(8) + 1)})
+		end
+	end
+	for i=1, 80 do
+		x = s.stars[i][1]
+		y = s.stars[i][2]
+		c = 'white'
+		if s.stars[i][3] <= 2 then c = '#0000ff';
+		elseif s.stars[i][3] <= 3 then c = '#1d1d1d';
+		elseif s.stars[i][3] <= 4 then c = '#ff0000'; 
+		elseif s.stars[i][3] <= 5 then c = 'cyan'; 
+		elseif s.stars[i][3] <= 6 then c = 'white'; end
+		sprite.fill(sprite.screen(), x, y, 2, 2, c);
+		s.stars[i][1] = s.stars[i][1] - s.stars[i][3]
+		if hero.y == 0 and s.dy < 0 or hero.y == 480 - hero.h and s.dy > 0 then
+			s.stars[i][2] = s.stars[i][2] - s.dy / 2
+		end
+		if s.stars[i][1] < 0 then
+			s.stars[i][1] = 640
+			s.stars[i][2] = rnd(680) - 100
+			s.stars[i][3] = (rnd(8) + 1)
+		end
+	end
+	
+	if not s.title_pos then s.title_pos = 1 else
+		s.title_pos = s.title_pos + 0.005 end
+	if math.floor(s.title_pos) > #ending_spr then s.title_pos = 1 end
+
+	local w, h = sprite.size(ending_spr[math.floor(s.title_pos)])
+	sprite.draw(ending_spr[math.floor(s.title_pos)], sprite.screen(), (640 - w) / 2, 480 - h);
+end
+
+},
+
 
 [CONTMAP] = 	{
 		title = "cont:Continue?",
