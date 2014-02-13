@@ -376,7 +376,7 @@ explode = {
 						yy = y + p * SP * math.sin(3.14 * i / 4)
 						sprite.fill(sprite.screen(), xx, yy, 4, 4, 'black')
 						local c = map:cell(map:pos2block(xx, yy))
-						if c and c[1] ~= 0 and c[1] and c[1] ~= ' ' then
+						if c and c[1] ~= 0 and c[1] and c[1] ~= ' ' and c[1] ~= HEART then
 							v[i] = true
 						elseif hero:collision(xx, yy, 4, 4) then
 							hero:state(FLY)
