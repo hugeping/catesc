@@ -1466,7 +1466,7 @@ end
 		map = {
 '                                        ';-- 0
 '                                        ';-- 1
-'########################################';-- 2
+'         #######################        ';-- 2
 '          m                   m         ';-- 3
 '                                        ';-- 4
 '                                        ';-- 5
@@ -1580,7 +1580,7 @@ end
 			if s.x > 13 * BW + 8 then h = h - 1 end
 			if s.x > 15 * BW + 8 then h = h - 1 end
 			if not s.pos then s.pos = 0 end
-			if s.pos > 100 then
+			if s.pos > 60 then
 				local c = 'red'
 				if not phaser_step then
 					c = 'yellow'
@@ -1594,7 +1594,7 @@ end
 			elseif not s.l1on then
 				laser_mute()
 			end
-			if s.pos > 120 then s.pos = 0 end
+			if s.pos > 80 then s.pos = 0 end
 			s.pos = s.pos + 1
 		end;
 

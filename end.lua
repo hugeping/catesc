@@ -38,6 +38,7 @@ maps[32] = {
            1         2         3
 ]]--
 after = function(s)
+--[[	
 	if hero:state() == JUMP then
 		sprite.fill(sprite.screen(0), hero.x + hero.w - 34, hero.y + hero.h / 2 + 3, 20, 3, 'black');
 		sprite.fill(sprite.screen(0), hero.x + hero.w - 34, hero.y + hero.h / 2 + 1, 6, 7, 'black');
@@ -45,7 +46,6 @@ after = function(s)
 		sprite.fill(sprite.screen(0), hero.x + hero.w - 34, hero.y + hero.h / 2 + 5, 20, 3, 'black');
 		sprite.fill(sprite.screen(0), hero.x + hero.w - 34, hero.y + hero.h / 2 + 3, 6, 7, 'black');
 	end
-	
 	if key_space then
 		local c = 'cyan'
 		if rnd(50) > 25 then c = 'red' end
@@ -56,7 +56,7 @@ after = function(s)
 	else
 		laser_mute()
 	end
-
+]]--
 end;
 life = function(s)
 	local SG = 0.1
