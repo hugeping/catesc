@@ -262,7 +262,7 @@ map = obj {
 			end
 			block_x = true
 		end
-		if x < -hero.w / 2 and map.nr ~= 30 then
+		if x < -hero.w / 2 and map.nr ~= MIRROR_MAP then
 			x = -hero.w / 2
 		end
 		return math.floor(x), math.floor(y), block_x, block_y
