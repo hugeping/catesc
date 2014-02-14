@@ -139,7 +139,6 @@ game.kbd = function(s, down, key)
 					game:state(CHANGE_LEVEL, 16)
 					hero:state(DEAD)
 					map:select(n)
-					game_lifes = 3
 					game:dist(0)
 				end
 				lev_num = nil

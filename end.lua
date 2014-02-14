@@ -64,6 +64,18 @@ life = function(s)
 	G = 0
 	GX = 0
 	set_music 'snd/music2.ogg'
+	if (game_lifes > 1 or bonus_timer) and (s.title_pos and s.title_pos > 3 ) then
+		if not bonus_timer then 
+			bonus_timer = 0
+			game_lifes = game_lifes - 1
+			game:dist(game:dist() + 100)
+			sound.play(bonus_snd)
+		end
+		bonus_timer = bonus_timer + 1
+		if bonus_timer > 60 then
+			bonus_timer = nil
+		end
+	end
 	map:dist(0)
 	if not s.dy then s.dy = 0 end
 	if not s.dx then s.dx = 1 end
@@ -120,16 +132,23 @@ life = function(s)
 			s.stars[i][3] = (rnd(8) + 1)
 		end
 	end
-	if not end_stats then
+
+	if not end_stats and s.title_pos and s.title_pos >= #ending_spr then
 		end_stats = {}
 		end_stats[1] = sprite.text(fn, string.format(_"stat_score:YOUR SCORE: %s", game:dist() + map:dist()), "white")
 		end_stats[2] = sprite.text(fn, string.format(_"stat_record:YOUR RECORD: %s", prefs.game_record), "white")
 	end
 
-	if not s.title_pos then s.title_pos = 1 else
-		s.title_pos = s.title_pos + 0.005 end
+	if not s.title_pos then s.title_pos = 1 
+	else
+		if s.title_pos <= 3 or game_lifes == 1 then
+			s.title_pos = s.title_pos + 0.005 
+		end
+	end
 
-	if math.floor(s.title_pos) > #ending_spr + #end_stats then s.title_pos = 1 end
+	if end_stats then
+		if math.floor(s.title_pos) > #ending_spr + #end_stats then s.title_pos = 1 end
+	end
 
 	if math.floor(s.title_pos) > #ending_spr then
 		local w, h = sprite.size(end_stats[math.floor(s.title_pos) - #ending_spr])
