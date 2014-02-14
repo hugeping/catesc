@@ -710,6 +710,79 @@ after = function(s)
 	end
 end
 },
+ {
+      title = "spacehere:Dont panic!";
+      map = {
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'########################################';
+'#                                      #';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                              #####     ';
+'                         ######   ##    ';
+'                    ######         ##   ';
+'               ######               ##  ';
+'          ######                     ## ';
+'>    ######                           ##';
+'######                                 #';
+};
+life = function(s)
+   local position, index
+   if not s.x then
+      s.x = 38 * BW
+      s.speed = -2
+      s.length = {22, 22, 22, 22, 22, 21, 21, 21, 21, 21, 20, 20, 20, 20, 20, 19, 19, 19, 19, 19, 18, 18, 18, 18, 18, 17, 17, 17, 17, 17, 16, 16, 16, 16, 16, 17, 18, 19, 20, 21 }
+      s.laser = false
+   end
+   sprite.fill (sprite.screen(), s.x, 6 * BW, BW, BW, "yellow")
+   if s.laser then
+      if s.speed < 0 then
+	 index = math.floor ((s.x + 6) / BW) + 1
+	 sprite.fill (sprite.screen(), s.x + 6, 7 * BW, 3, s.length[index] * BW, 'red')
+	 if hero:collision(s.x + 6, 7 * BW, 3, s.length[index] * BW) and hero:alive() then
+	    hero:state(FLY)
+	 end
+      else
+	 index = math.floor ((s.x + 7) / BW) + 1
+	 sprite.fill (sprite.screen(), s.x + 7, 7 * BW, 3, s.length[index] * BW, 'red')
+	 if hero:collision(s.x + 7, 7 * BW, 3, s.length[index] * BW) and hero:alive() then
+	    hero:state(FLY)
+	 end
+      end
+   end
+   s.x = s.x + s.speed
+   if s.x == BW or s.x == 38 * BW then
+      s.speed = s.speed * -1
+   end
+   position = hero.x + hero.w
+   if (position > 9 * BW and position < 10 * BW
+	  or position > 14 * BW and position < 15 * BW
+	  or position > 19 * BW and position < 20 * BW
+	  or position > 24 * BW and position < 25 * BW
+	  or position > 29 * BW and position < 30 * BW)
+   and hero:state() == WALK then
+      s.laser = true
+   end
+end
+},
 
 	{
 		title = "lasers:Lasers";
@@ -828,6 +901,111 @@ end
 		end;
 
 },
+{
+	title = "run:Run",
+	map = {
+'                                        ';
+'                                        ';
+'                                        ';
+'                                   #    ';
+'                                   #~~~~';
+'                                   #~~~~';
+'                                   #~~~~';
+'                                   #~~~~';
+'                                   #~~~~';
+'                                   #~~~~';
+'                                   #####';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                          %%%%%%        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                 %%%%%%            #####';
+'                                   #    ';
+'                                   #~~~~';
+'>                                  #~~~~';
+'#%%%%%%%%%%%%%                     #~~~~';
+'                                   #~~~~';
+'                                   #~~~~';
+'                                   #~~~~';
+'                                   #~~~~';
+'                                   #~~~~';
+};
+},
+{
+-- После 4:Лестница по высоте подходит уровень.
+		title = "flow:Flow";
+		map = {
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'########################################';
+'                        #  #            ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'>                                       ';
+'########################################';
+'                                        ';
+'~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~';
+'~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~';
+'~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~';
+'~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~';
+'~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~';
+'~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~';
+'~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~';
+'~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~';
+};
+life = function(s)
+   local i
+   if not s.w1 then
+      s.switched = false
+      s.w1 = 6 * BW
+      s.w2 = 0
+      s.flow = 0
+   end
+   sprite.fill (sprite.screen(), 0, 10 * BW - s.w1 + 1, 41 * BW, s.w1, "blue")
+   sprite.fill (sprite.screen(), 0, 22 * BW - s.w2 + 1, 41 * BW, s.w2, "blue")
+   if hero.x > 7 * BW and hero.x < 18 * BW and hero:state() == WALK and not s.switched then
+      s.switched = true
+      for i = 25, 26 do
+	 c = map:cell(i, 10)
+	 c[1] = 0
+      end
+   end
+   if s.switched then
+      sprite.fill (sprite.screen(), 25 * BW, 10 * BW, 2 * BW, s.flow, "blue")
+      if s.flow <= 12 * BW then
+	 s.flow = s.flow + 4
+      end
+      s.w1 = s.w1 - 0.1
+      if s.flow > 12 * BW then
+	 s.w2 = s.w2 + 0.1
+      end
+   end
+   if hero:collision(25 * BW, 10 * BW, 2 * BW, s.flow) and hero:alive() then
+      hero:state(FLY)
+   elseif 22 * BH - s.w2 < hero.y + hero.h and hero:alive()then
+      hero:state(DROWN)
+   end
+end
+},
+
 {
 	title = "figure:Figure out",
 	map = {
@@ -1364,9 +1542,44 @@ end
 '                                        ';
 '                                        ';
 '                                        ';
-'>        m          +          m        ';
+'>         m          +          m      #';
 '########################################';
 };
+},
+{
+		title = "mines2:Мины II";
+		map = {
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                 #####                  ';
+'             #####mmm#####              ';
+'         #####mmmm   mmmm#####          ';
+'     #####mmmm           mmmm#####      ';
+'######mmmm                   mmmm#######';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                 #####                  ';
+'             #####   #####              ';
+'         #####           #####          ';
+'>    #####                   #####      ';
+'######                           #####  ';
+'                                     ###';
+},
 },
 
 	{
