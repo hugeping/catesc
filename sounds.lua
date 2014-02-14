@@ -4,6 +4,7 @@ laser_snd = sound.load 'snd/laser.ogg'
 bonus_snd = sound.load 'snd/bonus.wav'
 beep_snd = sound.load 'snd/beep.wav'
 boom_snd = sound.load 'snd/boom.wav'
+teleport_snd = sound.load 'snd/teleport.ogg'
 
 function laser_play()
 	if not laser_playing then

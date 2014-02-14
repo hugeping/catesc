@@ -502,7 +502,64 @@ end
 '                                        ';
 };
 },
-
+	{
+		title = "teleports:Teleports";
+		map = {
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'        ###                  ###        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'>       xxx                             ';
+'###########                  ###########';
+'                                        ';
+'                                        ';
+'              +                         ';
+'             #####                      ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+};
+life = function(s)
+	local x = 8
+	local y = 16
+	local c = 'blue'
+	if not tel_trigger then c = 'white' end
+	tel_trigger = not tel_trigger 
+	sprite.fill(sprite.screen(), x * BW, y * BH - BH, 3 * BW, 5 * BH, c);
+	
+	if hero:collision((x + 1) * BW, (y + 2)* BH, BW, 1 * BH) then
+		hero.x = 30*BW + BW/2 - hero.dir * (3*BW) - hero.w/2
+		hero.speed_x = - hero.speed_x
+		hero.dir = -1
+		sound.play(teleport_snd)
+	end
+	x = 29
+	sprite.fill(sprite.screen(), x * BW, y * BH - BH, 3 * BW, 5 * BH, c);
+	if hero:collision((x + 1) * BW, (y + 2)* BH, BW, 1 * BH) then
+		hero.x = 9*BW + BW/2 - hero.dir * (3*BW) - hero.w/2
+		hero.speed_x = - hero.speed_x
+		hero.dir = -1
+		sound.play(teleport_snd)
+	end
+end
+},
 
 	{
 		title = "black:Dont afraid";
@@ -540,7 +597,6 @@ end
 '########################################';
 };
 },
-
 	{
 		title = "lift:Lift";
 		color = 'white';
