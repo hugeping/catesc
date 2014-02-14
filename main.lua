@@ -469,7 +469,9 @@ hero = obj {
 game.timer = function(s)
 	local st, m, i, x, y;
 
-	mouse()
+	if mouse_press then
+		mouse()
+	end
 
 	st, m = game:state()
 
