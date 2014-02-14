@@ -1,6 +1,6 @@
 maps = {
 	{
-		title = "1:Cats cant swim";
+		title = "first:Cats cant swim";
 		map = {
 '                                        ';
 '                                        ';
@@ -35,7 +35,7 @@ maps = {
 };
 },
 	{
-		title = "2:Be careful!",
+		title = "2dots:Be careful!",
 		map = {
 '                                        ';
 '                                        ';
@@ -70,7 +70,7 @@ maps = {
 		};
 	},
 	{
-		title = "3:Tramboline",
+		title = "tramp:Tramboline",
 		map = {
 '                                        ';
 '                                        ';
@@ -105,7 +105,7 @@ maps = {
 };
 },
 	{
-		title = "4:Ladder";
+		title = "ladder:Ladder";
 		map = {
 '                                        ';
 '                                        ';
@@ -141,7 +141,7 @@ maps = {
 
 },
 	{
-		title = "5:Laser";
+		title = "laser:Laser";
 		map = {
 '                                        ';
 '                                        ';
@@ -189,7 +189,7 @@ life = function(s)
 end
 },
 	{
-		title = "6:Dont be so fast";
+		title = "trap:Dont be so fast";
 		map = {
 '                                        ';
 '                                        ';
@@ -241,7 +241,7 @@ end
 },
 
 	{
-		title = "7:Dont stop!";
+		title = "panic:Dont stop!";
 		map = {
 '         #####   #####   #####          ';
 '          ###     ###     ###           ';
@@ -303,7 +303,7 @@ end
 },
 
 	{
-		title = "8:Walk!";
+		title = "walk:Walk";
 		map = {
 '                                        ';
 '                                        ';
@@ -362,7 +362,7 @@ end
 },
 
 	{
-		title = "9:Jump!";
+		title = "jump:Jump!";
 		map = {
 '                                        ';
 '                                        ';
@@ -410,7 +410,7 @@ end
 },
 
 	{
-		title = "10:Rope";
+		title = "rope:Rope";
 		map = {
 '             +                         *';
 '                                        ';
@@ -447,7 +447,7 @@ end
 
 
 	{
-		title = "11:Dont afraid";
+		title = "black:Dont afraid";
 		color = 'black';
 		map = {
 '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~';
@@ -484,7 +484,7 @@ end
 },
 
 	{
-		title = "12:Lift";
+		title = "lift:Lift";
 		color = 'white';
 		map = {
 '                                        ';
@@ -554,7 +554,7 @@ end
 },
 
 	{
-		title = "13:Snake";
+		title = "snake:Snake";
 		map = {
 '                                        ';
 '                                        ';
@@ -619,7 +619,7 @@ end
 },
 
 	{
-		title = "14:Rain";
+		title = "rain:Rain";
 		map = {
 '                                        ';
 '                                        ';
@@ -712,7 +712,7 @@ end
 },
 
 	{
-		title = "15:Lasers";
+		title = "lasers:Lasers";
 		map = {
 '          #########################     ';
 '           *          *          *      ';
@@ -760,7 +760,7 @@ life = function(s)
 end
 },
 {
-	title = "16:Press",
+	title = "press:Press",
 	map = {
 '                                        ';
 '                                        ';
@@ -829,7 +829,7 @@ end
 
 },
 {
-	title = "17:Figure out",
+	title = "figure:Figure out",
 	map = {
 '                                        ';
 '                                        ';
@@ -892,7 +892,7 @@ end
 		end;
 },
 {
-	title = "18:Easy?",
+	title = "easy:Easy?",
 	map = {
 '                                        ';
 '                                        ';
@@ -931,7 +931,7 @@ end
 ]]--
 },
 {
-	title = "19:Impossible?",
+	title = "impossible:Impossible?",
 	map = {
 '                                       #';
 '                                       #';
@@ -982,7 +982,7 @@ life = function(s)
 end
 },
 	{
-		title = "20:Mars",
+		title = "mars:Mars",
 		map = {
 '                                        ';
 '                                        ';
@@ -1025,7 +1025,7 @@ end;
 },
 
 	{
-		title = "21:Faster, higher, stronger!",
+		title = "faster:Faster, higher, stronger!",
 		map = {
 '                                        ';
 '                                        ';
@@ -1075,7 +1075,7 @@ end;
 
 },
       	{
-		title = "22:Be careful!",
+		title = "careful:Be careful!",
 		map = {
 '                                        ';
 '                                        ';
@@ -1125,7 +1125,7 @@ end;
 
 },
       	{
-		title = "23:Winter",
+		title = "winter:Winter",
 		map = {
 '                                        ';
 '                                        ';
@@ -1191,7 +1191,7 @@ end
 },
 
 	{
-		title = "24:Tired?",
+		title = "tired:Tired?",
 		map = {
 '                                        ';
 '                                        ';
@@ -1216,7 +1216,7 @@ end
 '########################################';
 '########################################';
 '########################################';
-'########################################';
+'                                        ';
 '                                        ';
 '                                        ';
 '                                        ';
@@ -1227,7 +1227,78 @@ end
 },
 
 	{
-		title = "25:?",
+		title = "danger:Danger",
+		map = {
+'                ########                ';
+'                ########                ';
+'                ########                ';
+'                ########                ';
+'                ########                ';
+'                ########                ';
+'                ########                ';
+'                ########                ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'>                                       ';
+'################========################';
+'################        ################';
+'################        ################';
+'################        ################';
+'################        ################';
+'################        ################';
+'################        ################';
+'################        ################';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+};
+life = function(s)
+	if not s.fall and hero.x > 16 * BW and hero.speed_x >= SPEED_RUN * 0.75 and hero.x < 22 * BW then
+		s.fall = 0
+	end
+	if s.fall and s.fall * BH < 480 then
+		local yy = math.floor(s.fall)
+		local xx = 0
+		local x, y
+		for x = 0, 7 do
+			for y = yy, yy + 7 do 
+				local c = map:cell(16 + x, y)
+				if c then
+					c[1] = 0
+				end
+			end
+		end
+		s.fall = s.fall + G;
+		if hero.y > (s.fall * BH) then
+			if s.fall and hero.y <= (s.fall + 8) * BH and hero.x < 21 * BW and hero.x > 16 * BW then
+				hero.y = (s.fall + 8) * BH
+			end
+		end
+		yy = math.floor(s.fall)
+		for x = 0, 7 do
+			for y = yy, yy + 7 do 
+				local c = map:cell(16 + x, y)
+				if c then
+					c[1] = BLOCK
+				end
+			end
+		end
+	end
+end
+},
+
+
+
+	{
+		title = "?",
 		map = {
 '                                        ';
 '                                        ';
@@ -1263,7 +1334,7 @@ end
 },
 
 	{
-		title = "26:Mines",
+		title = "mines:Mines",
 		map = {
 '                                        ';
 '                                        ';
@@ -1299,7 +1370,7 @@ end
 },
 
 	{
-		title = "27:Power",
+		title = "power:Power",
 		map = {
 '                                        ';
 '                                        ';
@@ -1358,7 +1429,7 @@ end
 },
 
 	{
-		title = "28:Darkness",
+		title = "darkness:Darkness",
 		map = {
 '                                        ';
 '                                        ';
@@ -1401,7 +1472,7 @@ end
 
 
 	{
-		title = "29:Snake II",
+		title = "snake2:Snake II",
 		map = {
 '                                        ';-- 0
 '                                        ';-- 1
@@ -1463,7 +1534,7 @@ end
 },
 	{
 		mirror = true,
-		title = "30:Strange place",
+		title = "strange:Strange place",
 		map = {
 '                                        ';-- 0
 '                                        ';-- 1
@@ -1517,7 +1588,7 @@ life = function(s)
 end
 },
 	{
-		title = "31:Gate",
+		title = "gate:Gate",
 		map = {
 '>                    ###################';
 '                     #                 #';

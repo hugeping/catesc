@@ -47,6 +47,8 @@ GAMEOVER = 2
 INTRO = 3
 CONTMAP = 99
 
+LIVES = 3
+
 global {
 	game_state = 0;
 	game_move = 0;
@@ -179,7 +181,6 @@ game.kbd = function(s, down, key)
 		key_left, key_right = false, false
 	end
 end
-LIVES = 3
 
 BLOCK = 1
 WATER = 2

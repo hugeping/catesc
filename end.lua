@@ -1,5 +1,5 @@
 end_map = {
-		title = "32:Freedom",
+		title = "free:Freedom",
 		color = '#00001c';
 		map = {
 '                                        ';-- 0
