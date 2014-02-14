@@ -410,6 +410,64 @@ end
 },
 
 	{
+		title = "monolit:Monolith";
+		map = {
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'              #############             ';
+'              #############             ';
+'              #############             ';
+'              #############             ';
+'              #############             ';
+'              #############             ';
+'              #############             ';
+'              #############             ';
+'              #############             ';
+'              #############             ';
+'              #############             ';
+'              #############             ';
+'              #############             ';
+'>             #############             ';
+'########################################';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+};
+life = function(s)
+	if hero:state() == WALK and hero.speed_x == 0 then
+		if not s.trig then
+			s.trig = 0
+		end
+	else
+		s.trig = false
+	end
+	if s.trig and not s.fall then
+		s.trig = s.trig + 1
+		if s.trig > 150 then s.fall = 6 end
+	end
+	if s.fall and s.fall < 18 then
+		local y = math.floor(s.fall)
+		local x
+		for x = 14, 26 do
+			local c = map:cell(x, y)
+			c[1] = 0
+		end
+		s.fall = s.fall + 0.1
+	end
+end
+},
+
+	{
 		title = "rope:Rope";
 		map = {
 '             +                         *';
