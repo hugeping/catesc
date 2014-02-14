@@ -134,7 +134,7 @@ life = function(s)
 		sprite.fill(sprite.screen(), x, y, 2, 2, c);
 		s.stars[i][1] = s.stars[i][1] - s.stars[i][3]
 		if hero.y == 0 and s.dy < 0 or hero.y == 480 - hero.h and s.dy > 0 then
-			s.stars[i][2] = s.stars[i][2] - s.dy / 2
+			s.stars[i][2] = s.stars[i][2] - s.dy/3 * (s.stars[i][3]/7)
 		end
 		if s.stars[i][1] < 0 then
 			s.stars[i][1] = 640
