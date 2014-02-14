@@ -1822,7 +1822,7 @@ life = function(s)
 	local st, m
 	st, m = game:state()
 	if st == CHANGE_LEVEL and m >= 16 and hero.x > 600 and not s.skip then
-		map.nr = 29
+		map.nr = map.nr - 1
 	elseif hero.x < - (hero.w * 3) and s ~= CHANGE_LEVEL then
 		hero.x = 700
 		hero.y = 0
