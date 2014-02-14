@@ -1,5 +1,6 @@
 origG = G
 origRGX = RGX
+origGX = GX
 
 map = obj {
 	nam = 'map';
@@ -28,6 +29,7 @@ map = obj {
 		end
 		G = origG
 		RGX = origRGX
+		GX = origGX
 		if s.title then
 			sprite.free(s.title);
 		end
