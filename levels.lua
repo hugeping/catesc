@@ -1590,7 +1590,7 @@ end
 '                                        ';
 };
 life = function(s)
-	if not s.fall and hero.x > 16 * BW and hero.speed_x >= SPEED_RUN * 0.75 and hero.x < 22 * BW then
+	if not s.fall and hero.x > 16 * BW and hero.speed_x >= SPEED_RUN * 0.65 and hero.x < 22 * BW then
 		s.fall = 0
 	end
 	if s.fall and s.fall * BH < 480 then
@@ -1607,8 +1607,8 @@ life = function(s)
 		end
 		s.fall = s.fall + G;
 		if hero.y > (s.fall * BH) then
-			if s.fall and hero.y <= (s.fall + 8) * BH and hero.x < 21 * BW and hero.x > 16 * BW then
-				hero.y = (s.fall + 8) * BH
+			if s.fall and hero.y <= (s.fall + 8) * BH and hero.x < 24 * BW - hero.w and hero.x > 16 * BW then
+				hero.y = (s.fall + 8) * BH + hero.yoff
 			end
 		end
 		yy = math.floor(s.fall)
