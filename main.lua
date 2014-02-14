@@ -163,7 +163,7 @@ game.kbd = function(s, down, key)
 		if key >= '0' and key <= '9' then
 			if not lev_num then lev_num = '' end
 			lev_num = lev_num .. key
-		elseif key == 'return' then
+		elseif key == 'return' and prefs.unlock then
 			if tonumber(lev_num) then
 				local n = tonumber(lev_num)
 				if n >= 0 and n <= #maps then

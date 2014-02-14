@@ -46,6 +46,7 @@ exit = function(s)
 		end
 	end
 	end_stats = nil
+	prefs:store()
 end;
 after = function(s)
 --[[	
@@ -73,6 +74,7 @@ life = function(s)
 	local x, y, i, c
 	G = 0
 	GX = 0
+	prefs.unlock = true
 	set_music 'snd/music2.ogg'
 	if (game_lifes > 1 or bonus_timer) and (s.title_pos and s.title_pos > 3 ) then
 		if not bonus_timer then 
