@@ -117,6 +117,9 @@ mouse_ctrl = { false, false, false }
 
 game.click = function(s, press, x, y)
 	mouse_press = press
+	if not press then
+		mouse()
+	end
 end
 
 mouse = function()
