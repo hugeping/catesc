@@ -336,6 +336,8 @@ ending_txt = {
 	"Snoopy (1984)",
 	"Sqrzx",
 	"Giana's Return...",
+	"YOU CAN ENTER LEVEL NUMBER WITH KEYS 0..9",
+	"AND PRESS RETURN",
 }
 
 

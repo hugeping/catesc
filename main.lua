@@ -35,7 +35,8 @@ function init()
 	for i = 1, #ending_txt do
 		table.insert(ending_spr, sprite.text(fn, _('end'..tostring(i)..':'..ending_txt[i]), 'white'));
 	end
-	hook_keys('right', 'left', 'space', 'up', 'return');
+	hook_keys('right', 'left', 'space', 'up', 'return', '0',
+		'1', '2', '3', '4', '5', '6', '7', '8', '9' );
 	hero:state(DEAD)
 	game:state(INTRO);
 end
@@ -127,7 +128,21 @@ game.kbd = function(s, down, key)
 			end
 			return
 		end
-		if key == 'left' or key == 'right' and key_input[1] ~= key then
+		if key >= '0' and key <= '9' then
+			if not lev_num then lev_num = '' end
+			lev_num = lev_num .. key
+		elseif key == 'return' and tonumber(lev_num) then
+			local n = tonumber(lev_num)
+			if n >= 0 and n <= #maps then
+				set_music 'snd/music.ogg'
+				game:state(CHANGE_LEVEL, 16)
+				hero:state(DEAD)
+				map:select(n)
+				game_lifes = 3
+				game:dist(0)
+			end
+			lev_num = nil
+		elseif key == 'left' or key == 'right' and key_input[1] ~= key then
 			table.insert(key_input, 1, key)
 			if #key_input >=3 then
 				table.remove(key_input, 3)
