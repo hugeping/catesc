@@ -754,6 +754,7 @@ life = function(s)
    end
    sprite.fill (sprite.screen(), s.x, 6 * BW, BW, BW, "yellow")
    if s.laser then
+	laser_play()
       if s.speed < 0 then
 	 index = math.floor ((s.x + 6) / BW) + 1
 	 sprite.fill (sprite.screen(), s.x + 6, 7 * BW, 3, s.length[index] * BW, 'red')
@@ -767,6 +768,8 @@ life = function(s)
 	    hero:state(FLY)
 	 end
       end
+   else
+	laser_mute()
    end
    s.x = s.x + s.speed
    if s.x == BW or s.x == 38 * BW then
