@@ -50,7 +50,7 @@ CONTMAP = 99
 global {
 	game_state = 0;
 	game_move = 0;
-	game_lifes = 3;
+	game_lifes = LIVES;
 	game_dist = 0;
 	bg_color = 'white';
 }
@@ -116,7 +116,7 @@ game.kbd = function(s, down, key)
 			game:state(CHANGE_LEVEL, 16);
 			hero:state(DEAD)
 			map:select(1)
-			game_lifes = 3
+			game_lifes = LIVES
 			game:dist(0)
 		end
 		return
@@ -140,6 +140,7 @@ game.kbd = function(s, down, key)
 					hero:state(DEAD)
 					map:select(n)
 					game:dist(0)
+					game_lifes = LIVES
 				end
 				lev_num = nil
 			end
@@ -178,6 +179,7 @@ game.kbd = function(s, down, key)
 		key_left, key_right = false, false
 	end
 end
+LIVES = 3
 
 BLOCK = 1
 WATER = 2

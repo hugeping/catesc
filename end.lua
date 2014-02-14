@@ -1,4 +1,4 @@
-maps[32] = {
+end_map = {
 		title = "32:Freedom",
 		color = '#00001c';
 		map = {
@@ -37,6 +37,16 @@ maps[32] = {
  0123456789012345678901234567890123456789
            1         2         3
 ]]--
+exit = function(s)
+	s.title_pos = nil
+	local k,v
+	if end_stats then
+		for k,v in pairs(end_stats) do
+			sprite.free(v)
+		end
+	end
+	end_stats = nil
+end;
 after = function(s)
 --[[	
 	if hero:state() == JUMP then
@@ -160,6 +170,8 @@ life = function(s)
 end
 }
 
+table.insert(maps, end_map)
+
 maps[CONTMAP] = {
 		title = "cont:Continue?",
 		map = {
@@ -214,3 +226,4 @@ life =  function(s)
 end
 }
 
+game.enable_save = false

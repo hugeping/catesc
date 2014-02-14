@@ -16,8 +16,12 @@ map = obj {
 		if n then s.d = n end
 		return nn
 	end;
+	mirror = function(s)
+		return maps[s.nr].mirror
+	end;
 	select = function(s, n)
 		if n then
+			if s.nr and maps[s.nr] and maps[s.nr].exit then maps[s.nr].exit(s.data) end
 			s.prev = s.nr
 			s.nr = n;
 			if n == CONTMAP then
@@ -96,7 +100,7 @@ map = obj {
 		n = s.nr + 1;
 		if s.nr == CONTMAP then 
 			n = s.prev 
-			game_lifes = 3
+			game_lifes = LIVES
 			game:dist(0)
 			hero:state(DEAD)
 			restore_music(game)
@@ -264,7 +268,7 @@ map = obj {
 			end
 			block_x = true
 		end
-		if x < -hero.w / 2 and map.nr ~= MIRROR_MAP then
+		if x < -hero.w / 2 and not map:mirror() then
 			x = -hero.w / 2
 		end
 		return math.floor(x), math.floor(y), block_x, block_y
@@ -321,8 +325,6 @@ map = obj {
 		end
 	end
 }
-
-MIRROR_MAP = 30
 
 ending_txt = {
 	"CONGRATULATIONS!",
@@ -479,3 +481,4 @@ snake = {
 }
 
 dofile "levels.lua"
+dofile "end.lua"

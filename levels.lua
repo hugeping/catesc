@@ -1462,6 +1462,7 @@ end
 
 },
 	{
+		mirror = true,
 		title = "30:Strange place",
 		map = {
 '                                        ';-- 0
@@ -1507,6 +1508,7 @@ life = function(s)
 	elseif hero.x < - (hero.w * 3) and s ~= CHANGE_LEVEL then
 		hero.x = 700
 		hero.y = 0
+		hero.speed_x = 0
 		game:state(CHANGE_LEVEL)
 		hero:state(WALK)
 		s.skip = true
@@ -1600,5 +1602,3 @@ end
 
 },
 }
-dofile "end.lua"
-game.enable_save = false
