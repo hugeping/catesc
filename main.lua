@@ -131,27 +131,32 @@ game.kbd = function(s, down, key)
 		if key >= '0' and key <= '9' then
 			if not lev_num then lev_num = '' end
 			lev_num = lev_num .. key
-		elseif key == 'return' and tonumber(lev_num) then
-			local n = tonumber(lev_num)
-			if n >= 0 and n <= #maps then
-				set_music 'snd/music.ogg'
-				game:state(CHANGE_LEVEL, 16)
-				hero:state(DEAD)
-				map:select(n)
-				game_lifes = 3
-				game:dist(0)
+		elseif key == 'return' then
+			if tonumber(lev_num) then
+				local n = tonumber(lev_num)
+				if n >= 0 and n <= #maps then
+					set_music 'snd/music.ogg'
+					game:state(CHANGE_LEVEL, 16)
+					hero:state(DEAD)
+					map:select(n)
+					game_lifes = 3
+					game:dist(0)
+				end
+				lev_num = nil
+			end
+		else
+			if key == 'left' or key == 'right' and key_input[1] ~= key then
+				table.insert(key_input, 1, key)
+				if #key_input >=3 then
+					table.remove(key_input, 3)
+				end
+			elseif key == 'space' then
+				if key_space_pass then
+					key_space = true;
+					key_space_pass = false
+				end
 			end
 			lev_num = nil
-		elseif key == 'left' or key == 'right' and key_input[1] ~= key then
-			table.insert(key_input, 1, key)
-			if #key_input >=3 then
-				table.remove(key_input, 3)
-			end
-		elseif key == 'space' then
-			if key_space_pass then
-				key_space = true;
-				key_space_pass = false
-			end
 		end
 	else
 		if key == 'left' or key == 'right'  then
