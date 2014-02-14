@@ -5,6 +5,9 @@ require "timer"
 require "kbd"
 require "sound"
 require "prefs"
+require "click"
+click.bg = true
+click.press = true
 
 SEMICOL="#103030"
 
@@ -110,6 +113,30 @@ end
 
 key_input = {}
 key_space_pass = true
+mouse_ctrl = { false, false, false }
+
+game.click = function(s, press, x, y)
+	mouse_press = press
+end
+
+mouse = function()
+	local x, y = stead.mouse_pos()
+	mouse_ctrl[1] = false
+	mouse_ctrl[2] = false
+	mouse_ctrl[3] = false
+	if x > 640 / 2 + 160 then
+		mouse_ctrl[3] = mouse_press
+	elseif x <= 640 / 2 - 160 then
+		mouse_ctrl[1] = mouse_press
+	end
+	if y < 480 / 2 - 120 then
+		mouse_ctrl[2] = mouse_press
+	end
+	game:kbd(mouse_ctrl[1], 'left')
+	game:kbd(mouse_ctrl[3], 'right')
+	game:kbd(mouse_ctrl[2], 'up')
+end
+
 game.kbd = function(s, down, key)
 	if key == 'up' then key = 'space' end
 	local st = game:state()
@@ -441,6 +468,8 @@ hero = obj {
 
 game.timer = function(s)
 	local st, m, i, x, y;
+
+	mouse()
 
 	st, m = game:state()
 
