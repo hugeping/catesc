@@ -2485,7 +2485,7 @@ life = function(s)
 	if not s.robots then
 		s.robots = {}
 		for i = 1, 3 do
-			table.insert(s.robots, {rnd(640) + 640, rnd(200) +BH+BH, i, rnd(60) })
+			table.insert(s.robots, {rnd(640) + 640, rnd(160) +BH+BH, i, rnd(60) })
 		end
 	end
 	local exp
