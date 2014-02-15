@@ -237,7 +237,7 @@ FLY = 6
 JUMP_SPEED = 5
 SPEED_RUN = 5
 MAX_SPEEDX = 5
-MIN_SPEED = 2
+MIN_SPEED = 0.5 -- 2
 
 R = 0.75
 
@@ -305,7 +305,6 @@ hero = obj {
 			s.x, s.y, block_x, block_y = map:move(s.x, s.y, 
 				s.speed_x, -d, s.w, s.h);
 			if block_x then
-				
 				s.speed_x = s.speed_x * R
 			end
 			if d <= 0 or block_y then

@@ -271,7 +271,19 @@ map = obj {
 		if x < -hero.w / 2 and not map:mirror() then
 			x = -hero.w / 2
 		end
-		return math.floor(x), math.floor(y), block_x, block_y
+		if dx >= 0 then
+			x = math.ceil(x)
+		else
+			x = math.floor(x)
+		end
+
+		if dy >= 0 then
+			y = math.ceil(y)
+		else
+			y = math.floor(y)
+		end
+
+		return x, y, block_x, block_y
 	end;
 	life = function(s)
 		local y, x
