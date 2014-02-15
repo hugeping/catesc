@@ -773,7 +773,7 @@ end
 life = function(s)
 	rain_play()
 	if hero:state() == JUMP or hero:state() == FALL then
-		hero.speed_x = hero.speed_x - GX*0.60
+		hero.speed_x = hero.speed_x - GX*0.75
 		if hero.speed_x < -MAX_SPEEDX then
 			hero.speed_x = -MAX_SPEEDX
 		end
@@ -788,6 +788,8 @@ life = function(s)
 		s.move = 0
 		s.r = 1
 	end
+	local c = map:cell(0, 28)
+	c[1] = 0
 	for k=s.r, 2 do
 		v = math.ceil(s.move)
 		local c = map:cell(k * 20 - v, 28)
