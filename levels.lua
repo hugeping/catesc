@@ -1054,7 +1054,6 @@ end
 };
 },
 {
--- После 4:Лестница по высоте подходит уровень.
 		title = "flow:Flow";
 		map = {
 '                                        ';
@@ -1076,8 +1075,8 @@ end
 '                                        ';
 '                                        ';
 '                                        ';
-'>       +                               ';
-'########################################';
+'>                                       ';
+'##########%%%%%%%%######################';
 '                                        ';
 '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~';
 '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~';
@@ -1122,6 +1121,78 @@ life = function(s)
    end
 end
 },
+{
+		title = "propeller:Propeller",
+		map = {
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'       ##*##*##*##*##*##*##*##*##       ';
+'       #                        #       ';
+'       #                        #       ';
+'########                        ########';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                   +                    ';
+'                                        ';
+'>                                       ';
+'########                        ########';
+'       #                        #       ';
+'       #                        #       ';
+'       #                        #       ';
+'       #                        #       ';
+'       #                        #       ';
+'       #                        #       ';
+'       #                        #       ';
+'       #    xxxxxxxXXxxxxxxx    #       ';
+'       ##########################       ';
+};
+life = function(s)
+	local max = 1
+	if not s.vent then
+		s.vent = 1
+		s.speed = 0.001
+	end
+	s.speed = s.speed + 0.002
+	if s.speed > max then s.speed = max end
+	if hero.x > 7 * BW and hero.x + hero.w <= 32 * BW then
+		local h = 29 - (hero.y + hero.h)/ BH
+		h = (38 - h)/38 -- 1..0
+		if hero:alive() then
+			G = origG - (s.speed * s.speed * h * 2 * origG)
+		else
+			G = origG
+		end
+		if math.abs(G) < 0.05 then G = G * 0.1 end
+		if G < 0 then hero.y = hero.y + G end
+	else
+		G = origG
+	end
+	local v = { 7, 6, 4, 2, 0, 1, 2, 4, 6, 7 }
+	s.vent = s.vent + s.speed * 2
+	local n = math.floor(s.vent)
+	if n >#v then s.vent = 1;n = 1; end
+	local c
+	local x, y, xx
+	x = 19
+	y = 28
+	xx = x - v[n]
+	sprite.fill(sprite.screen(), xx * BW, y * BH + 4, (v[n] * 2 + 2) * BW, 4, 'black')
+	sprite.fill(sprite.screen(), x * BW, y * BH, 2 * BW, BH, '#333333')
+	if hero:collision(xx * BW, y * BH, (v[n] * 2 + 2) * BW, 4) then
+		hero:state(FLY)
+	end
+end
+},
+
 {
 		title = "stairs:Stairs";
 		map = {
