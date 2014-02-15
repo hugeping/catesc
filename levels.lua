@@ -771,6 +771,7 @@ end
 ]]--
 	},
 life = function(s)
+	rain_play()
 	if hero:state() == JUMP or hero:state() == FALL then
 		hero.speed_x = hero.speed_x - GX*0.60
 		if hero.speed_x < -MAX_SPEEDX then
