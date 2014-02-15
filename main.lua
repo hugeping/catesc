@@ -166,7 +166,7 @@ game.kbd = function(s, down, key)
 		elseif key == 'return' and prefs.unlock then
 			if tonumber(lev_num) then
 				local n = tonumber(lev_num)
-				if n >= 0 and n <= #maps then
+				if n > 0 and n <= #maps then
 					set_music 'snd/music.ogg'
 					game:state(CHANGE_LEVEL, 16)
 					hero:state(DEAD)
