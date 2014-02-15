@@ -2433,4 +2433,101 @@ end
 		end;
 
 },
+
+	{
+		title = "exit:Exit",
+		color = "blue",
+		map = {
+'                                       #';
+'                                      ##';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                       *';
+'                                      ##';
+'                                       #';
+'                                       #';
+'                                       #';
+'                                       #';
+'                                       #';
+'                                       #';
+'>                                      #';
+'########################################';
+'                                       #';
+'                                       #';
+'                                       #';
+'                                       #';
+'                                       #';
+}, 
+life = function(s)
+	if not s.door then
+		s.door = 0
+	end
+	if math.floor(s.door) < 7 then
+		s.door = s.door + 0.004
+	end
+	local x, y, i, xx, yy
+	x = math.floor(s.door)
+	local c = map:cell(39, 24 - x)
+	if x ~= 0 then
+		c[1] = 0
+	end
+	if not s.robots then
+		s.robots = {}
+		for i = 1, 3 do
+			table.insert(s.robots, {rnd(640) + 640, rnd(200) +BH+BH, i, rnd(60) })
+		end
+	end
+	local exp
+	local laser_on = false
+	for i=1, #s.robots do
+		x = s.robots[i][1]
+		y = s.robots[i][2]
+		if rnd(50) > 25 then
+			sprite.fill(sprite.screen(), x, y, BW, BH, 'white');
+		else
+			sprite.fill(sprite.screen(), x, y, BW, BH, 'red');
+		end
+		s.robots[i][4] = s.robots[i][4] + 1
+		if s.robots[i][4] > 60 then
+			if s.robots[i][4] > 80 then
+				s.robots[i][4] = 0
+			end
+			if x < 640 - BW - BW then
+				local c = 'red'
+				if not phaser_step then
+					c = 'yellow'
+				end
+				phaser_step = not phaser_step
+				laser_on = true
+				sprite.fill(sprite.screen(), x + BW / 2 - 3, y + BH, 4, 22 * BH - y + BH, c)
+				laser_play()
+				if hero:collision(x + BW / 2 - 3, y + BH, 4, 22 * BH - y + BH) then
+					hero:state(FLY)
+				end
+			end
+		end
+		s.robots[i][1] = x - s.robots[i][3]
+		if s.robots[i][1] <= 0 then
+			s.robots[i][3] = - (rnd(2) + 1)
+			s.robots[i][4] = rnd(60)
+		elseif s.robots[i][1] >= 640 - BW and s.robots[i][3] < 0 then
+			s.robots[i][3] = (rnd(2) + 1)
+			s.robots[i][4] = rnd(60)
+		end
+	end
+	if not laser_on then laser_mute() end
+end;
+},
+
 }
