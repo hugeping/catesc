@@ -319,6 +319,11 @@ map = obj {
 			maps[s.nr].life(s.data)
 		end
 	end;
+	before = function(s)
+		if maps[s.nr].before then
+			maps[s.nr].before(s.data)
+		end
+	end;
 	after = function(s)
 		if maps[s.nr].after then
 			maps[s.nr].after(s.data)
@@ -479,6 +484,54 @@ snake = {
 		end
 	end;
 }
+lift = {
+	activate = function(s, x, y, w, dir, u, d)
+		s.y = y
+		s.x = x
+		s.dir = dir
+		s.w = w
+		s.hi = u
+		s.low = d
+	end;
+	draw = function(s)
+		local x, y
+		for x = s.x, s.x + s.w - 1 do
+			local c = map:cell(x, math.floor(s.y))
+			c[1] = 0
+		end
+		local on = false
 
+		if s.dir > 0 and hero:collision(s.x * BW, math.floor(s.y * BH) - BH, s.w * BW, BH) 
+			and hero.y + hero.h <= s.y * BH and 
+			map:is_fall(hero.x, hero.y + hero.h, hero.w, s.dir)
+			then
+			on = true
+		end
+		s.y = s.y + s.dir
+		if math.floor(s.y) < s.hi then 
+			s.dir = -1 * s.dir 
+			s.y = s.hi
+		end
+
+		if math.floor(s.y) > s.low then 
+			s.dir = -1 * s.dir 
+			s.y = s.low
+		end
+
+		for x = s.x, s.x + s.w - 1 do
+			local c = map:cell(x, math.floor(s.y))
+			c[1] = BRIDGE
+		end
+		if s.dir < 0 and  hero:collision(s.x * BW, math.floor(s.y * BH), s.w * BW, BH) and 
+			hero.y + hero.h - BH < s.y * BH 
+			then
+			on = true
+		end
+		if on then 
+			map:move(hero.x, hero.y, 0, s.y * BH - (hero.y + hero.h), hero.w, hero.h) 
+			hero.y = math.floor(s.y) * BH - hero.h
+		end
+	end
+}
 dofile "levels.lua"
 dofile "end.lua"

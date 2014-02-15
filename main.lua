@@ -510,10 +510,12 @@ game.timer = function(s)
 
 	sprite.fill(sprite.screen(), bg_color)
 
+	map:before()
 	map:show()
 	map:life()
 	hero:draw()
 	map:after()
+
 	if st == GAME or (st == CHANGE_LEVEL and m >= 16) then
 		hero:life();
 	end
