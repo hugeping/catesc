@@ -866,7 +866,11 @@ life = function(s)
       s.length = {22, 22, 22, 22, 22, 21, 21, 21, 21, 21, 20, 20, 20, 20, 20, 19, 19, 19, 19, 19, 18, 18, 18, 18, 18, 17, 17, 17, 17, 17, 16, 16, 16, 16, 16, 17, 18, 19, 20, 21 }
       s.laser = false
    end
-   sprite.fill (sprite.screen(), s.x, 6 * BW, BW, BW, "yellow")
+   if (rnd(100) > 50) then
+	   sprite.fill (sprite.screen(), s.x, 6 * BW, BW, BW, "yellow")
+    else
+	sprite.fill (sprite.screen(), s.x, 6 * BW, BW, BW, "gold")
+    end
    if s.laser then
 	laser_play()
       if s.speed < 0 then
