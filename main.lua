@@ -237,12 +237,13 @@ FLY = 6
 JUMP_SPEED = 5
 SPEED_RUN = 5
 MAX_SPEEDX = 5
+MIN_SPEED = 2
 
 R = 0.75
 
 global {
     G = 0.5,
-    RGX = 0.4,
+    RGX = 0.45,
     GX = 0.25
 }
 
@@ -304,6 +305,7 @@ hero = obj {
 			s.x, s.y, block_x, block_y = map:move(s.x, s.y, 
 				s.speed_x, -d, s.w, s.h);
 			if block_x then
+				
 				s.speed_x = s.speed_x * R
 			end
 			if d <= 0 or block_y then
@@ -401,6 +403,10 @@ hero = obj {
 			end
 			if key_space then
 				key_space = false
+				if math.abs(s.speed_x) == GX then
+					if key_right then s.speed_x = MIN_SPEED 
+					elseif key_left then s.speed_x = -MIN_SPEED end
+				end
 				s:state(JUMP)
 			end
 		end

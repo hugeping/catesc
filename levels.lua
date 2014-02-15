@@ -1427,6 +1427,91 @@ life = function(s)
 	end
 end;
 },
+	{
+		title = "meteors:Meteors",
+		map = {
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                        ';
+'                                       #';
+'                                      ##';
+'                                     ###';
+'                                     ###';
+'                                     ###';
+'                                     ###';
+'                                     ###';
+'                                    ####';
+'                      #######       ####';
+'                     #########   + #####';
+'>                   ###########  #######';
+'###              #######################';
+'########################################';
+'########################################';
+'########################################';
+'########################################';
+'~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~';
+};
+life = function(s)
+	local x, y, i, xx, yy
+	if not s.meteo then
+		s.r = 0
+		s.meteo = {}
+		for i = 1, 3 do
+			table.insert(s.meteo, {rnd(640) - BW * 4, rnd(480) - 480, rnd(2) + 1 })
+		end
+	end
+	local exp
+	for i=1, #s.meteo do
+		exp = false
+		x = s.meteo[i][1]
+		y = s.meteo[i][2]
+		if rnd(50) > 25 then
+			sprite.fill(sprite.screen(), x, y, BW, BH, 'white');
+		else
+			sprite.fill(sprite.screen(), x, y, BW, BH, 'red');
+		end
+		s.meteo[i][2] = s.meteo[i][2] + s.meteo[i][3]
+		xx, yy = map:pos2block(x + BW / 2, y + BH / 2)
+		if xx >= 0 and yy >= 0 then
+			local c = map:cell(xx, yy)
+			if c and c[1] ~= 0 and c[1] ~= HEART then
+				explode.add(s, xx, yy)
+				exp = true
+			end
+		end
+		if hero:collision(x, y, BW, BH) then
+			exp = true
+			explode.add(s, xx, yy)
+			hero:state(FLY)
+		end
+		if s.meteo[i][1] < 0 or s.meteo[i][2] > 480 - BH or exp then
+			if i == s.right then
+				s.right = false
+			end
+			s.meteo[i][1] = rnd(640) - BW * 4
+			s.meteo[i][2] = -BH
+			s.meteo[i][3] = rnd(2) + 1
+			if not s.right and s.r <= 4 then
+				s.meteo[i][1] = 640 - BW * ((s.r % 3)) - BW
+				s.r = s.r + 1
+				s.meteo[i][3] = 3
+				s.right = i
+			end
+		end
+	end
+end;
+},
+
 
 	{
 		title = "faster:Faster, higher, stronger!",
