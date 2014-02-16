@@ -11,6 +11,8 @@ require "click"
 click.bg = true
 click.press = true
 
+last_ticks = 0
+
 SEMICOL="#103030"
 
 function init()
