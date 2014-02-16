@@ -41,7 +41,7 @@ function init()
 		table.insert(ending_spr, sprite.text(fn, _('end'..tostring(i)..':'..ending_txt[i]), 'white'));
 	end
 	hook_keys('right', 'left', 'space', 'up', 'return', '0',
-		'1', '2', '3', '4', '5', '6', '7', '8', '9' );
+		'1', '2', '3', '4', '5', '6', '7', '8', '9', 'escape', 'f1' );
 	hero:state(DEAD)
 	game:state(INTRO);
 end
@@ -143,6 +143,12 @@ mouse = function()
 end
 
 game.kbd = function(s, down, key)
+	if key == 'escape' or key == 'f1' then
+		key_left = false
+		key_right = false
+		key_space = false
+		key_input = {}
+	end
 	if key == 'up' then key = 'space' end
 	local st = game:state()
 	if st == INTRO then
@@ -479,7 +485,6 @@ hero = obj {
 
 game.timer = function(s)
 	local st, m, i, x, y;
-
 	if mouse_press then
 		mouse()
 	end
