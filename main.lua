@@ -1,6 +1,6 @@
 --$Name:ESCAPE OF THE CAT$
 --$Name(ru):ПОБЕГ КОТА$
---$Version:0.1$
+--$Version:0.2$
 instead_version "1.9.0"
 require "sprites"
 require "timer"
