@@ -234,12 +234,13 @@ DROWN = 4
 DEAD = 5
 FLY = 6
 
+R = 0.75
+
 JUMP_SPEED = 5
 SPEED_RUN = 5
 MAX_SPEEDX = 5
-MIN_SPEED = 0.5 -- 2
+MIN_SPEED = (1.5 / R)
 
-R = 0.75
 
 global {
     G = 0.5,

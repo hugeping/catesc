@@ -272,17 +272,12 @@ map = obj {
 			x = -hero.w / 2
 		end
 		if dx >= 0 then
-			x = math.ceil(x)
-		else
 			x = math.floor(x)
-		end
-
-		if dy >= 0 then
-			y = math.ceil(y)
 		else
-			y = math.floor(y)
+			x = math.ceil(x)
 		end
 
+		y = math.floor(y)
 		return x, y, block_x, block_y
 	end;
 	life = function(s)

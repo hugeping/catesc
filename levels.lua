@@ -828,7 +828,7 @@ end
 life = function(s)
 	rain_play()
 	if hero:state() == JUMP or hero:state() == FALL then
-		hero.speed_x = hero.speed_x - GX*0.75
+		hero.speed_x = hero.speed_x - GX*0.70
 		if hero.speed_x < -MAX_SPEEDX then
 			hero.speed_x = -MAX_SPEEDX
 		end
@@ -1979,9 +1979,9 @@ end
 '                               ##       ';
 '                                ##      ';
 '%%%%               #####         ##     ';
-'                   #   #          ##    ';
+'%%%%               #   #          ##    ';
 '                   #   #           #####';
-'      %%%%        *#   #                ';
+'    %%%%          *#   #                ';
 '                   #   #                ';
 '                   #   #                ';
 '                   #   #                ';
