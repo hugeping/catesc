@@ -143,6 +143,9 @@ mouse = function()
 end
 
 game.kbd = function(s, down, key)
+	if math.abs(stead.ticks() - last_ticks) > 100 then -- workaround of INSTEAD bug
+		timer:set(20)
+	end
 	if key == 'escape' or key == 'f1' then
 		key_left = false
 		key_right = false
@@ -485,6 +488,7 @@ hero = obj {
 
 game.timer = function(s)
 	local st, m, i, x, y;
+	last_ticks = stead.ticks()
 	if mouse_press then
 		mouse()
 	end
