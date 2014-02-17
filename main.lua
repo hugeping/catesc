@@ -15,6 +15,11 @@ last_ticks = 0
 
 SEMICOL="#103030"
 
+main.nam = '!!!';
+main.dsc = function(s)
+	p (_("warning:Please, go to settings and switch on own themes feature!"))
+end
+
 function init()
 	if not prefs.game_record then
 		prefs.game_record = 0
