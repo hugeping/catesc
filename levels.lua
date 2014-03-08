@@ -1330,7 +1330,7 @@ end
 ]]--
 
 		life =  function(s)
-			if hero:state() == JUMP or hero:state() == FALL and hero.x > 4 * BW and hero.y >= 24 * BH then
+			if (hero:state() == JUMP or hero:state() == FALL) and hero.x > 4 * BW and hero.y + hero.h < 24 * BH then
 				if not s.pos then
 					s.pos = 0
 				end 
