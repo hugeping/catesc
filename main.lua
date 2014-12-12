@@ -124,12 +124,51 @@ key_input = {}
 key_space_pass = true
 mouse_ctrl = { false, false, false }
 
+function check_fingers()
+	if not use_fingers then
+		return
+	end
+
+	local k,v
+
+	local dx = 640 / 6;
+	local dx2 = dx * 2;
+
+	game:kbd(false, 'right')
+	game:kbd(false, 'left')
+	game:kbd(false, 'up')
+
+	local fng = finger:list()
+	for k,v in ipairs(fng) do
+		local x, y = v.x, v.y
+		if x >= dx and x < dx2 then
+			game:kbd(true, 'right')
+		elseif x < dx then
+			game:kbd(true, 'left')
+		end
+		if x >= 640/2 then
+			game:kbd(true, 'up')
+		end
+	end
+end
+
+if stead.finger_pos then
+	require "finger"
+	game.finger = function()
+		use_fingers = true
+	end
+end
+
 game.click = function(s, press, x, y)
+	if use_fingers then
+		return
+	end
 	mouse_press = press
 	if not press then
 		mouse()
 	end
 end
+
 
 mouse = function()
 	local x, y = stead.mouse_pos()
@@ -492,10 +531,12 @@ hero = obj {
 		return true
 	end
 }
-
 game.timer = function(s)
 	local st, m, i, x, y;
 	last_ticks = stead.ticks()
+
+	check_fingers();
+
 	if mouse_press then
 		mouse()
 	end
