@@ -1,6 +1,6 @@
 --$Name:ESCAPE OF THE CAT$
 --$Name(ru):ПОБЕГ КОТА$
---$Version:0.5$
+--$Version:0.6$
 instead_version "1.9.0"
 require "sprites"
 require "timer"
@@ -161,6 +161,10 @@ end
 
 game.click = function(s, press, x, y)
 	if use_fingers then
+		mouse_press = false
+		mouse_ctrl[1] = false
+		mouse_ctrl[2] = false
+		mouse_ctrl[3] = false
 		return
 	end
 	mouse_press = press
