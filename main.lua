@@ -1,6 +1,6 @@
 --$Name:ESCAPE OF THE CAT$
 --$Name(ru):ПОБЕГ КОТА$
---$Version:0.6$
+--$Version:0.7$
 instead_version "1.9.0"
 require "sprites"
 require "timer"
@@ -28,6 +28,9 @@ function init()
 	fn = sprite.font("font.ttf", 16);
 	fn8 = sprite.font("8bit.ttf", 32);
 	fn_big = sprite.font("font.ttf", 28);
+	left_spr = sprite.load "pic/left.png"
+	right_spr = sprite.scale(left_spr, -1.0, 1, false)
+	up_spr = sprite.rotate(left_spr, -90, false)
 	hero.spr = sprite.load "pic/cat.png"
 	hero.spr_left = sprite.scale(hero.spr, -1.0, 1, false)
 	heart_spr = sprite.load "pic/heart.png"
@@ -629,7 +632,11 @@ game.timer = function(s)
 		blanker = not blanker
 		sprite.draw(gameover_spr, sprite.screen(), (640 - w)/2, (480 - h)/2)
 	end
-
+	if use_fingers then
+		sprite.draw(left_spr, sprite.screen(), 0, 480 - 96);
+		sprite.draw(right_spr, sprite.screen(), 640 / 6, 480 - 96);
+		sprite.draw(up_spr, sprite.screen(), 640 - 96 - 32, 480 - 96);
+	end
 	if st == CHANGE_LEVEL and m < 16 then
 		local y
 		for y = 0, 29 do
@@ -683,3 +690,5 @@ end
 dofile "maps.lua"
 dofile "i18n.lua"
 dofile "sounds.lua"
+
+instead_mouse_show(false)
